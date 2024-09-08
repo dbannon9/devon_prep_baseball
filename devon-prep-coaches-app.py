@@ -1,21 +1,17 @@
 import pandas as pd
 import streamlit as st
-import streamlit_authenticator as stauth
 
-users = {
-    "db": "password1",
-}
+def authenticate():
+    st.sidebar.header('Login')
+    password = st.sidebar.text_input("Password", type='password')
 
-authenticator = stauth.Authenticate(
-    names=list(users.keys()),
-    passwords=list(users.values()),
-    cookie_name="remember_me",
-    cookie_expiry_days=30,
-)
+    if password == "db_dp_baseball":
+        return True
+    elif password:
+        st.sidebar.error("Incorrect password")
+    return False
 
-name, authentication_status, _ = authenticator.login("Login", "main")
-
-if authentication_status:
+if authenticate():
     st.write(f"Welcome {name}!")
 
     players = pd.read_excel(r"C:\Users\dbann\Documents\Baseball\code\Devon Prep\Devon Prep Baseball.xlsx")
@@ -61,14 +57,3 @@ if authentication_status:
     if pnote_submit:
         new_note = {'pitcher': pnote_pitcher, 'date': pnote_date, 'author': pnote_author, 'note': pnote_note}
         pnotes = pnotes.append(new_note, ignore_index=True)
-
-
-
-
-
-
-
-elif authentication_status is False:
-    st.error("Username or password is incorrect")
-elif authentication_status is None:
-    st.warning("Please enter your username and password")
