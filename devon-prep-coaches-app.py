@@ -1,7 +1,5 @@
 import pandas as pd
 import streamlit as st
-from io import BytesIO
-import requests
 
 def authenticate():
     st.sidebar.header('Login')
@@ -15,9 +13,7 @@ def authenticate():
 
 if authenticate():
     url = "https://github.com/dbannon9/devon_prep_baseball/raw/master/Devon%20Prep%20Baseball.xlsx"
-    response = requests.get(url)
-    response.raise_for_status()
-    df = pd.read_excel(BytesIO(response.content), engine='xlrd')
+    df = pd.read_excel(url, engine = 'odf')
 
     #clean column names
     def clean_column_names(columns):
