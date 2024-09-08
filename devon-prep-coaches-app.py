@@ -12,8 +12,8 @@ def authenticate():
     return False
 
 if authenticate():
-    url = "https://github.com/dbannon9/devon_prep_baseball/raw/master/Devon%20Prep%20Baseball.xlsx"
-    df = pd.read_excel(url, engine = 'odf')
+    url = "https://raw.githubusercontent.com/dbannon9/devon_prep_baseball/master/Devon%20Prep%20Baseball.csv"
+    df = pd.read_csv(url)
 
     #clean column names
     def clean_column_names(columns):
