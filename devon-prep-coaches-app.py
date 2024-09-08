@@ -13,7 +13,7 @@ def authenticate():
 
 if authenticate():
     url = "https://raw.githubusercontent.com/dbannon9/devon_prep_baseball/master/Devon%20Prep%20Baseball.csv"
-    df = pd.read_csv(url)
+    players = pd.read_csv(url)
 
     #clean column names
     def clean_column_names(columns):
