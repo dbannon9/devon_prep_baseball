@@ -1,47 +1,74 @@
 import pandas as pd
 import streamlit as st
+import streamlit_authenticator as stauth
 
-players = pd.read_excel(r"C:\Users\dbann\Documents\Baseball\code\Devon Prep\Devon Prep Baseball.xlsx")
+users = {
+    "db": "password1",
+}
 
-#clean column names
+authenticator = stauth.Authenticate(
+    names=list(users.keys()),
+    passwords=list(users.values()),
+    cookie_name="remember_me",
+    cookie_expiry_days=30,
+)
 
-def clean_column_names(columns):
-    return ['is_pitcher' if col == 'Pitcher?' else col.lower().replace(' ', '_') for col in columns]
+name, authentication_status, _ = authenticator.login("Login", "main")
 
-players.columns = clean_column_names(players.columns)
+if authentication_status:
+    st.write(f"Welcome {name}!")
 
-players['full_name'] = players['first_name'] + ' ' + players['last_name']
+    players = pd.read_excel(r"C:\Users\dbann\Documents\Baseball\code\Devon Prep\Devon Prep Baseball.xlsx")
 
-active_classes = ['Freshman','Sophomore','Junior','Senior']
-players['active'] = players['class'].isin(active_classes)
+    #clean column names
 
-pnotes = pd.DataFrame(columns = ['pitcher','date','author','note'])
+    def clean_column_names(columns):
+        return ['is_pitcher' if col == 'Pitcher?' else col.lower().replace(' ', '_') for col in columns]
+
+    players.columns = clean_column_names(players.columns)
+
+    players['full_name'] = players['first_name'] + ' ' + players['last_name']
+
+    active_classes = ['Freshman','Sophomore','Junior','Senior']
+    players['active'] = players['class'].isin(active_classes)
+
+    pnotes = pd.DataFrame(columns = ['pitcher','date','author','note'])
+
+    #streamlit app
+
+    st.title('Devon Prep Coaches App')
+    st.subheader('Track Player Updates Below')
+    ptoggle = st.toggle('Pitchers?')
+    if ptoggle:
+        fplayers = players.query('is_pitcher == True')[['first_name','last_name','class','level']]
+    else:
+        fplayers = players[['first_name','last_name','class','level','position_1','position_2','position_3']].fillna('')
+    fplayers
+
+    #pitcher notes
+
+    st.title('Input New Pitcher Note')
+    currentpitchers = players.query('is_pitcher == True').query('active == True')
+    authors = ['Coach Palumbo','Coach Grande','Coach Bannon','Coach Martin','Coach Toal','Coach Kania']
+
+    with st.form(key='Input New Pitcher Note'):
+        pnote_pitcher = st.selectbox("Pitcher", currentpitchers['full_name'])
+        pnote_date = st.date_input("Today's Date", value = "default_value_today")
+        pnote_author = st.selectbox("Author", authors)
+        pnote_note = st.text_input("Note")
+        pnote_submit = st.form_submit_button(label = "Submit Note")
+
+    if pnote_submit:
+        new_note = {'pitcher': pnote_pitcher, 'date': pnote_date, 'author': pnote_author, 'note': pnote_note}
+        pnotes = pnotes.append(new_note, ignore_index=True)
 
 
-#streamlit app
 
-st.title('Devon Prep Coaches App')
-st.subheader('Track Player Updates Below')
-ptoggle = st.toggle('Pitchers?')
-if ptoggle:
-    fplayers = players.query('is_pitcher == True')[['first_name','last_name','class','level']]
-else:
-    fplayers = players[['first_name','last_name','class','level','position_1','position_2','position_3']].fillna('')
-fplayers
 
-#pitcher notes
 
-st.title('Input New Pitcher Note')
-currentpitchers = players.query('is_pitcher == True').query('active == True')
-authors = ['Coach Palumbo','Coach Grande','Coach Bannon','Coach Martin','Coach Toal','Coach Kania']
 
-with st.form(key='Input New Pitcher Note'):
-    pnote_pitcher = st.selectbox("Pitcher", currentpitchers['full_name'])
-    pnote_date = st.date_input("Today's Date", value = "default_value_today")
-    pnote_author = st.selectbox("Author", authors)
-    pnote_note = st.text_input("Note")
-    pnote_submit = st.form_submit_button(label = "Submit Note")
 
-if pnote_submit:
-    new_note = {'pitcher': pnote_pitcher, 'date': pnote_date, 'author': pnote_author, 'note': pnote_note}
-    pnotes = pnotes.append(new_note, ignore_index=True)
+elif authentication_status is False:
+    st.error("Username or password is incorrect")
+elif authentication_status is None:
+    st.warning("Please enter your username and password")
