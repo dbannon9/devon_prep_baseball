@@ -26,7 +26,7 @@ if authenticate():
     active_classes = ['Freshman','Sophomore','Junior','Senior']
     players['active'] = players['class'].isin(active_classes)
 
-    pnotes = pd.DataFrame(columns = ['pitcher','date','author','note'])
+    pnotes = pd.read_csv("https://raw.githubusercontent.com/dbannon9/devon_prep_baseball/master/pnotes.csv")
 
     #streamlit app
 
