@@ -12,7 +12,7 @@ def authenticate():
     return False
 
 if authenticate():
-    url = "https://github.com/dbannon9/devon_prep_baseball/blob/adc85eea24662ad274f267c5f91916f4e850f808/Devon%20Prep%20Baseball.xlsx"
+    url = "https://github.com/dbannon9/devon_prep_baseball/blob/master/Devon%20Prep%20Baseball.xlsx"
     players = pd.read_excel(url)
 
     #clean column names
