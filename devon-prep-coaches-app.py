@@ -12,8 +12,6 @@ def authenticate():
     return False
 
 if authenticate():
-    st.write(f"Welcome {name}!")
-
     players = pd.read_excel(r"C:\Users\dbann\Documents\Baseball\code\Devon Prep\Devon Prep Baseball.xlsx")
 
     #clean column names
