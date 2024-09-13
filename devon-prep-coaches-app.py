@@ -1,19 +1,30 @@
 import pandas as pd
 import streamlit as st
+from sqlalchemy import create_engine, text
+
+db = create_engine("postgresql://postgres.xtmfmfkpgommfdujhvev:G#v2!*hq8hU8-aU@aws-0-us-east-1.pooler.supabase.com:6543/postgres").connect()
 
 def authenticate():
     st.sidebar.header('Login')
     password = st.sidebar.text_input("Password", type='password')
 
-    if password == "db_dp_baseball":
+    if password == "p1":
         return True
     elif password:
         st.sidebar.error("Incorrect password")
     return False
 
 if authenticate():
-    url = "https://raw.githubusercontent.com/dbannon9/devon_prep_baseball/master/Devon%20Prep%20Baseball.csv"
-    players = pd.read_csv(url)
+    players = pd.DataFrame(db.execute(text("SELECT * FROM players")))
+    players.set_index('id',inplace=True)
+
+###### PICK UP HERE, ADD IN CLASS AND OTHER FORMULA COLUMNS ######
+    
+    coaches = pd.DataFrame(db.execute(text("SELECT * FROM coaches")))
+    coaches.set_index('id',inplace=True)
+
+    notes = pd.DataFrame(db.execute(text("SELECT * FROM notes")))
+    notes.set_index('id',inplace=True)
 
     #clean column names
     def clean_column_names(columns):
@@ -54,4 +65,5 @@ if authenticate():
 
     if pnote_submit:
         new_note = {'pitcher': pnote_pitcher, 'date': pnote_date, 'author': pnote_author, 'note': pnote_note}
-        pnotes = pnotes.append(new_note, ignore_index=True)
+        pd.DataFrame([new_note])
+        pnotes = pd.concat([pnotes, new_note], ignore_index=True)
