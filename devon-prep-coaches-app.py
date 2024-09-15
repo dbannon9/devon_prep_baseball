@@ -4,16 +4,20 @@ from sqlalchemy import create_engine, text
 from datetime import date
 import math
 from decimal import Decimal
+from dotenv import load_dotenv
+import os
 
-db = create_engine("postgresql://postgres.xtmfmfkpgommfdujhvev:G#v2!*hq8hU8-aU@aws-0-us-east-1.pooler.supabase.com:6543/postgres").connect()
+load_dotenv()
+pw = os.getenv('supabasetoken')
+db = create_engine("postgresql://postgres.xtmfmfkpgommfdujhvev:"+pw+"@aws-0-us-east-1.pooler.supabase.com:6543/postgres").connect()
 
 classdict = {
-        0: "grad",
-        1: "freshman",
-        2: "sophomore",
-        3: "junior",
-        4: "senior",
-        5: "middle"
+        0: "Grad",
+        1: "Freshman",
+        2: "Sophomore",
+        3: "Junior",
+        4: "Senior",
+        5: "Middle"
 }
 
 def authenticate():
@@ -63,7 +67,7 @@ if authenticate():
     st.subheader('Track Player Updates Below')
     ptoggle = st.toggle('Pitchers?')
     if ptoggle:
-        fplayers = players.query('pitcher == True')[['first_name','last_name','class','level']]
+        fplayers = players.query('pitcher == True')[['first_name','last_name','class']]
     else:
         fplayers = players[['first_name','last_name','class','pos_1','pos_2','pos_3']].fillna('')
     fplayers
@@ -73,10 +77,13 @@ if authenticate():
     st.title('Input New Player Note')
     currentplayers = players.query('active == True')
 
+    note_types = ['Fielder','Hitter','Pitcher']
+
     with st.form(key='Input New Player Note'):
         note_pitcher = st.selectbox("Player", currentplayers['full_name'])
         note_date = st.date_input("Today's Date", value = "default_value_today")
         note_coach = st.selectbox("Coach", coaches['name'])
+        note_type = st.selectbox("Type", note_types)
         note_note = st.text_input("Note")
         note_submit = st.form_submit_button(label = "Submit Note")
 
