@@ -1,0 +1,25 @@
+﻿first_name,last_name,,grad_year,pitcher,pos_1,pos_2,pos_3,,,name,role,active,,player_id,type,coach_id,note
+Caleb,Tesfaye,1,2028,TRUE,3B,1B,OF,,1,Coach Palumbo,Varsity Head Coach,TRUE,,3,Pitcher,2,"Fastball is fairly dead-zone, we should try and tilt it so he sinks it more. Slider played ok, pretty tight and he tunneled well."
+Hudson,Swan,2,2026,TRUE,3B,1B,,,2,Coach Bannon,"Varsity Assistant Coach, Player Development",TRUE,,2,Pitcher,2,"Best fastball shape I've seen, pristine command. Will need to see more from secondaries if he starts, but A+ fastball"
+Aaron,Ward,3,2025,TRUE,,,,,3,Coach Martin,Varsity Hitting & Outfield Coach,TRUE,,22,Pitcher,2,"Velo is decent, good finish and tail at the end. Needs to work arm-side more, he nibbled (both location of fastball and use of slider). After he threw two sliders his fastball leaked arm-side, need to clean up mech's there. Upside is there"
+Ryan,Samms,4,2025,TRUE,OF,1B,,,4,Coach Kania,Junior Varsity Head Coach,TRUE,,13,Pitcher,2,"Aimer, not a pitcher. Slider is better than fastball, almost same velo too. No clue what's going on with his fastball, but it won't play I don't think. Will be slider first, show me fastball if used."
+Teddy,Celentano,5,2028,TRUE,1B,,,,5,Coach Grande,Varsity Pitching Coach,TRUE,,9,Pitcher,2,"Supreme extension. Fastball will play the whole first time through. Shape isnt remarkable, but velo+ ext gives me Logan Gilbert vibes. Similarly, would be a splitter candidate if he needs an offspeed."
+Sean,Clancy,6,2027,FALSE,OF,,,,6,Coach Toal,Junior Varsity Assistant Coach,TRUE,,8,Pitcher,2,"Would be a project. Limited feel for spin, though he located the curve he was throwing. Fastball down got hit hard, needs to jam guys despite middling velo, which is a challenge. Shape is ok and slot is a little funky."
+Colin,Carrey,7,2026,TRUE,UT,,,,,,,,,1,Pitcher,2,"The velo is really good, and I think the fastball can play. Good finish, seemed to backspin it nicely. Curve was ok, but he yanked his fastball everytime he followed CU with FF, can work back and forth in the pen"
+Austin,Conaty,8,2026,TRUE,UT,,,,,,,,,5,Pitcher,2,"Hands are huge, but he has absolutely 0 feel. Holds fastball like a palmball, slider orientation is way off probably because he got the grip from a normal-handed friend. Ripped off 2 great CH, 2 terrible. Great clay to work with"
+Liam,Jung,9,2026,TRUE,1B,3B,,,,,,,,17,Fielder,2,"Kid can receive. Poised and fluid back there, has the arm for it. Great interactions with ump & opponents, OKD setup, quick feet moving behind him."
+John,Doogan,10,2027,TRUE,1B,OF,,,,,,,,10,Fielder,2,Seemed to make a great play on a double down the left field line. Good throw into 2B
+Brady,Doyle,11,2028,TRUE,3B,1B,,,,,,,,14,Hitter,2,"Grinder, love the approach. I think he takes it slightly too far with 2K and limits his mobility, but it's the right idea"
+Caleb,Garecht,12,2027,TRUE,3B,,,,,,,,,24,Hitter,2,"Seemed to be behind everything. When he got on late in the game his baserunning was good. Might need to widen him out a bit, get more athletic in the box?"
+CJ,Bruno,13,2025,TRUE,UT,,,,,,,,,18,Hitter,2,"Gotta hit the weight room, the bat was swinging him. I checked and it was a 32, could probably choke or use a 31"
+Christian,Leckman,14,2027,FALSE,UT,,,,,,,,,9,Hitter,2,"after groundout, walked in the dugout and said ""why am I so fucking fat"". Not great, cannot have that mindset."
+Albert,Charpentier,15,2027,FALSE,2B,SS,OF,,,,,,,13,Hitter,2,"Load was late, candidate for an earlier timing mechanism. Hands also drift forward when they should be loaded"
+Ryan,LaFond,16,2028,TRUE,C,OF,,,,,,,,5,Hitter,2,"way too eager, drifting like crazy. Gotta get him to stay back"
+Caleb,Flannery,17,2027,FALSE,C,1B,,,,,,,,2,Hitter,2,"Really good approach, very sound, could get him in his legs more"
+Braylon,Ernest,18,2025,FALSE,C,,,,,,,,,1,Hitter,2,"drifted early in the count, but corrected it and put a really nice oppo swing on the ball. Can he pull with that stance? Probably not lol"
+Will,Newbert,19,2028,FALSE,C,UT,,,,,,,,6,Hitter,2,Good 1 pitch knock
+Max,DiSanto,20,2026,TRUE,C,OF,,,,,,,,11,Hitter,2,"way in his own head, he was narrating what was wrong with his swing in the on deck circle. Way behind everything, tons of whiff"
+Matthew,McHugh,21,2028,TRUE,OF,,,,,,,,,17,Hitter,2,"Good swing and approach, runs well, his bat was wrapped a little more than it needs to be, lengthened his swing a little."
+Chase,Lubker,22,2025,TRUE,UT,,,,,,,,,,,,
+Jack,Shapren,23,2027,FALSE,OF,,,,,,,,,,,,
+Alexander,Hannah,24,2027,,,,,,,,,,,,,,
