@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from datetime import date
+from datetime import date, time
 import math
 from decimal import Decimal
 import os
@@ -134,3 +134,9 @@ if authenticate():
 
         # Check if the insertion was successful
         st.success("Note submitted successfully")
+        
+        # Wait for 3 seconds
+        time.sleep(3)
+        
+        # Rerun the script to clear the form inputs
+        st.experimental_rerun()
