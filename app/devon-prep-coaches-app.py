@@ -4,30 +4,28 @@ from streamlit_sqlalchemy import StreamlitAlchemyMixin
 from datetime import date
 import math
 from decimal import Decimal
-from dotenv import load_dotenv
 import os
-import psycopg2
+from supabase import create_client, Client
 
 # create connection with supabase
-load_dotenv()
-pw = os.getenv('supabasetoken')
-db = psycopg2.connect("postgresql://postgres.xtmfmfkpgommfdujhvev:"+pw+"@aws-0-us-east-1.pooler.supabase.com:6543/postgres")
 
-# create a cursor object to gather all data from database
-cur = db.cursor()
+# Use st.secrets to load the URL and key from secrets.toml
+supabase_url = st.secrets["supabase"]["SUPABASE_URL"]
+supabase_key = st.secrets["supabase"]["SUPABASE_KEY"]
+
+# get secrets from toml
+supabase: Client = create_client(supabase_url, supabase_key)
+
+# Create the connection object using SupabaseConnection
+db = create_client(supabase_url, supabase_key)
+
 # Function to fetch data from any table
 def fetch_table_data(table_name):
     # Execute the SQL query
-    cur.execute(f"SELECT * FROM {table_name}")
+    df = supabase.table(f"{table_name}").select("*").execute().data
     
-    # Fetch all rows from the executed query
-    rows = cur.fetchall()
-
-    # Get column names from the cursor description
-    columns = [desc[0] for desc in cur.description]
-
     # Convert the fetched data into a pandas DataFrame
-    return pd.DataFrame(rows, columns=columns)
+    return pd.DataFrame(df)
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
@@ -36,10 +34,6 @@ coaches = fetch_table_data('coaches')
 coaches.set_index('id',inplace=True)
 notes = fetch_table_data('notes')
 notes.set_index('id',inplace=True)
-
-# Close the cursor and connection
-cur.close()
-db.close()
 
 # assign class levels to index of years
 classdict = {
@@ -77,11 +71,14 @@ players['active'] = players['class'].isin(active_classes)
 # Authentication
 def authenticate():
     st.sidebar.header('Login')
-    password = st.sidebar.text_input("Password", type='password')
+    entered_password = st.sidebar.text_input("Password", type='password')
+    
+    # Access the password from secrets
+    correct_password = st.secrets["authentication"]["password"]
 
-    if password == "p1":
+    if entered_password == correct_password:
         return True
-    elif password:
+    elif entered_password:
         st.sidebar.error("Incorrect password")
     return False
 
@@ -121,24 +118,20 @@ if authenticate():
 
     # When form is submitted
     if note_submit:
+        # Convert the date object to ISO 8601 string format
+        note_date_str = note_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
+
         # Create new note dictionary with IDs
         new_note = {
             'player_id': note_pitcher,
-            'date': note_date,
+            'date': note_date_str,  # Use the string version of the date
             'coach_id': note_coach,
             'type': note_type,
             'note': note_note
         }
 
-        # Re-open the connection for insertion
-        with psycopg2.connect("postgresql://postgres.xtmfmfkpgommfdujhvev:"+pw+"@aws-0-us-east-1.pooler.supabase.com:6543/postgres") as db:
-            insert_query = """
-            INSERT INTO notes (player_id, date, coach_id, type, note)
-            VALUES (%s, %s, %s, %s, %s)
-            """
-            with db.cursor() as cur:
-                cur.execute(insert_query, (note_pitcher, note_date, note_coach, note_type, note_note))
-                db.commit()  # Commit the transaction
+        # Push using insert function
+        response = supabase.table("notes").insert(new_note).execute()
 
-        # Display success message
-        st.success("Note submitted successfully!")
+        # Check if the insertion was successful
+        st.success("Note submitted successfully")
