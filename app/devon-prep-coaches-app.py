@@ -1,6 +1,5 @@
 import pandas as pd
 import streamlit as st
-from streamlit_sqlalchemy import StreamlitAlchemyMixin
 from datetime import date
 import math
 from decimal import Decimal
