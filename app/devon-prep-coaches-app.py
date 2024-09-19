@@ -107,7 +107,7 @@ if authenticate():
 
     st.title('Input New Player Note')
 
-    with st.form(key='Input New Player Note'):
+    with st.form(key='Input New Player Note',clear_on_submit=True):
         note_pitcher = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id])  # Displays name
         note_date = st.date_input("Today's Date", value=date.today())  # Default value to today's date
         note_coach = st.selectbox("Coach", options=list(coach_options.keys()), format_func=lambda id: coach_options[id])  # Displays name
@@ -134,5 +134,3 @@ if authenticate():
 
         # Display success message
         st.success("Note submitted successfully")
-
-        st.experimental_rerun()
