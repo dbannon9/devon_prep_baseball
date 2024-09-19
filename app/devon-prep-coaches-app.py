@@ -135,11 +135,4 @@ if authenticate():
         # Display success message
         st.success("Note submitted successfully")
 
-        # Display spinner for 3 seconds
-        with st.spinner("Processing..."):
-            # Use a placeholder to keep the spinner visible for 3 seconds
-            time.sleep(3)
-
-        # Clear form fields by setting session state variable to False and rerun
-        st.session_state.form_submitted = False
         st.experimental_rerun()
