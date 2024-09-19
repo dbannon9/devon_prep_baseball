@@ -129,14 +129,17 @@ if authenticate():
             'note': note_note
         }
 
-        # Push using insert function
-        response = supabase.table("notes").insert(new_note).execute()
+        # Mark the form as submitted
+        st.session_state.form_submitted = True
 
-        # Check if the insertion was successful
+        # Display success message
         st.success("Note submitted successfully")
-        
-        # Wait for 3 seconds
-        time.sleep(3)
-        
-        # Rerun the script to clear the form inputs
+
+        # Display spinner for 3 seconds
+        with st.spinner("Processing..."):
+            # Use a placeholder to keep the spinner visible for 3 seconds
+            time.sleep(3)
+
+        # Clear form fields by setting session state variable to False and rerun
+        st.session_state.form_submitted = False
         st.experimental_rerun()
