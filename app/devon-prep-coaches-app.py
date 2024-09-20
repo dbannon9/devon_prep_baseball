@@ -14,7 +14,7 @@ roster = st.Page("pages/roster-page.py",title="Roster",icon=":material/group:")
 note_input = st.Page("pages/note-input-page.py",title="Input Notes",icon=":material/edit_note:")
 player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
 coach_page = st.Page("pages/coaches-page.py",title="Coach Summary",icon=":material/sports:")
-calendar_page = st.Page("pages/calendar-page",title="Schedule",icon=":material/calendar_month:")
+calendar_page = st.Page("pages/calendar-page.py",title="Schedule",icon=":material/calendar_month:")
 
 def authenticate():
     st.sidebar.header('Login')
