@@ -32,6 +32,6 @@ def authenticate():
 #%% Run the App
 
 if authenticate():
-    nav = st.navigation([roster,note_input,player_page,coach_page])
+    nav = st.navigation([roster,note_input,player_page,coach_page,calendar_page])
     nav.run()
 
