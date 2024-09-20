@@ -42,12 +42,12 @@ notes.set_index('id',inplace=True)
 
 # assign class levels to index of years
 classdict = {
-        0: "Grad",
-        1: "Freshman",
-        2: "Sophomore",
-        3: "Junior",
-        4: "Senior",
-        5: "Middle"
+        0: "Middle",
+        1: "Senior",
+        2: "Junior",
+        3: "Sophomore",
+        4: "Freshman",
+        5: "Grad"
 }
 
 # assign class year names to each player based on graduation year
@@ -108,6 +108,9 @@ if note_submit:
         'type': note_type,
         'note': note_note
     }
+
+    # Push using insert function
+    response = supabase.table("notes").insert(new_note).execute()
 
     # Mark the form as submitted
     st.session_state.form_submitted = True
