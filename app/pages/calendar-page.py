@@ -38,4 +38,15 @@ schedule.set_index('id',inplace=True)
 
 st.title('Schedule')
 
-st.dataframe(schedule,hide_index=True)
+schedule_display = schedule.rename(columns={
+    'event_type': 'Event Type',
+    'date': 'Date',
+    'time': 'Time',
+    'opponent': 'Opponent',
+    'home_road': 'Home/Road',
+    'conference': 'Conference Game',
+    'teams': 'Teams',
+    'location': 'Location'
+}, inplace=True)
+
+st.dataframe(schedule_display,hide_index=True)
