@@ -38,7 +38,7 @@ schedule.set_index('id',inplace=True)
 
 st.title('Schedule')
 
-schedule_display = schedule.rename(columns={
+schedule.rename(columns={
     'event_type': 'Event Type',
     'date': 'Date',
     'time': 'Time',
@@ -49,4 +49,4 @@ schedule_display = schedule.rename(columns={
     'location': 'Location'
 }, inplace=True)
 
-st.dataframe(schedule_display,hide_index=True)
+st.dataframe(schedule,hide_index=True)
