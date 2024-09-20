@@ -107,8 +107,6 @@ notes_table.rename(columns={
     'date': 'Date'
 }, inplace=True)
 
-# st.table(notes_table[['Player','Type','Date','Coach','Note']])
-
 st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=True)
 
 # query("player_id == player_select")

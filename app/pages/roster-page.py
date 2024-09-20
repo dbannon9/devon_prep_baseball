@@ -90,4 +90,5 @@ if ptoggle:
     fplayers = players.query('pitcher == True & active == True')[['first_name','last_name','class']]
 else:
     fplayers = players[['first_name','last_name','class','pos_1','pos_2','pos_3']].fillna('')
-fplayers
+
+st.dataframe(fplayers,hide_index=True)
