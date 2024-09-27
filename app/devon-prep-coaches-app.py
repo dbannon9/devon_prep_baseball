@@ -8,8 +8,6 @@ from decimal import Decimal
 import os
 from supabase import create_client, Client
 
-#%% Make Page Wide
-st.set_page_config(layout="wide")
 
 #%% page definitions
 
@@ -35,6 +33,7 @@ def authenticate():
     return False
 
 #%% Run the App
+st.set_page_config(layout="wide")
 
 if authenticate():
     nav = st.navigation([roster,note_input,player_page,calendar_page])
