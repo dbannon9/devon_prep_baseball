@@ -11,9 +11,10 @@ from supabase import create_client, Client
 
 #%% page definitions
 
-roster = st.Page("pages/roster-page.py",title="Roster",icon=":material/group:")
+roster = st.Page("pages/roster-page.py",title="Roster",icon=":material/tsunami:")
 note_input = st.Page("pages/note-input-page.py",title="Input Notes",icon=":material/edit_note:")
 player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
+team_notes_page = st.Page("pages/team-notes-page.py",title="Team Notes",icon=":material/group:")
 # coach_page = st.Page("pages/coaches-page.py",title="Coach Summary",icon=":material/sports:")
 calendar_page = st.Page("pages/calendar-page.py",title="Schedule",icon=":material/calendar_month:")
 
