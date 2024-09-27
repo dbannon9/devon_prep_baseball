@@ -51,7 +51,7 @@ team_notes_display = team_notes_display.drop(['coach_id'], axis=1)
 
 team_notes_display.rename(columns={
     'name': 'Coach',
-    'team_note': 'Note',
+    'note': 'Note',
     'date': 'Date'
 }, inplace=True)
 
