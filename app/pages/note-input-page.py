@@ -152,4 +152,4 @@ elif note_level == "Team":
             st.success("Note submitted successfully")
 
 elif note_level == "---":
-    print("Please pick a note type: Player or Team")
+    st.write("Please pick a note type: Player or Team")
