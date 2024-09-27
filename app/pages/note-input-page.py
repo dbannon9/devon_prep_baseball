@@ -89,7 +89,7 @@ coach_options = coaches['name'].to_dict()
 
 st.title('Input New Note')
 
-note_level = st.selectbox('Player Note or Team Note', ["Player","Team"])
+note_level = st.selectbox('Player Note or Team Note', ["---","Player","Team"])
 
 if note_level == "Player":
 
@@ -151,5 +151,5 @@ elif note_level == "Team":
             # Display success message
             st.success("Note submitted successfully")
 
-elif note_level is None:
+elif note_level == "---":
     print("Please pick a note type: Player or Team")
