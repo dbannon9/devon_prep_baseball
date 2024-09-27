@@ -37,6 +37,6 @@ def authenticate():
 st.set_page_config(layout="wide")
 
 if authenticate():
-    nav = st.navigation([roster,note_input,player_page,calendar_page])
+    nav = st.navigation([roster,note_input,player_page,team_notes_page,calendar_page])
     nav.run()
 
