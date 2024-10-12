@@ -17,8 +17,8 @@ player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":mater
 team_notes_page = st.Page("pages/team-notes-page.py",title="Team Notes",icon=":material/group:")
 # coach_page = st.Page("pages/coaches-page.py",title="Coach Summary",icon=":material/sports:")
 calendar_page = st.Page("pages/calendar-page.py",title="Schedule",icon=":material/calendar_month:")
-practice_planning_page = st.Page("pages/practice-planning-page.py",title="Practice Planning",icon=":material/conversion_path:")
 view_practice_plans_page = st.Page("pages/view-practice-plans-page.py",title="View Practice Plans",icon=":material/sports:")
+practice_planning_page = st.Page("pages/practice-planning-page.py",title="Practice Planning",icon=":material/conversion_path:")
 
 #%% Authentication
 
@@ -39,6 +39,13 @@ def authenticate():
 st.set_page_config(layout="wide")
 
 if authenticate():
-    nav = st.navigation([roster,note_input,player_page,team_notes_page,calendar_page,view_practice_plans_page,practice_planning_page])
+    nav = st.navigation([
+        roster,
+        note_input,
+        player_page,
+        team_notes_page,
+        calendar_page,
+        view_practice_plans_page,
+        practice_planning_page])
     nav.run()
 
