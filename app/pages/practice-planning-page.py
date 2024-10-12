@@ -96,36 +96,23 @@ date_str = practice_plans_date.isoformat()  # Converts the date object to 'YYYY-
 
 new_practice_plan = {
     'date': date_str,
-    'event_1_start_time': event_1_start_time,
-    'event_1_end_time': event_1_end_time,
+    'event_1_start_time': event_1_start_time.strftime('%H:%M') if event_1_start_time else None,
+    'event_1_end_time': event_1_end_time.strftime('%H:%M') if event_1_end_time else None,
     'event_1_name': event_1_name,
     'event_1_notes': event_1_notes,
+    'event_2_start_time': event_2_start_time.strftime('%H:%M') if event_2_start_time else None,
+    'event_2_end_time': event_2_end_time.strftime('%H:%M') if event_2_end_time else None,
+    'event_2_name': event_2_name,
+    'event_2_notes': event_2_notes,
+    'event_3_start_time': event_3_start_time.strftime('%H:%M') if event_3_start_time else None,
+    'event_3_end_time': event_3_end_time.strftime('%H:%M') if event_3_end_time else None,
+    'event_3_name': event_3_name,
+    'event_3_notes': event_3_notes,
+    'event_4_start_time': event_4_start_time.strftime('%H:%M') if event_4_start_time else None,
+    'event_4_end_time': event_4_end_time.strftime('%H:%M') if event_4_end_time else None,
+    'event_4_name': event_4_name,
+    'event_4_notes': event_4_notes
 }
-
-# Dynamically add event 2, 3, and 4 only if they are defined
-if event_2_name:  # Check if event_2_name is not None or an empty string
-    new_practice_plan.update({
-        'event_2_start_time': event_2_start_time,
-        'event_2_end_time': event_2_end_time,
-        'event_2_name': event_2_name,
-        'event_2_notes': event_2_notes,
-    })
-
-if event_3_name:  # Check if event_3_name is not None or an empty string
-    new_practice_plan.update({
-        'event_3_start_time': event_3_start_time,
-        'event_3_end_time': event_3_end_time,
-        'event_3_name': event_3_name,
-        'event_3_notes': event_3_notes,
-    })
-
-if event_4_name:  # Check if event_4_name is not None or an empty string
-    new_practice_plan.update({
-        'event_4_start_time': event_4_start_time,
-        'event_4_end_time': event_4_end_time,
-        'event_4_name': event_4_name,
-        'event_4_notes': event_4_notes,
-    })
 
 practice_submit = st.button("Submit Practice Plan")
 
