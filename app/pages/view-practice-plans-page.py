@@ -48,4 +48,10 @@ else:
     # Extract the event name for the row
     # event_1_name = this_practice.iloc[0]['event_1_name']
     st.subheader(f"{str(this_practice.iloc[0]['event_1_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_1_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_1_name']}")
-    st.write(f"***Description:*** {this_practice.iloc[0]['event_1_notes']}")
+    st.write(f"{this_practice.iloc[0]['event_1_notes']}")
+    if this_practice.iloc[0]['event_2_name'].empty:
+        print("")
+    else:
+        st.subheader(f"{str(this_practice.iloc[0]['event_2_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_2_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_2_name']}")
+        st.write(f"{this_practice.iloc[0]['event_2_notes']}")
+
