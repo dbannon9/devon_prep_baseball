@@ -34,6 +34,26 @@ def fetch_table_data(table_name):
 practice_plans = fetch_table_data('practice_plans')
 practice_plans.set_index('id',inplace=True)
 
+#%% Data Definitions
+
+date_str = ""
+event_1_start_time = ""
+event_1_end_time = ""
+event_1_name = ""
+event_1_notes = ""
+event_2_start_time = ""
+event_2_end_time = ""
+event_2_name = ""
+event_2_notes = ""
+event_3_start_time = ""
+event_3_end_time = ""
+event_3_name = ""
+event_3_notes = ""
+event_4_start_time = ""
+event_4_end_time = ""
+event_4_name = ""
+event_4_notes = ""
+
 #%% Input Practice Plans
 
 st.title('Create New Practice Plan')
