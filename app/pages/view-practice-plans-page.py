@@ -46,5 +46,6 @@ if this_practice.empty:
 
 else:
     # Extract the event name for the row
-    event_1_name = this_practice.iloc[0]['event_1_name']
-    st.subheader(f"***Event 1:*** {event_1_name}")
+    # event_1_name = this_practice.iloc[0]['event_1_name']
+    st.subheader(f"***Event 1:*** {this_practice.iloc[0]['event_1_name']}")
+    st.write(f"{this_practice.iloc[0]['event_1_start_time']} - {this_practice.iloc[0]['event_1_end_time']}")
