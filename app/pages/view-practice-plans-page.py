@@ -37,7 +37,7 @@ practice_plans.set_index('id',inplace=True)
 #%% View Practice Plans
 st.title("View Practice Plans")
 pdate = st.date_input("Select Practice Date", value=date.today())
-pdate = pd.to_datetime(pdate)
+pdate = pdate.strftime('%Y-%m-%d')
 
 this_practice = practice_plans[practice_plans['date']==pdate]
 
