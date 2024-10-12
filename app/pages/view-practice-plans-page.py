@@ -48,7 +48,4 @@ else:
     # Extract the event name for the row
     # event_1_name = this_practice.iloc[0]['event_1_name']
     st.subheader(f"***Event 1:*** {this_practice.iloc[0]['event_1_name']}")
-    
-    start_time = datetime.datetime.strptime(str(this_practice.iloc[0]['event_1_start_time']), '%H:%M:%S')
-    end_time = datetime.datetime.strptime(str(this_practice.iloc[0]['event_1_end_time']), '%H:%M:%S')
-    st.write(f"{start_time.strftime('%I:%M').lstrip('0')} - {end_time.strftime('%I:%M').lstrip('0')}")
+    st.write(f"{str(this_practice.iloc[0]['event_1_start_time']).lstrip('0').rstrip(':00')} - {str(this_practice.iloc[0]['event_1_end_time']).lstrip('0').rstrip(':00')}")
