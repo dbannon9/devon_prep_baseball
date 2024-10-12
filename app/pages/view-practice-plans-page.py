@@ -40,4 +40,4 @@ pdate = st.date_input("Select Practice Date", value=date.today())
 
 this_practice = practice_plans[practice_plans['date']==pdate]
 
-# st.write(f"Event 1: {this_practice['event_1_name']}")
+st.write(f"Event 1: {this_practice['event_1_name']}")
