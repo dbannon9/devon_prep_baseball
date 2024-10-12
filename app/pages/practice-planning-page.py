@@ -119,7 +119,7 @@ practice_submit = st.button("Submit Practice Plan")
 if practice_submit:
     response = supabase.table("practice_plans").insert(new_practice_plan).execute()
     st.success("Practice Plan Submitted Successfully")
-    st.experimental_rerun()
+    st.rerun()
 
 # Push using insert function
 
