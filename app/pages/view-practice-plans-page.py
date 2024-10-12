@@ -37,7 +37,14 @@ practice_plans.set_index('id',inplace=True)
 #%% View Practice Plans
 st.title("View Practice Plans")
 pdate = st.date_input("Select Practice Date", value=date.today())
+pdate = pd.to_datetime(pdate)
 
 this_practice = practice_plans[practice_plans['date']==pdate]
 
-st.write(f"Event 1: {this_practice['event_1_name']}")
+if this_practice.empty:
+    st.write("No practice plan found for this date.")
+
+else:
+    # Extract the event name for the row
+    event_1_name = this_practice.iloc[0]['event_1_name']
+    st.write(f"Event 1: {event_1_name}")
