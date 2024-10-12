@@ -117,7 +117,7 @@ new_practice_plan = {
 practice_submit = st.button("Submit Practice Plan")
 
 if practice_submit:
-    response = supabase.table("team_notes").insert(new_practice_plan).execute()
+    response = supabase.table("practice_plans").insert(new_practice_plan).execute()
     st.success("Practice Plan Submitted Successfully")
     st.experimental_rerun()
 
