@@ -54,4 +54,13 @@ else:
     else:
         st.subheader(f"{str(this_practice.iloc[0]['event_2_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_2_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_2_name']}")
         st.write(f"{this_practice.iloc[0]['event_2_notes']}")
-
+        if this_practice.iloc[0]['event_3_name'] == "":
+            print("")
+        else:
+            st.subheader(f"{str(this_practice.iloc[0]['event_3_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_3_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_3_name']}")
+            st.write(f"{this_practice.iloc[0]['event_3_notes']}")
+            if this_practice.iloc[0]['event_4_name'] == "":
+                print("")
+            else:
+                st.subheader(f"{str(this_practice.iloc[0]['event_4_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_4_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_4_name']}")
+                st.write(f"{this_practice.iloc[0]['event_4_notes']}")
