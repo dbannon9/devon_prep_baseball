@@ -116,7 +116,7 @@ def display_video():
     player_name = player_options[player_select]  # Get the player name from player_options
     player_videos = video[video['player_id'] == player_select]
     for index, row in player_videos.iterrows():
-        st.write(f"{player_name} - {row['speed']} - {row['pitch_type']}")
+        st.write(f"{row['date']} - {player_name} - {row['speed']} - {row['pitch_type']}")
         st.video(row['url'])
 
 st.subheader("Video:")
