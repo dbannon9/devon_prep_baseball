@@ -112,8 +112,8 @@ notes_table.rename(columns={
 st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=True)
 
 url = video[video['player_id'] == player_select]['url']
-st.video(url)
-
+# st.video(url)
+url
 # Get video rows for this player, sorted by most recent
 def display_video():
     player_video = video[video['player_id'] == player_select]
