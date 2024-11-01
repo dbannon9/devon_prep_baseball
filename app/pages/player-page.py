@@ -113,6 +113,8 @@ st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=Tru
 
 st.dataframe(video)
 
+st.video('https://xtmfmfkpgommfdujhvev.supabase.co/storage/v1/object/public/pitching/ward%204S.mp4?t=2024-10-22T00%3A46%3A34.515Z')
+
 # Get video rows for this player, sorted by most recent
 # def display_video():
 #     player_video = video[video['player_id'] = player_select]
