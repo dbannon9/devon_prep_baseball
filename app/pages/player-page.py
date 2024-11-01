@@ -111,11 +111,13 @@ notes_table.rename(columns={
 
 st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=True)
 
-# Get video rows for this player, sorted by most recent
-def display_video():
-    player_video = video[video['player_id'] = player_select]
-    video_urls = player_video['url']
-    for url in video_urls:
-        st.video(url)
+st.dataframe(video)
 
-display_video()
+# Get video rows for this player, sorted by most recent
+# def display_video():
+#     player_video = video[video['player_id'] = player_select]
+#     video_urls = player_video['url']
+#     for url in video_urls:
+#         st.video(url)
+
+# display_video()
