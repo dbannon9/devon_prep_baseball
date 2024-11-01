@@ -113,9 +113,10 @@ st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=Tru
 
 # Get video rows for this player, sorted by most recent
 def display_video():
-    player_video = video[video['player_id'] == player_select]
-    video_urls = player_video['url']
-    for url in video_urls:
-        st.video(url)
+    player_videos = video[video['player_id'] == player_select]
+    for video in player_videos:
+        st.write(f"{player_select} - {player_videos['Type']} - {player_videos['pitch_type']}")
+        st.video(player_videos['url'])
 
+st.subheader("Video:")
 display_video()
