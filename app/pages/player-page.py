@@ -37,6 +37,8 @@ coaches = fetch_table_data('coaches')
 coaches.set_index('id',inplace=True)
 notes = fetch_table_data('notes')
 notes.set_index('id',inplace=True)
+video = fetch_table_data('video')
+video.set_index('id',inplace=True)
 
 #%% Data Adjustments
 
@@ -109,4 +111,10 @@ notes_table.rename(columns={
 
 st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=True)
 
-# query("player_id == player_select")
+# Get video rows for this player, sorted by most recent
+def display_video(player):
+    player = player_select
+    player_video = video[video['player_id'] = player_select]
+    video_urls = player_video['url']
+    for url in video_urls:
+        st.video(url)
