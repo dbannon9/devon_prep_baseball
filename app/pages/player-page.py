@@ -115,7 +115,7 @@ st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=Tru
 def display_video():
     player_videos = video[video['player_id'] == player_select]
     for video in player_videos:
-        st.write(f"{player_select} - {player_videos['Type']} - {player_videos['pitch_type']}")
+        st.write(f"{player_select} - {player_videos['type']} - {player_videos['pitch_type']}")
         st.video(player_videos['url'])
 
 st.subheader("Video:")
