@@ -19,6 +19,7 @@ team_notes_page = st.Page("pages/team-notes-page.py",title="Team Notes",icon=":m
 calendar_page = st.Page("pages/calendar-page.py",title="Schedule",icon=":material/calendar_month:")
 view_practice_plans_page = st.Page("pages/view-practice-plans-page.py",title="View Practice Plans",icon=":material/sports:")
 practice_planning_page = st.Page("pages/practice-planning-page.py",title="Practice Planning",icon=":material/conversion_path:")
+video_upload_testing = st.Page("pages/video-upload-testing.py",title="Video Upload Testing",icon=":material/upload:")
 
 #%% Authentication
 
@@ -46,6 +47,7 @@ if authenticate():
         team_notes_page,
         calendar_page,
         view_practice_plans_page,
-        practice_planning_page])
+        practice_planning_page,
+        video_upload_testing])
     nav.run()
 
