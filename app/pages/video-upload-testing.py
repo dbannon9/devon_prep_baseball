@@ -40,6 +40,9 @@ players.set_index('id',inplace=True)
 video = fetch_table_data('video')
 video.set_index('id',inplace=True)
 
+# Create Players Full Name Column
+players['full_name'] = players['first_name'] + ' ' + players['last_name']
+
 # Prepare dropdown options
 player_options = players['full_name'].to_dict()
 pitch_type_options = {
