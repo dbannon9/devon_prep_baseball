@@ -66,10 +66,10 @@ if vid is not None:
         video_view = st.selectbox("View", options=list({"Pitcher's Mound","Home Plate","Open Side","Closed Side"}))
         video_pitch_type = st.selectbox("Pitch Type", options=list(pitch_type_options))
         video_speed = st.selectbox("Video Speed", options=list({"Slo-Mo","Regular"}))
+        if video_date is not None:
+            video_date_str = video_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
+        video_file_name = f"{video_player} - {video_pitch_type} - {video_speed} - {video_view} - {video_date_str}"
         video_submit = st.form_submit_button(label="Upload Video")
-
-video_date_str = video_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
-video_file_name = f"{video_player} - {video_pitch_type} - {video_speed} - {video_view} - {video_date_str}"
 
 if video_submit == True:
     # Start by loading the video from the uploader into the pitchers bucket
