@@ -57,7 +57,7 @@ pitch_type_options = {
 
 #%% Video Upload and Bucket Connection
 
-vid = st.file_uploader("Place Video Here",'mp4')
+vid = st.file_uploader("Place Video Here",['mp4','mov'])
 if vid is not None:
     with st.form(key='Input Key Video Information',clear_on_submit=True):
         video_player = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id])  # Displays name
