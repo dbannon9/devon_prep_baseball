@@ -78,14 +78,14 @@ elif vid is None:
 if video_submit:
     try:
         # Upload the video file to the bucket
-        response = supabase.storage.from_('pitchers').upload(video_file_name, vid.getvalue())
+        response = supabase.storage.from_('pitching').upload(video_file_name, vid.getvalue())
         
         # Check if there's an error in the response
         if response.error:
             st.error(f"Error uploading video: {response.error['message']}")
         else:
             # Get the public URL of the uploaded video
-            video_url = supabase.storage.from_('pitchers').get_public_url(video_file_name)
+            video_url = supabase.storage.from_('pitching').get_public_url(video_file_name)
             
             # Insert the video details into the database
             new_video_row = {
