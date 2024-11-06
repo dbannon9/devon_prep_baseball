@@ -77,17 +77,17 @@ elif vid is None:
 
 if video_submit:
     try:
-        # Attempt to upload the video file
-        response = supabase.storage.from_('pitching').upload(video_file_name, vid.getvalue())
+        # Upload the video file to the bucket
+        response = supabase.storage.from_('pitchers').upload(video_file_name, vid.getvalue())
         
-        # Check if upload was successful by inspecting the response's status code
-        if response.status_code != 200:
-            st.error(f"Error uploading video: {response.json().get('message', 'Unknown error')}")
+        # Check if there's an error in the response
+        if response.error:
+            st.error(f"Error uploading video: {response.error['message']}")
         else:
-            # Get the URL of the uploaded video
-            video_url = supabase.storage.from_('pitching').get_public_url(video_file_name)
+            # Get the public URL of the uploaded video
+            video_url = supabase.storage.from_('pitchers').get_public_url(video_file_name)
             
-            # Prepare the new row data
+            # Insert the video details into the database
             new_video_row = {
                 'player_id': video_player,
                 'date': video_date_str,
@@ -97,13 +97,12 @@ if video_submit:
                 'speed': video_speed,
                 'url': video_url
             }
+            insert_response = supabase.table("video").insert(new_video_row).execute()
             
-            # Insert the new row into the database
-            response = supabase.table("video").insert(new_video_row).execute()
-            if response.status_code != 200:
-                st.error(f"Error inserting data into database: {response.json().get('message', 'Unknown error')}")
+            if insert_response.error:
+                st.error(f"Error inserting data into database: {insert_response.error['message']}")
             else:
                 st.success("Video uploaded successfully and saved in the database.")
-
+    
     except Exception as e:
-        st.error(f"An error occurred: {e}")
+        st.error(f"An unexpected error occurred: {str(e)}")
