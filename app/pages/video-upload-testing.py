@@ -91,7 +91,7 @@ if video_submit:
             else:
                 mime_type = 'application/octet-stream'  # Default binary stream
         # Upload the video file to the bucket
-        response = supabase.storage.from_('pitching').upload(video_file_name, vid.getvalue(), file_options={"contentType": "video/quicktime"})
+        response = supabase.storage.from_('pitching').upload(video_file_name, vid, file_options={"contentType": "video/quicktime"})
         
         # Get the public URL of the uploaded video
         video_url = supabase.storage.from_('pitching').get_public_url(video_file_name)
