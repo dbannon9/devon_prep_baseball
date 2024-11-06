@@ -78,14 +78,14 @@ elif vid is None:
 if video_submit:
     try:
         # Attempt to upload the video file
-        response = supabase.storage.from_('pitching').upload(video_file_name, vid.getvalue())
+        response = supabase.storage.from_('pitchers').upload(video_file_name, vid.getvalue())
         
-        # Check for upload errors
-        if response.get("error"):
-            st.error(f"Error uploading video: {response['error']['message']}")
+        # Check if upload was successful by inspecting the response's status code
+        if response.status_code != 200:
+            st.error(f"Error uploading video: {response.json().get('message', 'Unknown error')}")
         else:
             # Get the URL of the uploaded video
-            video_url = supabase.storage.from_('pitching').get_public_url(video_file_name)
+            video_url = supabase.storage.from_('pitchers').get_public_url(video_file_name)
             
             # Prepare the new row data
             new_video_row = {
@@ -100,16 +100,10 @@ if video_submit:
             
             # Insert the new row into the database
             response = supabase.table("video").insert(new_video_row).execute()
-            if response.get("error"):
-                st.error(f"Error inserting data into database: {response['error']['message']}")
+            if response.status_code != 200:
+                st.error(f"Error inserting data into database: {response.json().get('message', 'Unknown error')}")
             else:
                 st.success("Video uploaded successfully and saved in the database.")
 
     except Exception as e:
         st.error(f"An error occurred: {e}")
-
-
-
-
-
-
