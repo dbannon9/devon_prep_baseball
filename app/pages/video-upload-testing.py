@@ -80,8 +80,8 @@ elif vid is None:
 # Check if the user uploaded a video
 if video_submit:
     try:
-        # Convert the Streamlit uploaded file to a BytesIO object
-        vid_file = BytesIO(vid.read())
+        # Read the content of the uploaded file as bytes
+        video_bytes = vid.read()
 
         # Set the appropriate mime type based on file extension
         if video_file_name.endswith('.mov'):
@@ -92,7 +92,7 @@ if video_submit:
             mime_type = 'application/octet-stream'  # Default fallback mime type
 
         # Upload the video file to the Supabase storage bucket
-        response = supabase.storage.from_('pitching').upload(video_file_name, vid_file, file_options={"contentType": mime_type})
+        response = supabase.storage.from_('pitching').upload(video_file_name, video_bytes, file_options={"contentType": mime_type})
 
         # Get the public URL of the uploaded video
         video_url = supabase.storage.from_('pitching').get_public_url(video_file_name)
