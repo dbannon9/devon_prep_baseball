@@ -80,29 +80,23 @@ if video_submit:
         # Upload the video file to the bucket
         response = supabase.storage.from_('pitching').upload(video_file_name, vid.getvalue(), file_options={"contentType": "video/quicktime"})
         
-        # Check if there's an error in the response
-        if response.error:
-            st.error(f"Error uploading video: {response.error['message']}")
-        else:
-            # Get the public URL of the uploaded video
-            video_url = supabase.storage.from_('pitching').get_public_url(video_file_name)
-            
-            # Insert the video details into the database
-            new_video_row = {
-                'player_id': video_player,
-                'date': video_date_str,
-                'type': video_type,
-                'view': video_view,
-                'pitch_type': video_pitch_type,
-                'speed': video_speed,
-                'url': video_url
-            }
-            insert_response = supabase.table("video").insert(new_video_row).execute()
-            
-            if insert_response.error:
-                st.error(f"Error inserting data into database: {insert_response.error['message']}")
-            else:
-                st.success("Video uploaded successfully and saved in the database.")
+        # Get the public URL of the uploaded video
+        video_url = supabase.storage.from_('pitching').get_public_url(video_file_name)
+
+        # Insert the video details into the database
+        new_video_row = {
+            'player_id': video_player,
+            'date': video_date_str,
+            'type': video_type,
+            'view': video_view,
+            'pitch_type': video_pitch_type,
+            'speed': video_speed,
+            'url': video_url
+        }
+        insert_response = supabase.table("video").insert(new_video_row).execute()
+
+        st.success("Video uploaded successfully and saved in the database.")
+
     
     except Exception as e:
         st.error(f"An unexpected error occurred: {str(e)}")
