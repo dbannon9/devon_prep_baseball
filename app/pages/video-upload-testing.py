@@ -58,7 +58,7 @@ pitch_type_options = {
 #%% Video Upload and Bucket Connection
 
 vid = st.file_uploader("Place Video Here",['mp4','mov'])
-video_submit = None
+# video_submit = None
 
 if vid is not None:
     with st.form(key='Input Key Video Information',clear_on_submit=True):
@@ -77,7 +77,7 @@ elif vid is None:
 
 if video_submit == True:
     # Start by loading the video from the uploader into the pitchers bucket
-    response = supabase.storage.from_('pitchers').upload(video_file_name, vid)
+    response = supabase.storage.from_('pitchers').upload(video_file_name, vid.getvalue())
     # Then get the URL of the video you just uploaded and save it with the same naming convention as above
     video_url = supabase.storage.from_('pitchers').get_public_url(video_file_name)
     # Then create the new row for the videos table with above info
