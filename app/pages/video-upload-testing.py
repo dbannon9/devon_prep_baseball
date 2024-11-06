@@ -58,6 +58,8 @@ pitch_type_options = {
 #%% Video Upload and Bucket Connection
 
 vid = st.file_uploader("Place Video Here",['mp4','mov'])
+video_submit = None
+
 if vid is not None:
     with st.form(key='Input Key Video Information',clear_on_submit=True):
         video_player = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id])  # Displays name
@@ -70,6 +72,8 @@ if vid is not None:
             video_date_str = video_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
         video_file_name = f"{video_player} - {video_pitch_type} - {video_speed} - {video_view} - {video_date_str}"
         video_submit = st.form_submit_button(label="Upload Video")
+elif vid is None:
+    st.write("Please upload a video")
 
 if video_submit == True:
     # Start by loading the video from the uploader into the pitchers bucket
