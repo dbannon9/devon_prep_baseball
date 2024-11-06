@@ -57,7 +57,7 @@ pitch_type_options = {
 
 #%% Video Upload and Bucket Connection
 
-vid = st.file_uploader("Place Video Here",['mp4','mov'])
+vid = st.file_uploader("Place Video Here", type=['mp4', 'mov'])
 video_submit = None
 
 if vid is not None:
