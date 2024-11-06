@@ -7,6 +7,7 @@ import math
 from decimal import Decimal
 import os
 from supabase import create_client, Client
+import mimetypes
 
 #%% create connection with supabase
 
@@ -77,6 +78,18 @@ elif vid is None:
 
 if video_submit:
     try:
+        # Get MIME type based on file extension
+        file_extension = vid.name.split('.')[-1].lower()
+        mime_type, _ = mimetypes.guess_type(vid.name)
+        
+        # If mime_type is None, set default values
+        if not mime_type:
+            if file_extension == 'mov':
+                mime_type = 'video/quicktime'
+            elif file_extension == 'mp4':
+                mime_type = 'video/mp4'
+            else:
+                mime_type = 'application/octet-stream'  # Default binary stream
         # Upload the video file to the bucket
         response = supabase.storage.from_('pitching').upload(video_file_name, vid.getvalue(), file_options={"contentType": "video/quicktime"})
         
