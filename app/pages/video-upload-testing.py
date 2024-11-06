@@ -75,28 +75,38 @@ if vid is not None:
 elif vid is None:
     st.write("Please upload a video")
 
-if video_submit == True:
-    # Start by loading the video from the uploader into the pitchers bucket
-    response = supabase.storage.from_('pitchers').upload(video_file_name, vid.getvalue())
-    # Then get the URL of the video you just uploaded and save it with the same naming convention as above
-    video_url = supabase.storage.from_('pitchers').get_public_url(video_file_name)
-    # Then create the new row for the videos table with above info
-    new_video_row = {
-        'player_id': video_player,
-        'date': video_date_str,
-        'type': video_type,
-        'view': video_view,
-        'pitch_type': video_pitch_type,
-        'speed': video_speed,
-        'url': video_url
-    }
-    response = supabase.table("video").insert(new_video_row).execute()
+if video_submit:
+    try:
+        # Attempt to upload the video file
+        response = supabase.storage.from_('pitchers').upload(video_file_name, vid.getvalue())
+        
+        # Check for upload errors
+        if response.get("error"):
+            st.error(f"Error uploading video: {response['error']['message']}")
+        else:
+            # Get the URL of the uploaded video
+            video_url = supabase.storage.from_('pitchers').get_public_url(video_file_name)
+            
+            # Prepare the new row data
+            new_video_row = {
+                'player_id': video_player,
+                'date': video_date_str,
+                'type': video_type,
+                'view': video_view,
+                'pitch_type': video_pitch_type,
+                'speed': video_speed,
+                'url': video_url
+            }
+            
+            # Insert the new row into the database
+            response = supabase.table("video").insert(new_video_row).execute()
+            if response.get("error"):
+                st.error(f"Error inserting data into database: {response['error']['message']}")
+            else:
+                st.success("Video uploaded successfully and saved in the database.")
 
-    # Mark the form as submitted
-    st.session_state.form_submitted = True
-
-    # Display success message
-    st.success("Note submitted successfully")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
 
 
 
