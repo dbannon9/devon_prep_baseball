@@ -78,7 +78,7 @@ elif vid is None:
 if video_submit:
     try:
         # Upload the video file to the bucket
-        response = supabase.storage.from_('pitching').upload(video_file_name, vid.getvalue(), file_options={"contentType": "video/mp4"})
+        response = supabase.storage.from_('pitching').upload(video_file_name, vid.getvalue(), file_options={"contentType": "video/quicktime"})
         
         # Check if there's an error in the response
         if response.error:
