@@ -72,12 +72,11 @@ if vid is not None:
         video_speed = st.selectbox("Video Speed", options=list({"Slo-Mo","Regular"}))
         if video_date is not None:
             video_date_str = video_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
-        video_file_name = f"{video_player} - {video_pitch_type} - {video_speed} - {video_view} - {video_date_str}"
+        video_file_name = f"{video_player} - {video_pitch_type} - {video_speed} - {video_view} - {video_date_str}.mov"
         video_submit = st.form_submit_button(label="Upload Video")
 elif vid is None:
     st.write("Please upload a video")
 
-# Check if the user uploaded a video
 # Check if the user uploaded a video
 if video_submit:
     try:
