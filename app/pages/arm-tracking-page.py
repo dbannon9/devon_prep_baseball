@@ -112,18 +112,18 @@ sessions_d4 = show_throw_session.query(f"Date == '{d4}'")
 #%% Arm Tracking
 
 st.title('Recent Sessions')
-show_throw_session
+
 st.subheader(f'Sessions from {d1}')
-sessions_d1
+st.dataframe(sessions_d1,hide_index=True)
 
 st.subheader(f'Sessions from {d2}')
-sessions_d2
+st.dataframe(sessions_d2,hide_index=True)
 
 st.subheader(f'Sessions from {d3}')
-sessions_d3
+st.dataframe(sessions_d3,hide_index=True)
 
 st.subheader(f'Sessions from {d4}')
-sessions_d4
+st.dataframe(sessions_d4,hide_index=True)
 
 #%% Input Sesstion
 
