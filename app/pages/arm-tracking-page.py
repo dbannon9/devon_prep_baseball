@@ -82,7 +82,7 @@ current_pitcher_options = currentpitchers['full_name'].to_dict()
 session_types = ['Bullpen','Sim Game','Scrimmage','Game']
 
 # Add player names to sessions
-# throw_session = throw_session.merge(players[['id', 'full_name']], left_on='player_id', right_on='id', how='left', suffixes=('', '_drop'))
+throw_session = throw_session.merge(players[['id', 'full_name']], left_on='player_id', right_on='id', how='left', suffixes=('', '_drop'))
 # throw_session.rename(columns={'full_name': 'player_name'}, inplace=True)
 # throw_session.drop(columns=['id_drop'], inplace=True, errors='ignore')
 
@@ -102,7 +102,7 @@ sessions_d4 = throw_session.query(f"date == '{d4}'")
 #%% Arm Tracking
 
 st.title('Recent Sessions')
-players['full_name']
+throw_session['full_name']
 st.subheader(f'Sessions from {d1}')
 sessions_d1
 
