@@ -7,6 +7,8 @@ import math
 from decimal import Decimal
 import os
 from supabase import create_client, Client
+from fpdf import FPDF
+import base64
 
 #%% Connect to Supabase
 
@@ -38,6 +40,24 @@ practice_plans.set_index('id',inplace=True)
 st.title("View Practice Plans")
 pdate = st.date_input("Select Practice Date", value=date.today())
 pdate = pdate.strftime('%Y-%m-%d')
+
+# add in PDF button
+def create_download_link(val, filename):
+    b64 = base64.b64encode(val)  # val looks like b'...'
+    return f'<a href="data:application/octet-stream;base64,{b64.decode()}" download="{filename}.pdf">Download file</a>'
+
+export_as_pdf = st.button("Export Practice Plans")
+
+if export_as_pdf:
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font('Helvetica', 'B', 16)
+    pdf.cell(40, 10, f"Practice Plans: {pdate}",1)
+    
+    html = create_download_link(pdf.output(dest="S").encode("latin-1"), "test")
+
+    st.markdown(html, unsafe_allow_html=True)
+
 
 this_practice = practice_plans[practice_plans['date']==pdate]
 
