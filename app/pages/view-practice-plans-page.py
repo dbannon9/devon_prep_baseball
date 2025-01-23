@@ -44,22 +44,10 @@ this_practice = practice_plans[practice_plans['date']==pdate]
 
 # assign practice text names
 
-if this_practice.iloc[0]['event_1_name'] == "":
-    print_1 = print("")
-else:
-    print_1 = f"{str(this_practice.iloc[0]['event_1_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_1_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_1_name']}"
-if this_practice.iloc[0]['event_2_name'] == "":
-    print_2 = print("")
-else:
-    print_2 = f"{str(this_practice.iloc[0]['event_2_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_2_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_2_name']}"
-if this_practice.iloc[0]['event_3_name'] == "":
-    print_3 = print("")
-else:
-    print_3 = f"{str(this_practice.iloc[0]['event_3_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_3_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_3_name']}"
-if this_practice.iloc[0]['event_4_name'] == "":
-    print_4 = print("")
-else:
-    print_4 = f"{str(this_practice.iloc[0]['event_4_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_4_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_4_name']}"
+print_1 = f"{str(this_practice.iloc[0]['event_1_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_1_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_1_name']}" if this_practice.iloc[0]['event_1_name'] != "" else ""
+print_2 = f"{str(this_practice.iloc[0]['event_2_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_2_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_2_name']}" if this_practice.iloc[0]['event_2_name'] != "" else ""
+print_3 = f"{str(this_practice.iloc[0]['event_3_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_3_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_3_name']}" if this_practice.iloc[0]['event_3_name'] != "" else ""
+print_4 = f"{str(this_practice.iloc[0]['event_4_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_4_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_4_name']}" if this_practice.iloc[0]['event_4_name'] != "" else ""
 
 print_note_1 = f"{this_practice.iloc[0]['event_1_notes']}"
 print_note_2 = f"{this_practice.iloc[0]['event_2_notes']}"
