@@ -82,7 +82,7 @@ current_pitcher_options = currentpitchers['full_name'].to_dict()
 session_types = ['Bullpen','Sim Game','Scrimmage','Game']
 
 # Add player names to sessions
-player_dict = players.set_index('id')['full_name'].to_dict()
+player_dict = players['full_name'].to_dict()
 throw_session['player_name'] = throw_session['player_id'].map(player_dict)
 
 # Assign days
@@ -101,7 +101,7 @@ sessions_d4 = throw_session.query(f"date == '{d4}'")
 #%% Arm Tracking
 
 st.title('Recent Sessions')
-currentpitchers['full_name']
+player_dict
 st.subheader(f'Sessions from {d1}')
 sessions_d1
 
