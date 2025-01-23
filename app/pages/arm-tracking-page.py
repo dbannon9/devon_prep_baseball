@@ -81,16 +81,16 @@ currentpitchers = players.query('pitcher == True')
 current_pitcher_options = currentpitchers['full_name'].to_dict()
 session_types = ['Bullpen','Sim Game','Scrimmage','Game']
 
-# Add player names to sessions
-throw_session = throw_session.merge(
-    players[['id', 'full_name']],  # Select only necessary columns from players
-    left_on='player_id',          # Match throw_session['player_id']
-    right_on='id',                # With players['id']
-    how='left'                    # Keep all rows in throw_session
-    suffixes=('', '_drop')        # Prevent duplicate column names
-)
-throw_session.rename(columns={'full_name': 'player_name'}, inplace=True)
-throw_session.drop(columns=['id_drop'], inplace=True, errors='ignore')
+# # Add player names to sessions
+# throw_session = throw_session.merge(
+#     players[['id', 'full_name']],  # Select only necessary columns from players
+#     left_on='player_id',          # Match throw_session['player_id']
+#     right_on='id',                # With players['id']
+#     how='left'                    # Keep all rows in throw_session
+#     suffixes=('', '_drop')        # Prevent duplicate column names
+# )
+# throw_session.rename(columns={'full_name': 'player_name'}, inplace=True)
+# throw_session.drop(columns=['id_drop'], inplace=True, errors='ignore')
 
 # Assign days
 today = date.today()
