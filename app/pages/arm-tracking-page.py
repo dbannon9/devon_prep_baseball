@@ -82,15 +82,9 @@ current_pitcher_options = currentpitchers['full_name'].to_dict()
 session_types = ['Bullpen','Sim Game','Scrimmage','Game']
 
 # Add player names to sessions
-throw_session1 = throw_session.merge(
-                                    players[['id', 'full_name']],
-                                    left_on='player_id',          
-                                    right_on='id',                
-                                    how='left'                    
-                                    suffixes=('', '_drop')
-                                    )
-throw_session1.rename(columns={'full_name': 'player_name'}, inplace=True)
-throw_session1.drop(columns=['id_drop'], inplace=True, errors='ignore')
+throw_session = throw_session.merge(players[['id', 'full_name']], left_on='player_id', right_on='id', how='left', suffixes=('', '_drop'))
+throw_session.rename(columns={'full_name': 'player_name'}, inplace=True)
+throw_session.drop(columns=['id_drop'], inplace=True, errors='ignore')
 
 # Assign days
 today = date.today()
@@ -100,10 +94,10 @@ d3 = (today - timedelta(days=3)).isoformat()
 d4 = (today - timedelta(days=4)).isoformat()
 
 # Create daily session list
-sessions_d1 = throw_session1.query(f"date == '{d1}'")
-sessions_d2 = throw_session1.query(f"date == '{d2}'")
-sessions_d3 = throw_session1.query(f"date == '{d3}'")
-sessions_d4 = throw_session1.query(f"date == '{d4}'")
+sessions_d1 = throw_session.query(f"date == '{d1}'")
+sessions_d2 = throw_session.query(f"date == '{d2}'")
+sessions_d3 = throw_session.query(f"date == '{d3}'")
+sessions_d4 = throw_session.query(f"date == '{d4}'")
 
 #%% Arm Tracking
 
