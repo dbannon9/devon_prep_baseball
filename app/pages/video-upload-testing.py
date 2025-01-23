@@ -80,19 +80,8 @@ elif vid is None:
 # Check if the user uploaded a video
 if video_submit:
     try:
-        # Read the content of the uploaded file as bytes
-        video_bytes = vid.read()
-
-        # Set the appropriate mime type based on file extension
-        if video_file_name.endswith('.mov'):
-            mime_type = 'video/quicktime'
-        elif video_file_name.endswith('.mp4'):
-            mime_type = 'video/mp4'
-        else:
-            mime_type = 'application/octet-stream'  # Default fallback mime type
-
         # Upload the video file to the Supabase storage bucket
-        response = supabase.storage.from_('pitching').upload(video_file_name, video_bytes, file_options={"contentType": mime_type})
+        response = supabase.storage.from_('pitching').upload(video_file_name, vid, file_options={"contentType": "video/quicktime"})
 
         # Get the public URL of the uploaded video
         video_url = supabase.storage.from_('pitching').get_public_url(video_file_name)
