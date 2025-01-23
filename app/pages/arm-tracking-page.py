@@ -113,7 +113,7 @@ sessions_d4 = show_throw_session.query(f"Date == '{d4}'")
 
 st.title('Recent Sessions')
 
-if len(sessions_d1) = 0:
+if len(sessions_d1) == 0:
     st.subheader(f'No sessions from {d1}')
 else:
     st.subheader(f'Sessions from {d1}')
