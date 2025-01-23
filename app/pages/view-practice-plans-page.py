@@ -40,6 +40,7 @@ practice_plans.set_index('id',inplace=True)
 st.title("View Practice Plans")
 pdate = st.date_input("Select Practice Date", value=date.today())
 pdate = pdate.strftime('%Y-%m-%d')
+this_practice = practice_plans[practice_plans['date']==pdate]
 
 # add in PDF button
 def create_download_link(val, filename):
@@ -52,14 +53,12 @@ if export_as_pdf:
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('Helvetica', 'B', 16)
-    pdf.cell(40, 10, f"Practice Plans: {pdate}",1)
-    
+    pdf.cell(40, 10, f"Practice Plans: {pdate}")
+    pdf.cell(40, 10, f"{str(this_practice.iloc[0]['event_1_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_1_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_1_name']}")
     html = create_download_link(pdf.output(dest="S").encode("latin-1"), "test")
 
     st.markdown(html, unsafe_allow_html=True)
 
-
-this_practice = practice_plans[practice_plans['date']==pdate]
 
 if this_practice.empty:
     st.write("No practice plan found for this date.")
