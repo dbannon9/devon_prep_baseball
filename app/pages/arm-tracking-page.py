@@ -83,10 +83,10 @@ session_types = ['Bullpen','Sim Game','Scrimmage','Game']
 
 # Assign days
 today = date.today()
-d1 = today - timedelta(days=1).isoformat()
-d2 = today - timedelta(days=2).isoformat()
-d3 = today - timedelta(days=3).isoformat()
-d4 = today - timedelta(days=4).isoformat()
+d1 = today - (timedelta(days=1)).isoformat()
+d2 = today - (timedelta(days=2)).isoformat()
+d3 = today - (timedelta(days=3)).isoformat()
+d4 = today - (timedelta(days=4)).isoformat()
 
 # Create daily session list
 sessions_d1 = throw_session.query(f"date == '{d1}'")
