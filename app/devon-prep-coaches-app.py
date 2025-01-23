@@ -49,7 +49,8 @@ if authenticate():
         arm_tracking_page,
         calendar_page,
         view_practice_plans_page,
-        practice_planning_page,
-        video_upload_testing])
+        practice_planning_page
+        # video_upload_testing
+        ])
     nav.run()
 
