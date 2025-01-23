@@ -119,14 +119,23 @@ else:
     st.subheader(f'Sessions from {d1}')
     st.dataframe(sessions_d1,hide_index=True)
 
-st.subheader(f'Sessions from {d2}')
-st.dataframe(sessions_d2,hide_index=True)
+if len(sessions_d2) == 0:
+    st.subheader(f'No sessions from {d2}')
+else:
+    st.subheader(f'Sessions from {d2}')
+    st.dataframe(sessions_d2,hide_index=True)
 
-st.subheader(f'Sessions from {d3}')
-st.dataframe(sessions_d3,hide_index=True)
+if len(sessions_d3) == 0:
+    st.subheader(f'No sessions from {d3}')
+else:
+    st.subheader(f'Sessions from {d3}')
+    st.dataframe(sessions_d3,hide_index=True)
 
-st.subheader(f'Sessions from {d4}')
-st.dataframe(sessions_d4,hide_index=True)
+if len(sessions_d4) == 0:
+    st.subheader(f'No sessions from {d4}')
+else:
+    st.subheader(f'Sessions from {d4}')
+    st.dataframe(sessions_d4,hide_index=True)
 
 #%% Input Sesstion
 
