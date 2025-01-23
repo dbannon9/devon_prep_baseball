@@ -89,10 +89,10 @@ d3 = today - timedelta(days=3).isoformat()
 d4 = today - timedelta(days=4).isoformat()
 
 # Create daily session list
-sessions_d1 = throw_session.query(f'date == {d1}')
-sessions_d2 = throw_session.query(f'date == {d2}')
-sessions_d3 = throw_session.query(f'date == {d3}')
-sessions_d4 = throw_session.query(f'date == {d4}')
+sessions_d1 = throw_session.query(f"date == '{d1}'")
+sessions_d2 = throw_session.query(f"date == '{d2}'")
+sessions_d3 = throw_session.query(f"date == '{d3}'")
+sessions_d4 = throw_session.query(f"date == '{d4}'")
 
 #%% Arm Tracking
 
