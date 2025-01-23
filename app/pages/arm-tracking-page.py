@@ -113,8 +113,11 @@ sessions_d4 = show_throw_session.query(f"Date == '{d4}'")
 
 st.title('Recent Sessions')
 
-st.subheader(f'Sessions from {d1}')
-st.dataframe(sessions_d1,hide_index=True)
+if len(sessions_d1) = 0:
+    st.subheader(f'No sessions from {d1}')
+else:
+    st.subheader(f'Sessions from {d1}')
+    st.dataframe(sessions_d1,hide_index=True)
 
 st.subheader(f'Sessions from {d2}')
 st.dataframe(sessions_d2,hide_index=True)
