@@ -1,6 +1,6 @@
 import pandas as pd
 import streamlit as st
-from datetime import date, time
+from datetime import date, time, timedelta
 import math
 from decimal import Decimal
 import os
@@ -81,7 +81,36 @@ currentpitchers = players.query('pitcher == True')
 current_pitcher_options = currentpitchers['full_name'].to_dict()
 session_types = ['Bullpen','Sim Game','Scrimmage','Game']
 
+# Assign days
+today = date.today()
+d1 = today - timedelta(days=1)
+d2 = today - timedelta(days=2)
+d3 = today - timedelta(days=3)
+d4 = today - timedelta(days=4)
+
+# Create daily session list
+sessions_d1 = throw_session.query(f'date == {d1}')
+sessions_d2 = throw_session.query(f'date == {d2}')
+sessions_d3 = throw_session.query(f'date == {d3}')
+sessions_d4 = throw_session.query(f'date == {d4}')
+
 #%% Arm Tracking
+
+st.title('Recent Sessions')
+
+st.subheader(f'Sessions from {d1}')
+sessions_d1
+
+st.subheader(f'Sessions from {d2}')
+sessions_d2
+
+st.subheader(f'Sessions from {d3}')
+sessions_d3
+
+st.subheader(f'Sessions from {d4}')
+sessions_d4
+
+#%% Input Sesstion
 
 st.title('Input New Session')
 
