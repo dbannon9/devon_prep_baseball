@@ -102,7 +102,7 @@ sessions_d4 = throw_session.query(f"date == '{d4}'")
 #%% Arm Tracking
 
 st.title('Recent Sessions')
-print(players.head())
+players['full_name']
 st.subheader(f'Sessions from {d1}')
 sessions_d1
 
