@@ -90,7 +90,7 @@ throw_session = throw_session.merge(
     suffixes=('', '_drop')        # Prevent duplicate column names
 )
 throw_session.rename(columns={'full_name': 'player_name'}, inplace=True)
-throw_session = throw_session.filter(regex='^(?!.*_drop)')
+throw_session.drop(columns=['id_drop'], inplace=True, errors='ignore')
 
 # Assign days
 today = date.today()
