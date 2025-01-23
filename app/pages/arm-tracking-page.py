@@ -85,6 +85,16 @@ session_types = ['Bullpen','Sim Game','Scrimmage','Game']
 player_dict = players['full_name'].to_dict()
 throw_session['player_name'] = throw_session['player_id'].map(player_dict)
 
+# Create display version of throw table
+show_throw_session = throw_session[['player_name','type','num_pitches','warmups_included','note']]
+show_throw_session.rename(columns={
+                          'player_name': 'Player',
+                          'type': 'Type',
+                          'num_pitches': 'Pitches',
+                          'warmups_included': 'Warmups Included?',
+                          'note': 'Note'
+                          }, inplace=True)
+
 # Assign days
 today = date.today()
 d1 = (today - timedelta(days=1)).isoformat()
@@ -93,15 +103,15 @@ d3 = (today - timedelta(days=3)).isoformat()
 d4 = (today - timedelta(days=4)).isoformat()
 
 # Create daily session list
-sessions_d1 = throw_session.query(f"date == '{d1}'")
-sessions_d2 = throw_session.query(f"date == '{d2}'")
-sessions_d3 = throw_session.query(f"date == '{d3}'")
-sessions_d4 = throw_session.query(f"date == '{d4}'")
+sessions_d1 = show_throw_session.query(f"date == '{d1}'")
+sessions_d2 = show_throw_session.query(f"date == '{d2}'")
+sessions_d3 = show_throw_session.query(f"date == '{d3}'")
+sessions_d4 = show_throw_session.query(f"date == '{d4}'")
 
 #%% Arm Tracking
 
 st.title('Recent Sessions')
-throw_session
+show_throw_session
 st.subheader(f'Sessions from {d1}')
 sessions_d1
 
