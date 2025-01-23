@@ -82,9 +82,8 @@ current_pitcher_options = currentpitchers['full_name'].to_dict()
 session_types = ['Bullpen','Sim Game','Scrimmage','Game']
 
 # Add player names to sessions
-throw_session = throw_session.merge(currentpitchers[['id', 'full_name']], left_on='player_id', right_on='id', how='left', suffixes=('', '_drop'))
-# throw_session.rename(columns={'full_name': 'player_name'}, inplace=True)
-# throw_session.drop(columns=['id_drop'], inplace=True, errors='ignore')
+player_dict = players.set_index('id')['full_name'].to_dict()
+throw_session['player_name'] = throw_session['player_id'].map(player_dict)
 
 # Assign days
 today = date.today()
