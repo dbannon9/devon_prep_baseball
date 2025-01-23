@@ -53,8 +53,8 @@ if export_as_pdf:
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font('Helvetica', 'B', 16)
-    pdf.cell(40, 10, f"Practice Plans: {pdate}")
-    pdf.cell(40, 10, f"{str(this_practice.iloc[0]['event_1_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_1_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_1_name']}", ln=2)
+    pdf.cell(40, 10, f"Practice Plans: {pdate}", ln=2)
+    pdf.cell(40, 10, f"{str(this_practice.iloc[0]['event_1_start_time'])[:5].lstrip('0')} - {str(this_practice.iloc[0]['event_1_end_time'])[:5].lstrip('0')} - {this_practice.iloc[0]['event_1_name']}")
     html = create_download_link(pdf.output(dest="S").encode("latin-1"), "test")
 
     st.markdown(html, unsafe_allow_html=True)
