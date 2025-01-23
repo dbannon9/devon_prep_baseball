@@ -33,6 +33,8 @@ players = fetch_table_data('players')
 players.set_index('id',inplace=True)
 notes = fetch_table_data('notes')
 notes.set_index('id',inplace=True)
+throw_session = fetch_table_data('throw_session')
+throw_session.set_index('id',inplace=True)
 
 #%% Data Adjustments
 
