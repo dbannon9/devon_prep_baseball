@@ -81,19 +81,28 @@ if export_as_pdf:
     pdf.set_font('Helvetica', 'I', 16)
     pdf.cell(40, 10, f"{str(print_1)}", ln=2)
     pdf.set_font('Helvetica', '', 12)
-    pdf.cell(40,10,f"{(print_note_1)}", ln=2)
-    pdf.set_font('Helvetica', 'I', 16)
-    pdf.cell(40, 10, f"{(print_2)}", ln=2)
-    pdf.set_font('Helvetica', '', 12)
-    pdf.cell(40,10,f"{str(print_note_2)}", ln=2)
-    pdf.set_font('Helvetica', 'I', 16)
-    pdf.cell(40, 10, f"{str(print_3)}", ln=2)
-    pdf.set_font('Helvetica', '', 12)
-    pdf.cell(40,10,f"{str(print_note_3)}", ln=2)
-    pdf.set_font('Helvetica', 'I', 16)
-    pdf.cell(40, 10, f"{str(print_4)}", ln=2)
-    pdf.set_font('Helvetica', '', 12)
-    pdf.cell(40,10,f"{str(print_note_4)}", ln=2)
+    pdf.cell(40,10,f"{str(print_note_1)}", ln=2)
+    if this_practice.iloc[0]['event_2_name'] == '':
+        print("")
+    else:
+        pdf.set_font('Helvetica', 'I', 16)
+        pdf.cell(40, 10, f"{str(print_2)}", ln=2)
+        pdf.set_font('Helvetica', '', 12)
+        pdf.cell(40,10,f"{str(print_note_2)}", ln=2)
+    if this_practice.iloc[0]['event_3_name'] == '':
+        print("")
+    else:
+        pdf.set_font('Helvetica', 'I', 16)
+        pdf.cell(40, 10, f"{str(print_3)}", ln=2)
+        pdf.set_font('Helvetica', '', 12)
+        pdf.cell(40,10,f"{str(print_note_3)}", ln=2)
+    if this_practice.iloc[0]['event_4_name'] == '':
+        print("")
+    else:
+        pdf.set_font('Helvetica', 'I', 16)
+        pdf.cell(40, 10, f"{str(print_4)}", ln=2)
+        pdf.set_font('Helvetica', '', 12)
+        pdf.cell(40,10,f"{str(print_note_4)}", ln=2)
     html = create_download_link(pdf.output(dest="S").encode("latin-1"), "test")
     st.markdown(html, unsafe_allow_html=True)
 
