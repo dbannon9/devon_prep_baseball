@@ -60,6 +60,7 @@ st.title('Create New Practice Plan')
 
 # Input fields for the first event
 practice_plans_date = st.date_input("Practice Date", value=date.today())  # Default value to today's date
+coach_quote = st.text_input("Coach's Quote") #Coach's Quote for the day
 event_1_name = st.text_input("First Event Name")  # Name of the first event
 event_1_notes = st.text_input("Describe the First Event")  # Notes about the first event
 event_1_start_time = st.time_input("First Event Start Time")  # Start time of the first event
@@ -96,6 +97,7 @@ date_str = practice_plans_date.isoformat()  # Converts the date object to 'YYYY-
 
 new_practice_plan = {
     'date': date_str,
+    'coach_quote': coach_quote,
     'event_1_start_time': event_1_start_time.strftime('%H:%M') if event_1_start_time else None,
     'event_1_end_time': event_1_end_time.strftime('%H:%M') if event_1_end_time else None,
     'event_1_name': event_1_name,
