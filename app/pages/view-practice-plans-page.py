@@ -93,6 +93,7 @@ else:
         st.markdown(html, unsafe_allow_html=True)
 
     # Extract the event name for the row
+    st.divider()
     st.markdown(
         f"""
         <div style="text-align: left; font-size: 1.5em; font-style: italic; text-decoration: underline; margin-top: 20px;">
