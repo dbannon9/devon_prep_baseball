@@ -41,6 +41,8 @@ st.title("View Practice Plans")
 pdate = st.date_input("Select Practice Date", value=date.today())
 pdate = pdate.strftime('%Y-%m-%d')
 this_practice = practice_plans[practice_plans['date']==pdate]
+if this_practice.empty:
+    st.write("No practice plan found for this date.")
 
 # assign practice text names
 
@@ -93,10 +95,6 @@ if export_as_pdf:
         pdf.cell(40,10,f"{str(print_note_4)}", ln=2)
     html = create_download_link(pdf.output(dest="S").encode("latin-1"), "test")
     st.markdown(html, unsafe_allow_html=True)
-
-
-if this_practice.empty:
-    st.write("No practice plan found for this date.")
 
 else:
     # Extract the event name for the row
