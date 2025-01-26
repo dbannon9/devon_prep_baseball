@@ -94,7 +94,7 @@ else:
 
     # Extract the event name for the row
     st.divider()
-    st.write(this_practice.iloc[0]['coach_quote'])
+    st.markdown(f"_{this_practice.iloc[0]['coach_quote']}_")
     st.divider()
     st.subheader(print_1)
     st.write(print_note_1)
