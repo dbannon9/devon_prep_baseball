@@ -94,7 +94,8 @@ else:
 
     # Extract the event name for the row
     st.divider()
-    st.caption(this_practice['coach_quote'])
+    st.write(this_practice['coach_quote'])
+    st.divider()
     st.subheader(print_1)
     st.write(print_note_1)
     if this_practice.iloc[0]['event_2_name'] != "":
