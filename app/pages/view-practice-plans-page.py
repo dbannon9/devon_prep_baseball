@@ -93,9 +93,14 @@ else:
         st.markdown(html, unsafe_allow_html=True)
 
     # Extract the event name for the row
-    st.divider()
-    st.markdown(f"_{this_practice.iloc[0]['coach_quote']}_")
-    st.divider()
+    st.markdown(
+        f"""
+        <div style="text-align: center; font-size: 1.5em; font-style: italic; margin-top: 20px;">
+            {this_practice.iloc[0]['coach_quote']}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     st.subheader(print_1)
     st.write(print_note_1)
     if this_practice.iloc[0]['event_2_name'] != "":
