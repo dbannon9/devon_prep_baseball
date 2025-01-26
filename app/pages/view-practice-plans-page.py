@@ -69,7 +69,7 @@ else:
         pdf = FPDF(format="Letter")
         pdf.add_page()
         pdf.set_font('Helvetica', 'B', 24)
-        pdf.cell(40, 12, f"Practice Plans: {pdate}", ln=2)
+        pdf.cell(40, 15, f"Practice Plans: {pdate}", ln=2)
         pdf.set_line_width(0.5)
         # pdf.line(12, 20, 200, 20)
         # pdf.line(12, 32, 200, 32)
