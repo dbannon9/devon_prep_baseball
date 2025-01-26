@@ -70,6 +70,8 @@ else:
         pdf.add_page()
         pdf.set_font('Helvetica', 'B', 24)
         pdf.cell(40, 10, f"Practice Plans: {pdate}", ln=2)
+        pdf.set_line_width(1.0)
+        pdf.line(10, 20, 100, 20)
         pdf.set_font('Helvetica', 'I', 16)
         pdf.cell(40, 10, f"{str(print_1)}", ln=2)
         pdf.set_font('Helvetica', '', 12)
@@ -89,7 +91,7 @@ else:
             pdf.cell(40, 10, f"{str(print_4)}", ln=2)
             pdf.set_font('Helvetica', '', 12)
             pdf.cell(40, 10, f"{str(print_note_4)}", ln=2)
-        html = create_download_link(pdf.output(dest="S").encode("latin-1"), "test")
+        html = create_download_link(pdf.output(dest="S").encode("latin-1"), f"Devon Prep Practice Plans - {pdate}")
         st.markdown(html, unsafe_allow_html=True)
 
     # Extract the event name for the row
