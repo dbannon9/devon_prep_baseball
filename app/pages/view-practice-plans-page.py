@@ -95,7 +95,7 @@ else:
     # Extract the event name for the row
     st.markdown(
         f"""
-        <div style="text-align: left; font-size: 1.5em; font-style: italic; margin-top: 20px;">
+        <div style="text-align: left; font-size: 1.5em; font-style: italic; text-decoration: underline; margin-top: 20px;">
             {this_practice.iloc[0]['coach_quote']}
         </div>
         """,
