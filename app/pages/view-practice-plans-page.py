@@ -72,7 +72,7 @@ else:
         pdf.cell(40, 10, f"Practice Plans: {pdate}", ln=2)
         pdf.set_line_width(0.5)
         pdf.line(12, 20, 200, 20)
-        pdf.line(12, 25, 200, 25)
+        pdf.line(12, 32, 200, 32)
         pdf.set_font('Helvetica', 'I', 16)
         pdf.cell(40, 10, f"{this_practice.iloc[0]['coach_quote']}", ln=2)
         pdf.set_font('Helvetica', 'I', 16)
