@@ -66,7 +66,7 @@ else:
     export_as_pdf = st.button("Export Practice Plans")
 
     if export_as_pdf:
-        pdf = FPDF()
+        pdf = FPDF(format="Letter")
         pdf.add_page()
         pdf.set_font('Helvetica', 'B', 24)
         pdf.cell(40, 10, f"Practice Plans: {pdate}", ln=2)
