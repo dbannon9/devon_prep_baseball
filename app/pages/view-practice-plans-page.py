@@ -74,7 +74,7 @@ else:
         # pdf.line(12, 20, 200, 20)
         # pdf.line(12, 32, 200, 32)
         pdf.set_font('Helvetica', 'I', 16)
-        pdf.cell(186, 15, f"{this_practice.iloc[0]['coach_quote']}", border='T, B', ln=2, align = 'C')
+        pdf.cell(195.9, 15, f"{this_practice.iloc[0]['coach_quote']}", border='T, B', ln=2, align = 'C')
         pdf.set_font('Helvetica', 'I', 16)
         pdf.cell(40, 10, f"{str(print_1)}", ln=2)
         pdf.set_font('Helvetica', '', 12)
