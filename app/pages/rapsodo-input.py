@@ -54,5 +54,5 @@ if new_file:
             # Display success message
             st.success("Data successfully uploaded")
         except Exception as e:
-            print("Supabase API Error:", e)
+            st.write(print("Supabase API Error:", e))
 
