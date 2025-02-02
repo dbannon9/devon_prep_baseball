@@ -116,7 +116,7 @@ if edit_toggle:
 
             players_update = players.to_dict(orient="records")
 
-            response = supabase.table("players").update(players_update).eq('id',players['id']).execute()
+            response = supabase.table("players").update(players_update).eq('id', players.loc[0, 'id']).execute()
         
             # Mark the form as submitted
             st.session_state.form_submitted = True
