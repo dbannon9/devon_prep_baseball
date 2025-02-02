@@ -38,8 +38,8 @@ rapsodo_pitching.set_index('id',inplace=True)
 
 st.title("Rapsodo Data Input")
 new_file = st.file_uploader("Dump Rapsodo 'pitchinggroup' File Here",type='csv')
-upload = st.button("Upload Rapsodo Pitching Data")
 if new_file:
+    upload = st.button("Upload Rapsodo Pitching Data")
     file_df = pd.read_csv(new_file)
 
 if upload:
