@@ -38,8 +38,9 @@ rapsodo_pitching.set_index('id',inplace=True)
 
 st.title("Rapsodo Data Input")
 new_file = st.file_uploader("Dump Rapsodo 'pitchinggroup' File Here",type='csv')
-file_df = pd.read_csv(new_file)
 upload = st.button("Upload Rapsodo Pitching Data")
+if new_file:
+    file_df = pd.read_csv(new_file)
 
 if upload:
     response = supabase.table("rapsodo_pitching").insert(file_df).execute()
