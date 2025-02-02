@@ -113,7 +113,8 @@ if edit_toggle:
     save = st.button("Save")
     if save:
         for idx, row in players_update.iterrows():
-            response = supabase.table("players").update(row.to_dict()).eq('id', row['id']).execute()
+            player_id = row.name  # This accesses the index (which is 'id' in your case)
+            response = supabase.table("players").update(row.to_dict()).eq('id', player_id).execute()
     
         # Mark the form as submitted
         st.session_state.form_submitted = True
