@@ -106,6 +106,19 @@ else:
     }, inplace=True)
 
 if edit_toggle:
-    st.data_editor(fplayers,hide_index=True)
+    st.data_editor(players,hide_index=True)
+    save = st.button("Save")
+    if save:
+        players = players.to_dict(orient="records")
+
+        response = supabase.table("roster").insert(players).execute()
+        
+        # Mark the form as submitted
+        st.session_state.form_submitted = True
+
+        # Display success message
+        st.success("Data successfully uploaded")
+
+
 else:
     st.dataframe(fplayers,hide_index=True)
