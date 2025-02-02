@@ -46,13 +46,10 @@ if new_file:
     file_df['Date'] = pd.to_datetime(file_df['Date']).dt.strftime('%Y-%m-%d')
     file_df = file_df.to_dict(orient="records")
     if upload:
-        try:
-            response = supabase.table("rapsodo_pitching").insert(file_df).execute()
-            # Mark the form as submitted
-            st.session_state.form_submitted = True
+        response = supabase.table("rapsodo_pitching").insert(file_df).execute()
+        
+        # Mark the form as submitted
+        st.session_state.form_submitted = True
 
-            # Display success message
-            st.success("Data successfully uploaded")
-        except Exception as e:
-            st.write(print("Supabase API Error:", e))
-
+        # Display success message
+        st.success("Data successfully uploaded")
