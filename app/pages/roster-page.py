@@ -109,7 +109,7 @@ else:
     }, inplace=True)
 
 if edit_toggle:
-    st.data_editor(players,hide_index=True)
+    st.data_editor(players)
     save = st.button("Save")
     if save:
         players_upsert = players.to_dict(orient="records")
