@@ -112,15 +112,19 @@ if edit_toggle:
     st.data_editor(players)
     save = st.button("Save")
     if save:
-        players_update = players.to_dict(orient="records")
+        try:
 
-        response = supabase.table("players").update(players_update).execute()
+            players_update = players.to_dict(orient="records")
+
+            response = supabase.table("players").update(players_update).execute()
         
-        # Mark the form as submitted
-        st.session_state.form_submitted = True
+            # Mark the form as submitted
+            st.session_state.form_submitted = True
 
-        # Display success message
-        st.success("Data successfully saved")
+            # Display success message
+            st.success("Data successfully saved")
+        except Exception as e:
+            st.write(e)
 
 
 else:
