@@ -41,12 +41,11 @@ new_file = st.file_uploader("Dump Rapsodo 'pitchinggroup' File Here",type='csv')
 if new_file:
     upload = st.button("Upload Rapsodo Pitching Data")
     file_df = pd.read_csv(new_file)
+    if upload:
+        response = supabase.table("rapsodo_pitching").insert(file_df).execute()
+        
+        # Mark the form as submitted
+        st.session_state.form_submitted = True
 
-if upload:
-    response = supabase.table("rapsodo_pitching").insert(file_df).execute()
-    
-    # Mark the form as submitted
-    st.session_state.form_submitted = True
-
-    # Display success message
-    st.success("Note submitted successfully")
+        # Display success message
+        st.success("Note submitted successfully")
