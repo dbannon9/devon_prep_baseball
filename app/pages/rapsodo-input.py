@@ -40,7 +40,7 @@ st.title("Rapsodo Data Input")
 new_file = st.file_uploader("Dump Rapsodo 'pitchinggroup' File Here",type='csv')
 if new_file:
     upload = st.button("Upload Rapsodo Pitching Data")
-    file_df = pd.read_csv(new_file)
+    file_df = pd.read_csv(new_file).to_dict(orient="records")
     if upload:
         response = supabase.table("rapsodo_pitching").insert(file_df).execute()
         
