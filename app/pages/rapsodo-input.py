@@ -2,6 +2,7 @@
 
 import pandas as pd
 import streamlit as st
+import numpy as np
 from datetime import date, time
 import math
 from decimal import Decimal
@@ -41,6 +42,7 @@ new_file = st.file_uploader("Dump Rapsodo 'pitchinggroup' File Here",type='csv')
 if new_file:
     upload = st.button("Upload Rapsodo Pitching Data")
     file_df = pd.read_csv(new_file)
+    file_df.replace("-", np.nan, inplace=True)
     file_df['Date'] = pd.to_datetime(file_df['Date']).dt.strftime('%Y-%m-%d')
     file_df = file_df.to_dict(orient="records")
     if upload:
