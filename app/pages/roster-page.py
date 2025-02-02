@@ -88,7 +88,6 @@ coach_options = coaches['name'].to_dict()
 
 #%% Roster Toggles
 st.title("Devon Prep Baseball Roster")
-players
 edit_toggle = st.toggle('Edit?')
 ptoggle = st.toggle('Pitchers?')
 if ptoggle:
