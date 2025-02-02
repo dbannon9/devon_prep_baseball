@@ -21,6 +21,7 @@ calendar_page = st.Page("pages/calendar-page.py",title="Schedule",icon=":materia
 view_practice_plans_page = st.Page("pages/view-practice-plans-page.py",title="View Practice Plans",icon=":material/sports:")
 practice_planning_page = st.Page("pages/practice-planning-page.py",title="Practice Planning",icon=":material/conversion_path:")
 video_upload_testing = st.Page("pages/video-upload-testing.py",title="Video Upload Testing",icon=":material/upload:")
+rapsodo_testing = st.Page("pages/rapsodo-input.py",title="Raposodo Testing",icon=":material/database:")
 
 #%% Authentication
 
@@ -49,7 +50,8 @@ if authenticate():
         arm_tracking_page,
         calendar_page,
         view_practice_plans_page,
-        practice_planning_page
+        practice_planning_page,
+        rapsodo_testing
         # video_upload_testing
         ])
     nav.run()
