@@ -51,7 +51,7 @@ classdict = {
 }
 
 #create the display version of players
-players_show = players
+players_show = players.copy()
 
 # assign class year names to each player based on graduation year
 def classdef(thing):
