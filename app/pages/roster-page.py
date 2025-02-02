@@ -111,13 +111,13 @@ if edit_toggle:
     if save:
         players = players.to_dict(orient="records")
 
-        response = supabase.table("roster").insert(players).execute()
+        response = supabase.table("roster").upsert(players).execute()
         
         # Mark the form as submitted
         st.session_state.form_submitted = True
 
         # Display success message
-        st.success("Data successfully uploaded")
+        st.success("Data successfully saved")
 
 
 else:
