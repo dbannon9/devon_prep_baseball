@@ -85,6 +85,7 @@ coach_options = coaches['name'].to_dict()
 
 #%% Roster Toggles
 st.title("Devon Prep Baseball Roster")
+edit_toggle = st.toggle('Edit?')
 ptoggle = st.toggle('Pitchers?')
 if ptoggle:
     fplayers = players.query('pitcher == True & active == True')[['first_name','last_name','class']]
@@ -104,4 +105,7 @@ else:
         'pos_3': 'Tertiary Position'
     }, inplace=True)
 
-st.dataframe(fplayers,hide_index=True)
+if edit_toggle:
+    st.data_editor(fplayers,hide_index=True)
+else:
+    st.dataframe(fplayers,hide_index=True)
