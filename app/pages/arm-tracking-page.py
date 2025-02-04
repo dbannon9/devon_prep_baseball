@@ -150,7 +150,7 @@ st.title('Input New Session')
 
 with st.form(key='Input New Player session',clear_on_submit=True):
     session_pitcher = st.selectbox("Player", options=list(current_pitcher_options.keys()), format_func=lambda id: current_pitcher_options[id])  # Displays name
-    session_date = st.date_input("Today's Date", value=date.today())  # Default value to today's date
+    session_date = st.date_input("Date", value=date.today())  # Default value to today's date
     session_type = st.selectbox("Type", session_types)  # Dropdown for session types
     session_warmups_included = st.checkbox("Warmups Included?")
     session_num_pitches = st.number_input("Number of Pitches",1,100)
