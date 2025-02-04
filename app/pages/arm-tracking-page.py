@@ -98,51 +98,21 @@ show_throw_session.rename(columns={
 
 # Assign days
 today = date.today()
-d1 = (today - timedelta(days=1)).isoformat()
-d2 = (today - timedelta(days=2)).isoformat()
-d3 = (today - timedelta(days=3)).isoformat()
-d4 = (today - timedelta(days=4)).isoformat()
+dates = [today - timedelta(days=i) for i in range(5)]
 
 # Create daily session list
-sessions_today = show_throw_session.query(f"Date == '{today}'")
-sessions_d1 = show_throw_session.query(f"Date == '{d1}'")
-sessions_d2 = show_throw_session.query(f"Date == '{d2}'")
-sessions_d3 = show_throw_session.query(f"Date == '{d3}'")
-sessions_d4 = show_throw_session.query(f"Date == '{d4}'")
+sessions = {d.isoformat(): show_throw_session.query(f"Date == '{d.isoformat()}'") for d in dates}
 
 #%% Arm Tracking
+st.title("Recent Sessions")
 
-st.title('Recent Sessions')
-
-if len(sessions_today) == 0:
-    st.subheader(f'No sessions today')
-else:
-    st.subheader(f'Today''s Sessions')
-    st.dataframe(sessions_d1,hide_index=True)
-
-if len(sessions_d1) == 0:
-    st.subheader(f'No sessions from {d1}')
-else:
-    st.subheader(f'Sessions from {d1}')
-    st.dataframe(sessions_d1,hide_index=True)
-
-if len(sessions_d2) == 0:
-    st.subheader(f'No sessions from {d2}')
-else:
-    st.subheader(f'Sessions from {d2}')
-    st.dataframe(sessions_d2,hide_index=True)
-
-if len(sessions_d3) == 0:
-    st.subheader(f'No sessions from {d3}')
-else:
-    st.subheader(f'Sessions from {d3}')
-    st.dataframe(sessions_d3,hide_index=True)
-
-if len(sessions_d4) == 0:
-    st.subheader(f'No sessions from {d4}')
-else:
-    st.subheader(f'Sessions from {d4}')
-    st.dataframe(sessions_d4,hide_index=True)
+for i, d in enumerate(dates):
+    date_str = d.isoformat()
+    if len(sessions[date_str]) == 0:
+        st.subheader(f"No sessions from {date_str}" if i > 0 else "No sessions today")
+    else:
+        st.subheader(f"Today's Sessions" if i == 0 else f"Sessions from {date_str}")
+        st.dataframe(sessions[date_str], hide_index=True)
 
 #%% Input Sesstion
 
