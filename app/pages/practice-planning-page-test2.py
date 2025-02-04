@@ -73,8 +73,10 @@ if edit_toggle:
     if save:
         for idx, row in date_events.iterrows():
             event_id = row.name  # This accesses the index (which is 'id' in your case)
-            response = supabase.table("practice_event").update(row.to_dict()).eq("id", event_id).execute()
-    
+            try:
+                response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
+            except Exception as e:
+                st.error(f"Supabase Error: {e}")    
         # Mark the form as submitted
         st.session_state.form_submitted = True
 
