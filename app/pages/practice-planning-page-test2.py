@@ -61,11 +61,6 @@ event_4_notes = ""
 st.title('Create New Practice Plan')
 practice_plans_date = st.date_input("Practice Date", value=date.today())  # Default value to today's date
 date_events = practice_event.query(f"date == '{practice_plans_date.isoformat()}'").sort_values(by="start_time",ascending=True)
-date_events_show = date_events.copy()
-
-st.write(date_events.index.dtype)
-
-date_events
 
 st.header('Existing Events:')
 edit_toggle = st.toggle('Edit?')
@@ -85,7 +80,7 @@ if edit_toggle:
         # Display success message
         st.success("Data successfully saved")
 else:
-    st.dataframe(date_events_show, hide_index=True)
+    st.dataframe(date_events, hide_index=True)
 
 
 # # Input fields for the first event
