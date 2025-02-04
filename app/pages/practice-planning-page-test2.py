@@ -60,7 +60,7 @@ event_4_notes = ""
 
 st.title('Create New Practice Plan')
 practice_plans_date = st.date_input("Practice Date", value=date.today())  # Default value to today's date
-date_events = practice_event.query(f"date == {practice_plans_date}")
+date_events = practice_event.query(f"date == '{practice_plans_date}'")
 edit_toggle = st.toggle('Edit?')
 if edit_toggle:
     st.data_editor(date_events)
