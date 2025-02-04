@@ -59,52 +59,24 @@ event_4_notes = ""
 #%% Input Practice Plans
 
 st.title('Create New Practice Plan')
-
-# Select practice date
 practice_plans_date = st.date_input("Practice Date", value=date.today())  # Default value to today's date
-
-# Fetch events for selected date
-date_events = practice_event.query(f"date == '{practice_plans_date.isoformat()}'").sort_values(by="start_time", ascending=True)
+date_events = practice_event.query(f"date == '{practice_plans_date.isoformat()}'").sort_values(by="start_time",ascending=True)
 date_events_show = date_events.copy()
 
-# Display events
+date_events
+
 st.header('Existing Events:')
 edit_toggle = st.toggle('Edit?')
-
 if edit_toggle:
-    # Allow editing the events
     st.data_editor(date_events)
-
     save = st.button("Save")
     if save:
         for idx, row in date_events.iterrows():
             event_id = row.name  # This accesses the index (which is 'id' in your case)
-            
-            # Ensure data is valid and convert float values to integers where needed
-            event_data = row.to_dict()
-
-            # Convert any float values to integers if the column expects a bigint
-            
-            for key, value in event_data.items():
-                if isinstance(value, float):  # Check if it's a float
-                    event_data[key] = int(value)  # Convert to integer if it's a float
-                elif value is None:
-                    event_data[key] = 0  # Handle None values if necessary, or set a default value
-                elif isinstance(value, str):
-                    try:
-                        # Attempt to convert strings that are numbers
-                        event_data[key] = int(value) if value.replace('.', '', 1).isdigit() else value
-                    except ValueError:
-                        pass  # Leave it as is if it's not a valid number string            
-            # Ensure that the event data is not empty
-            if event_data:
-                try:
-                    response = supabase.table("practice_event").update(event_data).eq('id', event_id).execute()
-                    if response.error:
-                        st.error(f"Supabase Error: {response.error.message}")
-                except Exception as e:
-                    st.error(f"Supabase Error: {e}")    
-        
+            try:
+                response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
+            except Exception as e:
+                st.error(f"Supabase Error: {e}")    
         # Mark the form as submitted
         st.session_state.form_submitted = True
 
@@ -112,6 +84,7 @@ if edit_toggle:
         st.success("Data successfully saved")
 else:
     st.dataframe(date_events_show, hide_index=True)
+
 
 # # Input fields for the first event
 # event_1_name = st.text_input("First Event Name")  # Name of the first event
