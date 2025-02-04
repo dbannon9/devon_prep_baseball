@@ -104,6 +104,7 @@ d3 = (today - timedelta(days=3)).isoformat()
 d4 = (today - timedelta(days=4)).isoformat()
 
 # Create daily session list
+sessions_today = show_throw_session.query(f"Date == '{today}'")
 sessions_d1 = show_throw_session.query(f"Date == '{d1}'")
 sessions_d2 = show_throw_session.query(f"Date == '{d2}'")
 sessions_d3 = show_throw_session.query(f"Date == '{d3}'")
@@ -112,6 +113,12 @@ sessions_d4 = show_throw_session.query(f"Date == '{d4}'")
 #%% Arm Tracking
 
 st.title('Recent Sessions')
+
+if len(sessions_today) == 0:
+    st.subheader(f'No sessions today')
+else:
+    st.subheader(f'Today''s Sessions')
+    st.dataframe(sessions_d1,hide_index=True)
 
 if len(sessions_d1) == 0:
     st.subheader(f'No sessions from {d1}')
