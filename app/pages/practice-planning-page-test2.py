@@ -77,8 +77,8 @@ if edit_toggle:
 
         # Display success message
         st.success("Data successfully saved")
-    else:
-        st.dataframe(date_events,hide_index=True)
+else:
+    st.dataframe(date_events,hide_index=True)
 
 
 
