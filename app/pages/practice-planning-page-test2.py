@@ -84,10 +84,18 @@ if edit_toggle:
             event_data = row.to_dict()
 
             # Convert any float values to integers if the column expects a bigint
-            for key, value in event_data.items():
-                if isinstance(value, float):
-                    event_data[key] = int(value)  # Convert to integer if it's a float
             
+            for key, value in event_data.items():
+                if isinstance(value, float):  # Check if it's a float
+                    event_data[key] = int(value)  # Convert to integer if it's a float
+                elif value is None:
+                    event_data[key] = 0  # Handle None values if necessary, or set a default value
+                elif isinstance(value, str):
+                    try:
+                        # Attempt to convert strings that are numbers
+                        event_data[key] = int(value) if value.replace('.', '', 1).isdigit() else value
+                    except ValueError:
+                        pass  # Leave it as is if it's not a valid number string            
             # Ensure that the event data is not empty
             if event_data:
                 try:
