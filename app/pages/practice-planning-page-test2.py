@@ -63,7 +63,7 @@ practice_plans_date = st.date_input("Practice Date", value=date.today())  # Defa
 date_events = practice_event.query(f"date == '{practice_plans_date.isoformat()}'").sort_values(by="start_time",ascending=True)
 date_events_show = date_events.copy()
 
-print(date_events.index.dtype)
+st.write(date_events.index.dtype)
 
 date_events
 
