@@ -80,7 +80,10 @@ if edit_toggle:
         # Display success message
         st.success("Data successfully saved")
 else:
-    st.dataframe(date_events, hide_index=True)
+    if len(date_events) < 1:
+        st.write("No Events for the Selected Date")
+    else:
+        st.dataframe(date_events, hide_index=True)
 
 
 # # Input fields for the first event
