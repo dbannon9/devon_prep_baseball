@@ -63,6 +63,8 @@ practice_plans_date = st.date_input("Practice Date", value=date.today())  # Defa
 date_events = practice_event.query(f"date == '{practice_plans_date.isoformat()}'").sort_values(by="start_time",ascending=True)
 date_events_show = date_events.copy()
 
+date_events
+
 st.header('Existing Events:')
 edit_toggle = st.toggle('Edit?')
 if edit_toggle:
