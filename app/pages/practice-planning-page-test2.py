@@ -65,20 +65,23 @@ date_events = practice_event.query(f"date == '{practice_plans_date.isoformat()}'
 st.header('Existing Events:')
 edit_toggle = st.toggle('Edit?')
 if edit_toggle:
-    events_update = st.data_editor(date_events)
-    save = st.button("Save")
-    if save:
-        for idx, row in events_update.iterrows():
-            event_id = row.name  # This accesses the index (which is 'id' in your case)
-            try:
-                response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
-            except Exception as e:
-                st.error(f"Supabase Error: {e}")    
-        # Mark the form as submitted
-        st.session_state.form_submitted = True
+    if len(date_events) < 1:
+        st.write("No Events for the Selected Date")
+    else:
+        events_update = st.data_editor(date_events)
+        save = st.button("Save")
+        if save:
+            for idx, row in events_update.iterrows():
+                event_id = row.name  # This accesses the index (which is 'id' in your case)
+                try:
+                    response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
+                except Exception as e:
+                    st.error(f"Supabase Error: {e}")    
+            # Mark the form as submitted
+            st.session_state.form_submitted = True
 
-        # Display success message
-        st.success("Data successfully saved")
+            # Display success message
+            st.success("Data successfully saved")
 else:
     if len(date_events) < 1:
         st.write("No Events for the Selected Date")
