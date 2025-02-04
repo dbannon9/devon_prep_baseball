@@ -72,7 +72,7 @@ if edit_toggle:
     save = st.button("Save")
     if save:
         for idx, row in date_events.iterrows():
-            event_id = row.name  # This accesses the index (which is 'id' in your case)
+            event_id = date_events['id']  # This accesses the index (which is 'id' in your case)
             response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
     
         # Mark the form as submitted
