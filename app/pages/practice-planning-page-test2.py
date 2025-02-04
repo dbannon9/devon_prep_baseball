@@ -61,6 +61,7 @@ event_4_notes = ""
 st.title('Create New Practice Plan')
 practice_plans_date = st.date_input("Practice Date", value=date.today())  # Default value to today's date
 date_events = practice_event.query(f"date == '{practice_plans_date.isoformat()}'").sort_values(by="start_time",ascending=True)
+date_events_show = date_events.copy()
 
 st.header('Existing Events:')
 edit_toggle = st.toggle('Edit?')
