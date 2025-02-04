@@ -69,17 +69,16 @@ if edit_toggle:
     save = st.button("Save")
     if save:
         for idx, row in date_events.iterrows():
-            event_id = row.name  # Accessing 'id' from index
-            row_dict = row.where(pd.notna(row), None).to_dict()  # Convert NaN to None
-            
-            response = supabase.table("practice_event").update(row_dict).eq('id', event_id).execute()
-            st.write(response)  # Debugging: Check if Supabase is rejecting requests
-
+            event_id = row.name  # This accesses the index (which is 'id' in your case)
+            response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
+    
         # Mark the form as submitted
         st.session_state.form_submitted = True
+
+        # Display success message
         st.success("Data successfully saved")
 else:
-    st.dataframe(date_events, hide_index=True)
+    st.dataframe(date_events_show, hide_index=True)
 
 
 # # Input fields for the first event
