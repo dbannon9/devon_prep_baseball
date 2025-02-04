@@ -81,6 +81,7 @@ if edit_toggle:
                 st.error(f"Supabase Error: {e}")    
         # Mark the form as submitted
         st.session_state.form_submitted = True
+        st.write(event_id.dtype)
 
         # Display success message
         st.success("Data successfully saved")
