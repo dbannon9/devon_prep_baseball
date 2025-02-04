@@ -70,10 +70,10 @@ date_events
 st.header('Existing Events:')
 edit_toggle = st.toggle('Edit?')
 if edit_toggle:
-    st.data_editor(date_events)
+    events_update = st.data_editor(date_events)
     save = st.button("Save")
     if save:
-        for idx, row in date_events.iterrows():
+        for idx, row in events_update.iterrows():
             event_id = row.name  # This accesses the index (which is 'id' in your case)
             try:
                 response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
