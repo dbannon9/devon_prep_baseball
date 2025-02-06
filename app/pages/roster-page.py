@@ -153,4 +153,11 @@ raphit_group = raphit_group.merge(
     how='left'
 )
 
-raphit_group
+raphit_group.rename(columns={
+    'full_name': 'Player',
+    'ExitVelocity_max': 'Max EV',
+    'ExitVelocity_avg': 'Average EV',
+    'ExitVelocity_90th_percentile': '90th pct EV',
+}, inplace=True)
+
+st.dataframe(raphit_group[['Player','Max EV','Average EV','90th pct EV']],hide_index=True)
