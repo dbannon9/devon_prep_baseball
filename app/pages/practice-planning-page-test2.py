@@ -96,32 +96,32 @@ st.header('Input New Practice Events')
 with st.form(key='Input New Practice Event',clear_on_submit=True):
     event_name = st.text_input("Event Name")
     event_desc = st.text_input("Event Description")
-    event_start = st.time_input("Start Time", value="3:30")
-    event_end = st.time_input("End Time", value="4:00")
+    event_start = st.time_input("Start Time", value="03:30")
+    event_end = st.time_input("End Time", value="04:00")
     event_location = st.selectbox("Location", options=locations)
     event_submit = st.form_submit_button(label="Submit Event")
 
-    # When form is submitted
-    if event_submit:
-        # Convert the date object to ISO 8601 string format
-        event_date_str = practice_plans_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
+# When form is submitted
+if event_submit:
+    # Convert the date object to ISO 8601 string format
+    event_date_str = practice_plans_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
 
-        # Create new note dictionary with IDs
-        new_event = {
-            'start_time': event_start,
-            'end_time': event_end,
-            'name': event_name,
-            'location': event_location,
-            'notes': event_desc,
-            'date': event_date_str
-        }
+    # Create new note dictionary with IDs
+    new_event = {
+        'start_time': event_start,
+        'end_time': event_end,
+        'name': event_name,
+        'location': event_location,
+        'notes': event_desc,
+        'date': event_date_str
+    }
 
-        # Push using insert function
-        response = supabase.table("practice_event").insert(new_event).execute()
+    # Push using insert function
+    response = supabase.table("practice_event").insert(new_event).execute()
 
-        # Mark the form as submitted
-        st.session_state.form_submitted = True
+    # Mark the form as submitted
+    st.session_state.form_submitted = True
 
-        # Display success message
-        st.success("Event submitted successfully")
+    # Display success message
+    st.success("Event submitted successfully")
 

@@ -127,27 +127,27 @@ with st.form(key='Input New Player session',clear_on_submit=True):
     session_note = st.text_input("Note")  # Input field for the note text
     session_submit = st.form_submit_button(label="Submit Session")
 
-    # When form is submitted
-    if session_submit:
-        # Convert the date object to ISO 8601 string format
-        session_date_str = session_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
+# When form is submitted
+if session_submit:
+    # Convert the date object to ISO 8601 string format
+    session_date_str = session_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
 
-        # Create new note dictionary with IDs
-        new_session = {
-            'player_id': session_pitcher,
-            'date': session_date_str,  # Use the string version of the date
-            'warmups_included': session_warmups_included,
-            'num_pitches': session_num_pitches,
-            'type': session_type,
-            'note': session_note
-        }
+    # Create new note dictionary with IDs
+    new_session = {
+        'player_id': session_pitcher,
+        'date': session_date_str,  # Use the string version of the date
+        'warmups_included': session_warmups_included,
+        'num_pitches': session_num_pitches,
+        'type': session_type,
+        'note': session_note
+    }
 
-        # Push using insert function
-        response = supabase.table("throw_session").insert(new_session).execute()
+    # Push using insert function
+    response = supabase.table("throw_session").insert(new_session).execute()
 
-        # Mark the form as submitted
-        st.session_state.form_submitted = True
+    # Mark the form as submitted
+    st.session_state.form_submitted = True
 
-        # Display success message
-        st.success("Session submitted successfully")
+    # Display success message
+    st.success("Session submitted successfully")
 
