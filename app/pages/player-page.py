@@ -118,8 +118,8 @@ st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=Tru
 # Display Rapsodo Stats
 
 # merge player_id onto rapsodo data
-raphit = rapsodo_hitting.merge(players,left_on='rapsodo_id', right_index=True, how='left')
-show_raphit = rapsodo_hitting[rapsodo_hitting['player_id']==player_select]
+raphit = rapsodo_hitting.merge(players,left_on='Player ID', right_on='rapsodo_id', how='left')
+# show_raphit = rapsodo_hitting[rapsodo_hitting['player_id']==player_select]
 
 # Get video rows for this player, sorted by most recent
 def display_video():
