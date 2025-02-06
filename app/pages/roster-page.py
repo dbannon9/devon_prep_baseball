@@ -1,6 +1,7 @@
 #%% Imports
 
 import pandas as pd
+import numpy as np
 import streamlit as st
 from datetime import date, time
 import math
@@ -37,6 +38,10 @@ coaches = fetch_table_data('coaches')
 coaches.set_index('id',inplace=True)
 notes = fetch_table_data('notes')
 notes.set_index('id',inplace=True)
+rapsodo_hitting = fetch_table_data('rapsodo_hitting')
+rapsodo_hitting.set_index('id',inplace=True)
+rapsodo_pitching = fetch_table_data('rapsodo_pitching')
+rapsodo_pitching.set_index('id',inplace=True)
 
 #%% Data Adjustments
 
@@ -125,3 +130,19 @@ if edit_toggle:
 
 else:
     st.dataframe(fplayers,hide_index=True)
+
+#%% Creating Rapsodo Dataframes
+
+## Hitting
+
+# merge for id purposes
+raphit = rapsodo_hitting.merge(players_show,left_on='Player ID', right_on='rapsodo_id', how='left')
+
+# group by id
+raphit_group = raphit.groupby('rapsodo_id').agg(
+    ExitVelocity_max=('ExitVelocity', 'max'),
+    ExitVelocity_avg=('ExitVelocity', 'mean'),
+    ExitVelocity_90th_percentile=('ExitVelocity', lambda x: np.percentile(x, 90))
+).reset_index()
+
+raphit_group
