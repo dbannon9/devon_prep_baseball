@@ -128,19 +128,39 @@ raphit_group.rename(columns={
 # sort
 raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 
-# color gradient
+# # color gradient
+# def highlight_ev(df):
+#     return df.style.background_gradient(
+#         cmap='coolwarm',
+#         subset=['Max EV', 'Average EV', '90th pct EV']
+#     ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
+
+# # display
+# st.subheader("Rapsodo Leaderboard")
+# st.dataframe(
+#     highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
+#     hide_index=True,
+# )
+
+
+# Define custom colormap (deep navy replacing white)
+colors = ["darkred", "deepnavy", "darkblue"]  # Adjust as needed
+custom_cmap = mcolors.LinearSegmentedColormap.from_list("custom_coolwarm", colors)
+
+# Function to apply color gradient
 def highlight_ev(df):
     return df.style.background_gradient(
-        cmap='coolwarm',
+        cmap=custom_cmap,  # Use the custom colormap
         subset=['Max EV', 'Average EV', '90th pct EV']
     ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
 
-# display
+# Display leaderboard
 st.subheader("Rapsodo Leaderboard")
 st.dataframe(
     highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
     hide_index=True,
 )
+
 
 #%% Roster Toggles
 
