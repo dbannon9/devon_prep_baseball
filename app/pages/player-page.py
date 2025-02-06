@@ -104,7 +104,7 @@ st.title('Player Summary Page')
 player_select = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id])
 type_select = st.multiselect("Type",options=note_types,default=note_types)
 
-# Display Rapsodo Stats
+## Display Rapsodo Stats
 
 # merge player_id onto rapsodo data
 raphit = rapsodo_hitting.merge(players,left_on='Player ID', right_on='rapsodo_id', how='left')
@@ -114,12 +114,15 @@ player_raphit = raphit[raphit['player_id']==player_select].replace("-",np.nan)
 if len(player_raphit) < 1:
     st.write('No Rapsodo Hitting Statistics')
 else:
+    st.subheader("Rapsodo Hitting Stats")
     ev_max = max(player_raphit['ExitVelocity'])
     ev_avg = round(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').mean(),1)
     ev_90 = round(np.percentile(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').dropna(), 90),1)
-    st.write(f"Max EV: {ev_max}; 90th pct EV: {ev_90}; Average EV: {ev_avg}")
+    st.write(f"""Max EV: {ev_max}
+             90th pct EV: {ev_90}
+             Average EV: {ev_avg}""")
 
-# Display Coach Notes
+## Display Coach Notes
  
 # Merge coach names onto table
 notes_display = notes.merge(coaches, left_on='coach_id', right_index=True, how='left').merge(players,left_on='player_id',right_index=True,how='left')
@@ -150,3 +153,5 @@ def display_video():
 
 st.subheader("Video:")
 display_video()
+
+# %%
