@@ -46,6 +46,7 @@ if new_file:
     # hitting or pitching?
     file_cols = file_df.columns
     pitch_upload = file_df[~file_df['Pitch ID'].isin(rapsodo_pitching['Pitch ID'])]
+    pitch_upload = pitch_upload.to_dict(orient="records")
     pitch_upload
 
     # file_df.replace("-", np.nan, inplace=True)
