@@ -103,7 +103,7 @@ with st.form(key='Input New Practice Event',clear_on_submit=True):
 
 # When form is submitted
 if event_submit:
-
+    event_date_str = practice_plans_date.isoformat()
     # Create new note dictionary with IDs
     new_event = {
         'start_time': event_start.strftime('%H:%M'),
@@ -111,7 +111,7 @@ if event_submit:
         'name': event_name,
         'location': event_location,
         'notes': event_desc,
-        'date': practice_plans_date.isoformat()
+        'date': event_date_str
     }
 
     # Push using insert function
