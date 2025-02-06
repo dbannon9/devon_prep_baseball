@@ -77,8 +77,8 @@ if edit_toggle:
                     response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
                 except Exception as e:
                     st.error(f"Supabase Error: {e}")    
-            # Mark the form as submitted
-            st.session_state.form_submitted = True
+            # Unclick Edit Toggle
+            edit_toggle = False
 
             # Display success message
             st.success("Data successfully saved")
@@ -154,3 +154,5 @@ else:
 # # Push using insert function
 
 # # Mark as complete:
+
+# %%
