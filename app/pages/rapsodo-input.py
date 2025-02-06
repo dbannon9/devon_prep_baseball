@@ -54,8 +54,11 @@ if new_file:
     if upload:
         if "Pitch ID" in file_cols:
             pitch_upload = file_df[~file_df['Pitch ID'].isin(rapsodo_pitching['Pitch ID'])]
-            pitch_upload = pitch_upload.to_dict(orient="records")
-            response = supabase.table("rapsodo_pitching").insert(pitch_upload).execute()
+            if len(pitch_upload) == 0:
+                st.success("Pitching Data is Up To Date")
+            else:
+                pitch_upload = pitch_upload.to_dict(orient="records")
+                response = supabase.table("rapsodo_pitching").insert(pitch_upload).execute()
                         
             # Mark the form as submitted
             st.session_state.form_submitted = True
@@ -65,8 +68,11 @@ if new_file:
 
         else:
             hit_upload = file_df[~file_df['HitID'].isin(rapsodo_hitting['HitID'])]
-            hit_upload = hit_upload.to_dict(orient="records")
-            response = supabase.table("rapsodo_hitting").insert(hit_upload).execute()
+            if len(hit_upload) == 0:
+                st.success("Hitting Data is Up To Date")
+            else:
+                hit_upload = hit_upload.to_dict(orient="records")
+                response = supabase.table("rapsodo_hitting").insert(hit_upload).execute()
             
             # Mark the form as submitted
             st.session_state.form_submitted = True
