@@ -160,4 +160,10 @@ raphit_group.rename(columns={
     'ExitVelocity_90th_percentile': '90th pct EV',
 }, inplace=True)
 
-st.dataframe(raphit_group[['Player','Max EV','Average EV','90th pct EV']],hide_index=True)
+st.dataframe(raphit_group[['Player','Max EV','Average EV','90th pct EV']],
+             hide_index=True,
+             column_config={
+                 "Max EV": st.column_config.NumberColumn(format="%.1f"),
+                 "Average EV": st.column_config.NumberColumn(format="%.1f"),
+                 "90th pct EV": st.column_config.NumberColumn(format="%.1f")
+})
