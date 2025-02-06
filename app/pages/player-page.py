@@ -39,6 +39,10 @@ notes = fetch_table_data('notes')
 notes.set_index('id',inplace=True)
 video = fetch_table_data('video')
 video.set_index('id',inplace=True)
+rapsodo_hitting = fetch_table_data('rapsodo_hitting')
+rapsodo_hitting.set_index('id',inplace=True)
+rapsodo_pitching = fetch_table_data('rapsodo_pitching')
+rapsodo_pitching.set_index('id',inplace=True)
 
 #%% Data Adjustments
 
@@ -110,6 +114,12 @@ notes_table.rename(columns={
 }, inplace=True)
 
 st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=True)
+
+# Display Rapsodo Stats
+
+# merge player_id onto rapsodo data
+raphit = rapsodo_hitting.merge(players,left_on='rapsodo_id', right_index=True, how='left')
+show_raphit = rapsodo_hitting[rapsodo_hitting['player_id']==player_select]
 
 # Get video rows for this player, sorted by most recent
 def display_video():
