@@ -45,7 +45,7 @@ if new_file:
     file_df = pd.read_csv(new_file)
     # hitting or pitching?
     file_cols = file_df.columns
-
+    file_cols
     # file_df.replace("-", np.nan, inplace=True)
     file_df['Date'] = pd.to_datetime(file_df['Date']).dt.strftime('%Y-%m-%d')
     
@@ -56,6 +56,13 @@ if new_file:
             pitch_upload = file_df[~file_df['Pitch ID'].isin(rapsodo_pitching['Pitch ID'])]
             pitch_upload = pitch_upload.to_dict(orient="records")
             response = supabase.table("rapsodo_pitching").insert(pitch_upload).execute()
+                        
+            # Mark the form as submitted
+            st.session_state.form_submitted = True
+
+            # Display success message
+            st.success("Data successfully uploaded")
+
         else:
             hit_upload = file_df[~file_df['HitID'].isin(rapsodo_pitching['HitID'])]
             hit_upload = hit_upload.to_dict(orient="records")
