@@ -85,7 +85,15 @@ else:
     if len(date_events) < 1:
         st.write("No Events for the Selected Date")
     else:
-        st.dataframe(date_events, hide_index=True)
+        date_events_show = date_events.rename(columns={
+                                              'start_time': 'Start',
+                                              'end_time': 'END',
+                                              'name': 'Name',
+                                              'location': 'Location',
+                                              'notes': 'Notes',
+                                              'date': 'Date'
+                                              }, inplace=True)
+        st.dataframe(date_events_show, hide_index=True)
 
 
 # # Input fields for the first event
