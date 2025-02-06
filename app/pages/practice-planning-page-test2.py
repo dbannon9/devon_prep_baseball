@@ -101,25 +101,25 @@ with st.form(key='Input New Practice Event',clear_on_submit=True):
     event_location = st.selectbox("Location", options=locations)
     event_submit = st.form_submit_button(label="Submit Event")
 
-    # When form is submitted
-    if event_submit:
+# When form is submitted
+if event_submit:
 
-        # Create new note dictionary with IDs
-        new_event = {
-            'start_time': event_start.strftime('%H:%M'),
-            'end_time': event_end.strftime('%H:%M'),
-            'name': event_name,
-            'location': event_location,
-            'notes': event_desc,
-            'date': practice_plans_date.isoformat()
-        }
+    # Create new note dictionary with IDs
+    new_event = {
+        'start_time': event_start.strftime('%H:%M'),
+        'end_time': event_end.strftime('%H:%M'),
+        'name': event_name,
+        'location': event_location,
+        'notes': event_desc,
+        'date': practice_plans_date.isoformat()
+    }
 
-        # Push using insert function
-        response = supabase.table("practice_event").insert(new_event).execute()
+    # Push using insert function
+    response = supabase.table("practice_event").insert(new_event).execute()
 
-        # Mark the form as submitted
-        st.session_state.form_submitted = True
+    # Mark the form as submitted
+    st.session_state.form_submitted = True
 
-        # Display success message
-        st.success("Event submitted successfully")
+    # Display success message
+    st.success("Event submitted successfully")
 
