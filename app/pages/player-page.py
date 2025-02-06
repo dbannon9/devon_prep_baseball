@@ -102,7 +102,6 @@ coach_options = coaches['name'].to_dict()
 st.title('Player Summary Page')
 
 player_select = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id])
-type_select = st.multiselect("Type",options=note_types,default=note_types)
 
 ## Display Rapsodo Stats
 
@@ -123,7 +122,10 @@ else:
              Average EV: {ev_avg}""")
 
 ## Display Coach Notes
- 
+
+st.subheader("Coach Notes")
+type_select = st.multiselect("Type",options=note_types,default=note_types)
+
 # Merge coach names onto table
 notes_display = notes.merge(coaches, left_on='coach_id', right_index=True, how='left').merge(players,left_on='player_id',right_index=True,how='left')
 
