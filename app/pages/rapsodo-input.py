@@ -34,22 +34,35 @@ def fetch_table_data(table_name):
 # Fetch data from tables, then align id to supabase index
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
 rapsodo_pitching.set_index('id',inplace=True)
+rapsodo_hitting = fetch_table_data('rapsodo_hitting')
+rapsodo_hitting.set_index('id',inplace=True)
 
 #%% .csv Data Dump
 
 st.title("Rapsodo Data Input")
-new_file = st.file_uploader("Dump Rapsodo 'pitchinggroup' File Here",type='csv')
+new_file = st.file_uploader("Dump Rapsodo 'pitchinggroup' or 'hittinggroup' File Here",type='csv')
 if new_file:
-    upload = st.button("Upload Rapsodo Pitching Data")
     file_df = pd.read_csv(new_file)
+    # hitting or pitching?
+    file_cols = file_df.columns
+
     # file_df.replace("-", np.nan, inplace=True)
     file_df['Date'] = pd.to_datetime(file_df['Date']).dt.strftime('%Y-%m-%d')
-    file_df = file_df.to_dict(orient="records")
+    
+    # upload button
+    upload = st.button("Upload Rapsodo Data")
     if upload:
-        response = supabase.table("rapsodo_pitching").insert(file_df).execute()
-        
-        # Mark the form as submitted
-        st.session_state.form_submitted = True
+        if "Pitch ID" in file_cols:
+            pitch_upload = file_df[~file_df['Pitch ID'].isin(rapsodo_pitching['Pitch ID'])]
+            pitch_upload = pitch_upload.to_dict(orient="records")
+            response = supabase.table("rapsodo_pitching").insert(pitch_upload).execute()
+        else:
+            hit_upload = file_df[~file_df['HitID'].isin(rapsodo_pitching['HitID'])]
+            hit_upload = hit_upload.to_dict(orient="records")
+            response = supabase.table("rapsodo_hitting").insert(hit_upload).execute()
+            
+            # Mark the form as submitted
+            st.session_state.form_submitted = True
 
-        # Display success message
-        st.success("Data successfully uploaded")
+            # Display success message
+            st.success("Data successfully uploaded")
