@@ -131,7 +131,7 @@ raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 # color gradient
 def highlight_ev(df):
     return df.style.background_gradient(
-        cmap='coolwarm',  # 'coolwarm' goes from blue (cool) to red (warm)
+        cmap='berlin',
         subset=['Max EV', 'Average EV', '90th pct EV']
     ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
 
