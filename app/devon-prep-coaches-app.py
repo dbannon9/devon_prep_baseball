@@ -11,7 +11,7 @@ from supabase import create_client, Client
 
 #%% page definitions
 
-roster = st.Page("pages/roster-page.py",title="Roster",icon=":material/tsunami:")
+roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
 note_input = st.Page("pages/note-input-page.py",title="Input Notes",icon=":material/edit_note:")
 player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
 team_notes_page = st.Page("pages/team-notes-page.py",title="Team Notes",icon=":material/group:")
@@ -22,7 +22,7 @@ view_practice_plans_page = st.Page("pages/view-practice-plans-page.py",title="Vi
 practice_planning_page = st.Page("pages/practice-planning-page.py",title="Practice Planning",icon=":material/conversion_path:")
 practice_planning_page2 = st.Page("pages/practice-planning-page-test2.py",title="TEST - Practice Planning",icon=":material/construction:")
 video_upload_testing = st.Page("pages/video-upload-testing.py",title="Video Upload Testing",icon=":material/upload:")
-rapsodo_testing = st.Page("pages/rapsodo-input.py",title="Raposodo Testing",icon=":material/database:")
+rapsodo_input = st.Page("pages/rapsodo-input.py",title="Raposodo Upload",icon=":material/upload:")
 
 #%% Authentication
 
@@ -53,7 +53,7 @@ if authenticate():
         view_practice_plans_page,
         practice_planning_page2,
         practice_planning_page,
-        rapsodo_testing
+        rapsodo_input
         # video_upload_testing
         ])
     nav.run()
