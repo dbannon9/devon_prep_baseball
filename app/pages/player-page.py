@@ -136,7 +136,7 @@ if len(player_raphit) < 1:
     st.write('No Rapsodo Hitting Statistics')
 else:
     ev_max = max(player_raphit['ExitVelocity'])
-    ev_avg = (player_raphit['ExitVelocity']).mean()
+    ev_avg = pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').mean()
     ev_90 = np.percentile(player_raphit['ExitVelocity'], 90)
     st.write(f"Max EV: {ev_max}; 90th pct EV: {ev_90}; Average EV: {ev_avg}")
 
