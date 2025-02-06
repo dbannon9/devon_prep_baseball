@@ -106,15 +106,15 @@ player_select = st.selectbox("Player", options=list(player_options.keys()), form
 ## Display Rapsodo Stats
 
 # merge player_id onto rapsodo data
-raphit = rapsodo_hitting.merge(players,left_on='Player ID', right_on='rapsodo_id', how='left').replace("-",np.nan)
-player_raphit = raphit[raphit['player_id']==player_select].replace("-",np.nan)
+raphit = rapsodo_hitting.merge(players,left_on='Player ID', right_on='rapsodo_id', how='left').replace("-",np.nan).dropna()
+player_raphit = raphit[raphit['player_id']==player_select].replace("-",np.nan).dropna()
 
 # generate stats
 if len(player_raphit) < 1:
     st.write('No Rapsodo Hitting Stats Available')
 else:
     st.subheader("Rapsodo Hitting Stats")
-    ev_max = max(player_raphit['ExitVelocity'])
+    ev_max = max(player_raphit['ExitVelocity']).replace("-",np.nan).dropna()
     ev_avg = round(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').mean(),1)
     ev_90 = round(np.percentile(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').dropna(), 90),1)
     st.write(f"""Max EV: {ev_max}
