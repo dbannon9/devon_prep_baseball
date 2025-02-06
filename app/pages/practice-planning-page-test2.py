@@ -123,5 +123,5 @@ if event_submit:
     st.session_state.form_submitted = True
 
     # Display success message
-    st.success("Session submitted successfully")
+    st.success("Event submitted successfully")
 
