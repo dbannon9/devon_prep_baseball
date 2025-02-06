@@ -8,6 +8,8 @@ import math
 from decimal import Decimal
 import os
 from supabase import create_client, Client
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 #%% Connect to Supabase
 
