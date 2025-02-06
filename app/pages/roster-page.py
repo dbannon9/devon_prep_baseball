@@ -8,8 +8,6 @@ import math
 from decimal import Decimal
 import os
 from supabase import create_client, Client
-import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 
 #%% Connect to Supabase
 
@@ -131,17 +129,11 @@ raphit_group.rename(columns={
 raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 
 # color gradient
-colors = ["blue", "#000e29", "red"]
-def highlight_ev(series):
-    norm = (series - series.min()) / (series.max() - series.min())  # Normalize
-    colors = plt.cm.get_cmap(custom_cmap)(norm)[:, :3]  # Get RGB colors
-    return [f'background-color: {mcolors.to_hex(color)}' for color in colors]
-
-def apply_gradient(df, columns):
-    return df.style.apply(highlight_ev, subset=columns)
-
-# Apply styling
-styled_df = apply_gradient(raphit_group, ["Max EV", "Average EV", "90th pct EV"])
+def highlight_ev(df):
+    return df.style.background_gradient(
+        cmap='coolwarm',
+        subset=['Max EV', 'Average EV', '90th pct EV']
+    ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
 
 # display
 st.subheader("Rapsodo Leaderboard")
