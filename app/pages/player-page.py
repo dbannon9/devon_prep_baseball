@@ -129,6 +129,8 @@ st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=Tru
 raphit = rapsodo_hitting.merge(players,left_on='Player ID', right_on='rapsodo_id', how='left')
 player_raphit = raphit[raphit['player_id']==player_select].replace("-",np.nan)
 
+player_raphit
+
 # generate stats
 if len(player_raphit) < 1:
     st.write('No Rapsodo Hitting Statistics')
