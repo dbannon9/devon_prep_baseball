@@ -116,6 +116,7 @@ if event_submit:
 
     # Push using insert function
     response = supabase.table("practice_event").insert(new_event).execute()
+    st.write("Debug - Supabase Response:", response)
 
     # Mark the form as submitted
     st.session_state.form_submitted = True
