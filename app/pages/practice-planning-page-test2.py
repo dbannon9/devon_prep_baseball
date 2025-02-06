@@ -76,12 +76,16 @@ if edit_toggle:
                 try:
                     response = supabase.table("practice_event").update(row.to_dict()).eq('id', event_id).execute()
                 except Exception as e:
-                    st.error(f"Supabase Error: {e}")    
-            # Unclick Edit Toggle
-            edit_toggle = False
+                    st.error(f"Supabase Error: {e}")
+            # Mark form as submitted
+            st.session_state.form_submitted = True
 
             # Display success message
             st.success("Data successfully saved")
+            
+            # Unclick Edit Toggle
+            edit_toggle = False
+
 else:
     if len(date_events) < 1:
         st.write("No Events for the Selected Date")
