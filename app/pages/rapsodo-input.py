@@ -66,7 +66,7 @@ if new_file:
             st.success("Data successfully uploaded")
 
         else:
-            hit_upload = file_df[~file_df['HitID'].isin(rapsodo_pitching['HitID'])]
+            hit_upload = file_df[~file_df['HitID'].isin(rapsodo_hitting['HitID'])]
             hit_upload = hit_upload.to_dict(orient="records")
             response = supabase.table("rapsodo_hitting").insert(hit_upload).execute()
             
