@@ -111,7 +111,7 @@ player_raphit = raphit[raphit['player_id']==player_select].replace("-",np.nan)
 
 # generate stats
 if len(player_raphit) < 1:
-    st.write('No Rapsodo Hitting Statistics')
+    st.write('No Rapsodo Hitting Stats Available')
 else:
     st.subheader("Rapsodo Hitting Stats")
     ev_max = max(player_raphit['ExitVelocity'])
