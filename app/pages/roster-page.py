@@ -8,6 +8,8 @@ import math
 from decimal import Decimal
 import os
 from supabase import create_client, Client
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 
 #%% Connect to Supabase
 
@@ -129,18 +131,22 @@ raphit_group.rename(columns={
 raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 
 # color gradient
-def highlight_ev(df):
-    return df.style.background_gradient(
-        cmap='coolwarm',
-        subset=['Max EV', 'Average EV', '90th pct EV']
-    ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
+colors = ["blue", "#000e29", "red"]
+custom_cmap = mcolors.LinearSegmentedColormap.from_list("darkmode_coolwarm", colors, N=256)
+# Function to apply gradient colors
+def apply_gradient(df, columns):
+    styled_df = df.style.apply(lambda x: [f'background-color: {color}' for color in 
+        plt.cm.get_cmap(custom_cmap)((x - x.min()) / (x.max() - x.min()))[:, :3]], subset=columns)
+    return styled_df
+styled_df = apply_gradient(raphit_group, ["Max EV", "Average EV", "90th pct EV"])
 
 # display
 st.subheader("Rapsodo Leaderboard")
-st.dataframe(
-    highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
-    hide_index=True,
-)
+st.dataframe(styled_df, hide_index=True, column_config={
+    "Max EV": st.column_config.NumberColumn(format="%.1f"),
+    "Average EV": st.column_config.NumberColumn(format="%.1f"),
+    "90th pct EV": st.column_config.NumberColumn(format="%.1f")
+})
 
 #%% Roster Toggles
 
