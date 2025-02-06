@@ -96,8 +96,8 @@ st.header('Input New Practice Events')
 with st.form(key='Input New Practice Event',clear_on_submit=True):
     event_name = st.text_input("Event Name")
     event_desc = st.text_input("Event Description")
-    event_start = st.time_input("Start Time", value="03:30")
-    event_end = st.time_input("End Time", value="04:00")
+    event_start = st.time_input("Start Time")
+    event_end = st.time_input("End Time")
     event_location = st.selectbox("Location", options=locations)
     event_submit = st.form_submit_button(label="Submit Event")
 
