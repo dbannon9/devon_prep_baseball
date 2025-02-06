@@ -124,3 +124,5 @@ if event_submit:
     # Display success message
     st.success("Event submitted successfully")
 
+st.write("Debug - Supabase Response:", response)
+
