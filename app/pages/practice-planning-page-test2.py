@@ -41,6 +41,7 @@ locations = [
     "Infield",
     "Outfield",
     "Bullpen",
+    "Indoor (Bullpen)",
     "Indoor (Full)",
     "Indoor (Half)"
 ]
