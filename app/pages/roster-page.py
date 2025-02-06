@@ -91,45 +91,9 @@ currentplayers = players_show.query('active == True')
 player_options = players_show['full_name'].to_dict()
 coach_options = coaches['name'].to_dict()
 
-#%% Roster Toggles
-st.title("Devon Prep Baseball Roster")
-edit_toggle = st.toggle('Edit?')
-ptoggle = st.toggle('Pitchers?')
-if ptoggle:
-    fplayers = players_show.query('pitcher == True & active == True')[['first_name','last_name','class']]
-    fplayers.rename(columns={
-        'first_name': 'First Name',
-        'last_name': 'Last Name',
-        'class': 'Grade Level'
-        }, inplace=True)
-else:
-    fplayers = players_show[['first_name','last_name','class','pos_1','pos_2','pos_3']].fillna('')
-    fplayers.rename(columns={
-        'first_name': 'First Name',
-        'last_name': 'Last Name',
-        'class': 'Grade Level',
-        'pos_1': 'Primary Position',
-        'pos_2': 'Secondary Position',
-        'pos_3': 'Tertiary Position'
-    }, inplace=True)
-
-if edit_toggle:
-    players_update = st.data_editor(players)
-    save = st.button("Save")
-    if save:
-        for idx, row in players_update.iterrows():
-            player_id = row.name  # This accesses the index (which is 'id' in your case)
-            response = supabase.table("players").update(row.to_dict()).eq('id', player_id).execute()
-    
-        # Mark the form as submitted
-        st.session_state.form_submitted = True
-
-        # Display success message
-        st.success("Data successfully saved")
-
-
-else:
-    st.dataframe(fplayers,hide_index=True)
+#%% Home Page
+ 
+st.title("Devon Prep Baseball")
 
 #%% Creating Rapsodo Leaderboards
 
@@ -170,3 +134,44 @@ st.dataframe(raphit_group[['Player','Average EV','90th pct EV','Max EV']],
                  "Average EV": st.column_config.NumberColumn(format="%.1f"),
                  "90th pct EV": st.column_config.NumberColumn(format="%.1f")
                 })
+
+#%% Roster Toggles
+
+st.title("Roster & Positions")
+edit_toggle = st.toggle('Edit?')
+ptoggle = st.toggle('Pitchers?')
+if ptoggle:
+    fplayers = players_show.query('pitcher == True & active == True')[['first_name','last_name','class']]
+    fplayers.rename(columns={
+        'first_name': 'First Name',
+        'last_name': 'Last Name',
+        'class': 'Grade Level'
+        }, inplace=True)
+else:
+    fplayers = players_show[['first_name','last_name','class','pos_1','pos_2','pos_3']].fillna('')
+    fplayers.rename(columns={
+        'first_name': 'First Name',
+        'last_name': 'Last Name',
+        'class': 'Grade Level',
+        'pos_1': 'Primary Position',
+        'pos_2': 'Secondary Position',
+        'pos_3': 'Tertiary Position'
+    }, inplace=True)
+
+if edit_toggle:
+    players_update = st.data_editor(players)
+    save = st.button("Save")
+    if save:
+        for idx, row in players_update.iterrows():
+            player_id = row.name  # This accesses the index (which is 'id' in your case)
+            response = supabase.table("players").update(row.to_dict()).eq('id', player_id).execute()
+    
+        # Mark the form as submitted
+        st.session_state.form_submitted = True
+
+        # Display success message
+        st.success("Data successfully saved")
+
+
+else:
+    st.dataframe(fplayers,hide_index=True)
