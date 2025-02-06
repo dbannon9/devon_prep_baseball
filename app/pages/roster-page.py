@@ -136,7 +136,7 @@ else:
 ## Hitting
 
 # merge for id purposes
-raphit = rapsodo_hitting.merge(players_show,left_on='Player ID', right_on='rapsodo_id', how='left')
+raphit = rapsodo_hitting.merge(players_show,left_on='Player ID', right_on='rapsodo_id', how='left').replace("-",np.nan)
 raphit['ExitVelocity'] = pd.to_numeric(raphit['ExitVelocity'], errors='coerce')
 
 # group by id
