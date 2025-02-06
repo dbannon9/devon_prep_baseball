@@ -131,7 +131,7 @@ if edit_toggle:
 else:
     st.dataframe(fplayers,hide_index=True)
 
-#%% Creating Rapsodo Dataframes
+#%% Creating Rapsodo Leaderboards
 
 ## Hitting
 
@@ -162,6 +162,7 @@ raphit_group.rename(columns={
 
 raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 
+st.title("Rapsodo Leaderboard")
 st.dataframe(raphit_group[['Player','Average EV','90th pct EV','Max EV']],
              hide_index=True,
              column_config={
