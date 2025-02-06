@@ -75,6 +75,9 @@ classdef(players['grad_year'])
 # Create Players Full Name Column
 players['full_name'] = players['first_name'] + ' ' + players['last_name']
 
+# create dupe id
+players['player_id'] = players.index
+
 # assign player active status by class
 active_classes = ['Freshman','Sophomore','Junior','Senior']
 players['active'] = players['class'].isin(active_classes)
