@@ -1,6 +1,7 @@
 #%% Imports
 
 import pandas as pd
+import numpy as np
 import streamlit as st
 from datetime import date, time
 import math
@@ -122,8 +123,9 @@ st.dataframe(notes_table[['Player','Type','Date','Coach','Note']],hide_index=Tru
 
 # merge player_id onto rapsodo data
 raphit = rapsodo_hitting.merge(players,left_on='Player ID', right_on='rapsodo_id', how='left')
-st.dataframe(raphit)
-# show_raphit = rapsodo_hitting[rapsodo_hitting['player_id']==player_select]
+player_raphit = raphit[raphit['player_id']==player_select].replace("-",np.nan)
+max_ev = max(player_raphit['ExitVelocity'])
+st.write(max_ev)
 
 # Get video rows for this player, sorted by most recent
 def display_video():
