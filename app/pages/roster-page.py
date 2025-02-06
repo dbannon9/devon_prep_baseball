@@ -140,10 +140,17 @@ raphit = rapsodo_hitting.merge(players_show,left_on='Player ID', right_on='rapso
 raphit['ExitVelocity'] = pd.to_numeric(raphit['ExitVelocity'], errors='coerce')
 
 # group by id
-raphit_group = raphit.groupby('rapsodo_id').agg(
+raphit_group = raphit.groupby('rapsodo_id','Full Name').agg(
     ExitVelocity_max=('ExitVelocity', 'max'),
     ExitVelocity_avg=('ExitVelocity', 'mean'),
     ExitVelocity_90th_percentile=('ExitVelocity', lambda x: np.percentile(x, 90))
 ).reset_index()
+
+# join full_name back on
+raphit_group = raphit_group.merge(
+    players_show[['rapsodo_id', 'full_name']], 
+    on='rapsodo_id', 
+    how='left'
+)
 
 raphit_group
