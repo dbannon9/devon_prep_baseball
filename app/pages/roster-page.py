@@ -146,7 +146,7 @@ raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 
 
 # Define custom colormap (deep navy replacing white)
-colors = ["blue", "black", "red"]  # Adjust as needed
+colors = ["blue", "#000e29", "red"]  # Adjust as needed
 custom_cmap = mcolors.LinearSegmentedColormap.from_list("custom_coolwarm", colors)
 
 # Function to apply color gradient
