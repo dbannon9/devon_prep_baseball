@@ -36,25 +36,14 @@ practice_plans.set_index('id',inplace=True)
 practice_event = fetch_table_data('practice_event')
 practice_event.set_index('id',inplace=True)
 
-#%% Data Definitions
-
-date_str = ""
-event_1_start_time = ""
-event_1_end_time = ""
-event_1_name = ""
-event_1_notes = ""
-event_2_start_time = ""
-event_2_end_time = ""
-event_2_name = ""
-event_2_notes = ""
-event_3_start_time = ""
-event_3_end_time = ""
-event_3_name = ""
-event_3_notes = ""
-event_4_start_time = ""
-event_4_end_time = ""
-event_4_name = ""
-event_4_notes = ""
+locations = [
+    "Whole Field",
+    "Infield",
+    "Outfield",
+    "Bullpen",
+    "Indoor (Full)",
+    "Indoor (Half)"
+]
 
 #%% Page Header
 
@@ -102,5 +91,37 @@ else:
 
 #%% Input New Practice Events
 
-st.title('Input New Practice Events')
+st.header('Input New Practice Events')
+
+with st.form(key='Input New Practice Event',clear_on_submit=True):
+    event_name = st.text_input("Event Name")
+    event_desc = st.text_input("Event Description")
+    event_start = st.time_input("Start Time", value="3:30")
+    event_end = st.time_input("End Time", value="4:00")
+    event_location = st.selectbox("Location", options=locations)
+    event_submit = st.form_submit_button(label="Submit Event")
+
+# When form is submitted
+if event_submit:
+    # Convert the date object to ISO 8601 string format
+    event_date_str = practice_plans_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
+
+    # Create new note dictionary with IDs
+    new_event = {
+        'start_time': event_start,
+        'end_time': event_end,
+        'name': event_name,
+        'location': event_location,
+        'notes': event_desc,
+        'date': event_date_str
+    }
+
+    # Push using insert function
+    response = supabase.table("practice_event").insert(new_event).execute()
+
+    # Mark the form as submitted
+    st.session_state.form_submitted = True
+
+    # Display success message
+    st.success("Session submitted successfully")
 
