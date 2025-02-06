@@ -126,7 +126,7 @@ raphit_group.rename(columns={
 
 raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 
-st.title("Rapsodo Leaderboard")
+st.subheader("Rapsodo Leaderboard")
 st.dataframe(raphit_group[['Player','Average EV','90th pct EV','Max EV']],
              hide_index=True,
              column_config={
@@ -137,7 +137,7 @@ st.dataframe(raphit_group[['Player','Average EV','90th pct EV','Max EV']],
 
 #%% Roster Toggles
 
-st.title("Roster & Positions")
+st.subheader("Roster & Positions")
 edit_toggle = st.toggle('Edit?')
 ptoggle = st.toggle('Pitchers?')
 if ptoggle:
