@@ -108,7 +108,6 @@ player_select = st.selectbox("Player", options=list(player_options.keys()), form
 # merge player_id onto rapsodo data
 raphit = rapsodo_hitting.merge(players,left_on='Player ID', right_on='rapsodo_id', how='left')
 player_raphit = raphit[raphit['player_id']==player_select][raphit['ExitVelocity']!="-"]
-player_raphit
 
 # generate stats
 if len(player_raphit) < 1:
