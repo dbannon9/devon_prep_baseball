@@ -46,6 +46,7 @@ if new_file:
     # hitting or pitching?
     file_cols = file_df.columns
     file_cols
+    "Pitch ID" in file_cols
     # file_df.replace("-", np.nan, inplace=True)
     file_df['Date'] = pd.to_datetime(file_df['Date']).dt.strftime('%Y-%m-%d')
     
