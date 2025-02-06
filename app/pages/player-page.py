@@ -137,7 +137,7 @@ else:
     ev_avg = round(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').mean(),1)
     ev_90 = round(np.percentile(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').dropna(), 90),1)
     st.write(f"Max EV: {ev_max}; 90th pct EV: {ev_90}; Average EV: {ev_avg}")
-
+    
 # Get video rows for this player, sorted by most recent
 def display_video():
     player_name = player_options[player_select]  # Get the player name from player_options
