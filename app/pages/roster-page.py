@@ -117,6 +117,7 @@ raphit_group = raphit_group.merge(
     how='left'
 )
 
+# col rename
 raphit_group.rename(columns={
     'full_name': 'Player',
     'ExitVelocity_max': 'Max EV',
@@ -124,16 +125,22 @@ raphit_group.rename(columns={
     'ExitVelocity_90th_percentile': '90th pct EV',
 }, inplace=True)
 
+# sort
 raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 
+# color code
+def highlight_ev(df):
+    return df.style.background_gradient(
+        cmap='coolwarm',
+        subset=['Max EV', 'Average EV', '90th pct EV']
+    ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
+
 st.subheader("Rapsodo Leaderboard")
-st.dataframe(raphit_group[['Player','Average EV','90th pct EV','Max EV']],
-             hide_index=True,
-             column_config={
-                 "Max EV": st.column_config.NumberColumn(format="%.1f"),
-                 "Average EV": st.column_config.NumberColumn(format="%.1f"),
-                 "90th pct EV": st.column_config.NumberColumn(format="%.1f")
-                })
+st.subheader("Rapsodo Leaderboard")
+st.dataframe(
+    highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
+    hide_index=True,
+)
 
 #%% Roster Toggles
 
