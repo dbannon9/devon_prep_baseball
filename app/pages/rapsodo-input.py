@@ -70,6 +70,7 @@ if new_file:
                 st.success("Hitting Data is Up To Date")
             else:
                 hit_upload = hit_upload.to_dict(orient="records")
+                st.json(hit_upload)
                 response = supabase.table("rapsodo_hitting").insert(hit_upload).execute()
                 # Mark the form as submitted
                 st.session_state.form_submitted = True
