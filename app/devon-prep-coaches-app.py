@@ -2,12 +2,6 @@
 
 import pandas as pd
 import streamlit as st
-from datetime import date, time
-import math
-from decimal import Decimal
-import os
-from supabase import create_client, Client
-
 
 #%% page definitions
 
