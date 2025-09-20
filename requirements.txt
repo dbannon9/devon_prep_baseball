@@ -1,5 +1,5 @@
 pandas==2.2.2
-streamlit==1.37.1
+streamlit==1.49.1
 supabase==2.7.4
 fpdf==1.7.2
 matplotlib
