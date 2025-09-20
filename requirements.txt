@@ -3,3 +3,4 @@ streamlit==1.37.1
 supabase==2.7.4
 fpdf==1.7.2
 matplotlib
+st-supabase-connection==2.0.0
