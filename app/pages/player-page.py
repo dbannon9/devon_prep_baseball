@@ -7,7 +7,7 @@ from datetime import date, time
 import math
 from decimal import Decimal
 import os
-from supabase import Client, create_client
+from st_supabase_connection import SupabaseConnection
 
 #%% Connect to Supabase
 
