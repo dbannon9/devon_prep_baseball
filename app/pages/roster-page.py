@@ -58,7 +58,7 @@ classdict = {
 }
 
 #create the display version of players
-players_show = players.copy()
+players_show = pd.DataFrame(players.copy())
 
 # assign class year names to each player based on graduation year
 def assign_class(players_show):
