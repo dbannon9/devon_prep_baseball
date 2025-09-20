@@ -2,6 +2,8 @@
 
 import pandas as pd
 import streamlit as st
+from supabase.client import Client
+from supabase import create_client
 
 #%% page definitions
 

@@ -7,7 +7,8 @@ from datetime import date, time
 import math
 from decimal import Decimal
 import os
-from supabase import create_client, Client
+from supabase.client import Client
+from supabase import create_client
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
