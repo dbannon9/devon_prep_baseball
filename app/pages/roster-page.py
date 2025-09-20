@@ -80,7 +80,10 @@ def assign_class(players_show):
     players_show['class'] = class_years
     return players_show
 
-players_show = assign_class(players_show)
+if 'grad_year' not in players_show.columns:
+    st.error("No grad_year column found in players_show")
+else:
+    players_show = assign_class(players_show)
 
 # Create Players Full Name Column
 players_show['full_name'] = players_show['first_name'] + ' ' + players_show['last_name']
