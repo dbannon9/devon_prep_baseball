@@ -11,6 +11,56 @@ import streamlit as st
 # import matplotlib.pyplot as plt
 # import matplotlib.colors as mcolors
 
+# diagnostics - paste at TOP of pages/roster-page.py
+import os, sys, pathlib
+import streamlit as st
+
+st.markdown("### ROSTER-PAGE.RAW DIAGNOSTICS")
+
+st.write("__file__ (executed file):", __file__)
+st.write("cwd:", os.getcwd())
+
+# show the file content that the server is executing (first chunk)
+try:
+    file_path = pathlib.Path(__file__)
+    content = file_path.read_text(errors="ignore")
+    st.write("First 2000 chars of this file (as read by server):")
+    st.code(content[:2000])
+except Exception as e:
+    st.write("Could not read __file__ content:", e)
+
+# inspect immediate directory & repo root (best-effort)
+parent = pathlib.Path(__file__).parent
+st.write("Directory listing of the page's folder:", sorted(os.listdir(parent)))
+# attempt to locate other files with similar names / suspicious tokens in the repo
+root = pathlib.Path(__file__).parents[2] if len(pathlib.Path(__file__).parents) >= 3 else pathlib.Path(".")
+st.write("Guessed repo root:", str(root))
+
+hits = []
+for p in root.rglob("*.py"):
+    try:
+        txt = p.read_text(errors="ignore")
+    except Exception:
+        continue
+    # look for the exact problem tokens that would cause your KeyError
+    if "players_show['class']" in txt or "assign_class(" in txt or "grad_year" in txt:
+        hits.append(str(p))
+# limit output
+st.write("Files in repo containing players_show/class/assign_class/grad_year (first 200):")
+st.write(hits[:200])
+
+# quick sanity: print the names of the first 20 files under repo root
+try:
+    sample_files = [str(x.relative_to(root)) for x in sorted(root.rglob("*"))[:200]]
+    st.write("Sample repo files (first 200):", sample_files)
+except Exception:
+    pass
+
+st.write("sys.path (first entries):", sys.path[:6])
+st.write("End diagnostics.")
+
+
+
 # #%% Connect to Supabase
 
 # # Use st.secrets to load the URL and key from secrets.toml
