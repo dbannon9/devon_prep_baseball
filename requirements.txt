@@ -2,7 +2,7 @@ python_version >= "3.11" and python_version < "3.13"
 
 pandas==2.2.2
 streamlit==1.49.1
-supabase==2.7.4
+supabase==2.19.0
 fpdf==1.7.2
 matplotlib
 st-supabase-connection==2.0.0
