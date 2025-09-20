@@ -11,7 +11,7 @@ for p in pathlib.Path(".").rglob("__pycache__"):
 
 #%% page definitions
 
-roster = st.Page("pages/roster-page2.py",title="Home",icon=":material/tsunami:")
+roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
 # note_input = st.Page("pages/note-input-page.py",title="Input Notes",icon=":material/edit_note:")
 player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
 # team_notes_page = st.Page("pages/team-notes-page.py",title="Team Notes",icon=":material/group:")
