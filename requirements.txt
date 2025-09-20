@@ -1,3 +1,5 @@
+python_version >= "3.11" and python_version < "3.13"
+
 pandas==2.2.2
 streamlit==1.49.1
 supabase==2.7.4
