@@ -69,9 +69,9 @@ def assign_class(players_show):
         years_diff = math.ceil((date(gy, 9, 1) - date.today()).days / 365)
 
         if years_diff >= 5:
-            class_year = 5
+            class_year = classdict.get(5)
         elif years_diff < 1:
-            class_year = 0
+            class_year = classdict.get(0)
         else:
             class_year = classdict.get(years_diff)
 
