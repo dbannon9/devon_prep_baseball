@@ -45,108 +45,134 @@ rapsodo_hitting.set_index('id',inplace=True)
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
 rapsodo_pitching.set_index('id',inplace=True)
 
-#%% Data Adjustments
+#%% DIAGNOSTIC
 
-# assign class levels to index of years
-classdict = {
-        0: "Middle",
-        1: "Senior",
-        2: "Junior",
-        3: "Sophomore",
-        4: "Freshman",
-        5: "Grad"
-}
+st.write("Columns in players:", players.columns.tolist())
+st.write(players.head())
 
-#create the display version of players
-players_show = pd.DataFrame(players.copy())
 
-# assign class year names to each player based on graduation year
-def assign_class(players_show):
-    class_years = []
-    for gy in players_show['grad_year']:
-        if isinstance(gy, Decimal):
-            gy = int(gy)
-        years_diff = math.ceil((date(gy, 9, 1) - date.today()).days / 365)
 
-        if years_diff >= 5:
-            class_year = classdict.get(5)
-        elif years_diff < 1:
-            class_year = classdict.get(0)
-        else:
-            class_year = classdict.get(years_diff)
+# #%% Data Adjustments
 
-        class_years.append(class_year)
+# # assign class levels to index of years
+# classdict = {
+#         0: "Middle",
+#         1: "Senior",
+#         2: "Junior",
+#         3: "Sophomore",
+#         4: "Freshman",
+#         5: "Grad"
+# }
 
-    players_show['class'] = class_years
-    return players_show
+# #create the display version of players
+# players_show = pd.DataFrame(players.copy())
 
-if 'grad_year' not in players_show.columns:
-    st.error("No grad_year column found in players_show")
-else:
-    players_show = assign_class(players_show)
+# # assign class year names to each player based on graduation year
+# def assign_class(players_show):
+#     class_years = []
+#     for gy in players_show['grad_year']:
+#         if isinstance(gy, Decimal):
+#             gy = int(gy)
+#         years_diff = math.ceil((date(gy, 9, 1) - date.today()).days / 365)
 
-# Create Players Full Name Column
-players_show['full_name'] = players_show['first_name'] + ' ' + players_show['last_name']
+#         if years_diff >= 5:
+#             class_year = classdict.get(5)
+#         elif years_diff < 1:
+#             class_year = classdict.get(0)
+#         else:
+#             class_year = classdict.get(years_diff)
 
-# assign player active status by class
-active_classes = ['Freshman','Sophomore','Junior','Senior']
-players_show['active'] = players_show['class'].isin(active_classes)
+#         class_years.append(class_year)
 
-# Assign types of notes
-note_types = ['Fielder','Hitter','Pitcher']
+#     players_show['class'] = class_years
+#     return players_show
 
-# create currentplayers table
-currentplayers = players_show.query('active == True')
+# if 'grad_year' not in players_show.columns:
+#     st.error("No grad_year column found in players_show")
+# else:
+#     players_show = assign_class(players_show)
 
-# Prepare dropdown options
-player_options = players_show['full_name'].to_dict()
-coach_options = coaches['name'].to_dict()
+# # Create Players Full Name Column
+# players_show['full_name'] = players_show['first_name'] + ' ' + players_show['last_name']
 
-#%% Home Page
+# # assign player active status by class
+# active_classes = ['Freshman','Sophomore','Junior','Senior']
+# players_show['active'] = players_show['class'].isin(active_classes)
+
+# # Assign types of notes
+# note_types = ['Fielder','Hitter','Pitcher']
+
+# # create currentplayers table
+# currentplayers = players_show.query('active == True')
+
+# # Prepare dropdown options
+# player_options = players_show['full_name'].to_dict()
+# coach_options = coaches['name'].to_dict()
+
+# #%% Home Page
  
-st.title("Devon Prep Baseball")
+# st.title("Devon Prep Baseball")
 
-#%% Creating Rapsodo Leaderboards
+# #%% Creating Rapsodo Leaderboards
 
-## Hitting
+# ## Hitting
 
-# merge for id purposes
-raphit = rapsodo_hitting.merge(players_show,left_on='Player ID', right_on='rapsodo_id', how='left')
-raphit['ExitVelocity'] = pd.to_numeric(raphit['ExitVelocity'], errors='coerce')[raphit['ExitVelocity']!="-"]
+# # merge for id purposes
+# raphit = rapsodo_hitting.merge(players_show,left_on='Player ID', right_on='rapsodo_id', how='left')
+# raphit['ExitVelocity'] = pd.to_numeric(raphit['ExitVelocity'], errors='coerce')[raphit['ExitVelocity']!="-"]
 
-# group by id
-raphit_group = raphit.groupby('rapsodo_id').agg(
-    ExitVelocity_max=('ExitVelocity', 'max'),
-    ExitVelocity_avg=('ExitVelocity', 'mean'),
-    ExitVelocity_90th_percentile=('ExitVelocity', lambda x: np.percentile(x, 90))
-).reset_index()
+# # group by id
+# raphit_group = raphit.groupby('rapsodo_id').agg(
+#     ExitVelocity_max=('ExitVelocity', 'max'),
+#     ExitVelocity_avg=('ExitVelocity', 'mean'),
+#     ExitVelocity_90th_percentile=('ExitVelocity', lambda x: np.percentile(x, 90))
+# ).reset_index()
 
-# join full_name back on
-raphit_group = raphit_group.merge(
-    players_show[['rapsodo_id', 'full_name']], 
-    on='rapsodo_id', 
-    how='left'
-)
+# # join full_name back on
+# raphit_group = raphit_group.merge(
+#     players_show[['rapsodo_id', 'full_name']], 
+#     on='rapsodo_id', 
+#     how='left'
+# )
 
-# col rename
-raphit_group.rename(columns={
-    'full_name': 'Player',
-    'ExitVelocity_max': 'Max EV',
-    'ExitVelocity_avg': 'Average EV',
-    'ExitVelocity_90th_percentile': '90th pct EV',
-}, inplace=True)
+# # col rename
+# raphit_group.rename(columns={
+#     'full_name': 'Player',
+#     'ExitVelocity_max': 'Max EV',
+#     'ExitVelocity_avg': 'Average EV',
+#     'ExitVelocity_90th_percentile': '90th pct EV',
+# }, inplace=True)
 
-# sort
-raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
+# # sort
+# raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 
-# # color gradient
+# # # color gradient
+# # def highlight_ev(df):
+# #     return df.style.background_gradient(
+# #         cmap='coolwarm',
+# #         subset=['Max EV', 'Average EV', '90th pct EV']
+# #     ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
+
+# # # display
+# # st.subheader("Rapsodo Leaderboard")
+# # st.dataframe(
+# #     highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
+# #     hide_index=True,
+# # )
+
+
+# # Define custom colormap (deep navy replacing white)
+# colors = ["blue", "black", "red"]  # Adjust as needed
+# custom_cmap = mcolors.LinearSegmentedColormap.from_list("custom_coolwarm", colors)
+
+# # Function to apply color gradient
 # def highlight_ev(df):
 #     return df.style.background_gradient(
-#         cmap='coolwarm',
+#         cmap=custom_cmap,  # Use the custom colormap
 #         subset=['Max EV', 'Average EV', '90th pct EV']
 #     ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
 
-# # display
+# # Display leaderboard
 # st.subheader("Rapsodo Leaderboard")
 # st.dataframe(
 #     highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
@@ -154,62 +180,43 @@ raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
 # )
 
 
-# Define custom colormap (deep navy replacing white)
-colors = ["blue", "black", "red"]  # Adjust as needed
-custom_cmap = mcolors.LinearSegmentedColormap.from_list("custom_coolwarm", colors)
+# #%% Roster Toggles
 
-# Function to apply color gradient
-def highlight_ev(df):
-    return df.style.background_gradient(
-        cmap=custom_cmap,  # Use the custom colormap
-        subset=['Max EV', 'Average EV', '90th pct EV']
-    ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
+# st.subheader("Roster & Positions")
+# edit_toggle = st.toggle('Edit?')
+# ptoggle = st.toggle('Pitchers?')
+# if ptoggle:
+#     fplayers = players_show.query('pitcher == True & active == True')[['first_name','last_name','class']]
+#     fplayers.rename(columns={
+#         'first_name': 'First Name',
+#         'last_name': 'Last Name',
+#         'class': 'Grade Level'
+#         }, inplace=True)
+# else:
+#     fplayers = players_show[['first_name','last_name','class','pos_1','pos_2','pos_3']].fillna('')
+#     fplayers.rename(columns={
+#         'first_name': 'First Name',
+#         'last_name': 'Last Name',
+#         'class': 'Grade Level',
+#         'pos_1': 'Primary Position',
+#         'pos_2': 'Secondary Position',
+#         'pos_3': 'Tertiary Position'
+#     }, inplace=True)
 
-# Display leaderboard
-st.subheader("Rapsodo Leaderboard")
-st.dataframe(
-    highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
-    hide_index=True,
-)
-
-
-#%% Roster Toggles
-
-st.subheader("Roster & Positions")
-edit_toggle = st.toggle('Edit?')
-ptoggle = st.toggle('Pitchers?')
-if ptoggle:
-    fplayers = players_show.query('pitcher == True & active == True')[['first_name','last_name','class']]
-    fplayers.rename(columns={
-        'first_name': 'First Name',
-        'last_name': 'Last Name',
-        'class': 'Grade Level'
-        }, inplace=True)
-else:
-    fplayers = players_show[['first_name','last_name','class','pos_1','pos_2','pos_3']].fillna('')
-    fplayers.rename(columns={
-        'first_name': 'First Name',
-        'last_name': 'Last Name',
-        'class': 'Grade Level',
-        'pos_1': 'Primary Position',
-        'pos_2': 'Secondary Position',
-        'pos_3': 'Tertiary Position'
-    }, inplace=True)
-
-if edit_toggle:
-    players_update = st.data_editor(players)
-    save = st.button("Save")
-    if save:
-        for idx, row in players_update.iterrows():
-            player_id = row.name  # This accesses the index (which is 'id' in your case)
-            response = supabase.table("players").update(row.to_dict()).eq('id', player_id).execute()
+# if edit_toggle:
+#     players_update = st.data_editor(players)
+#     save = st.button("Save")
+#     if save:
+#         for idx, row in players_update.iterrows():
+#             player_id = row.name  # This accesses the index (which is 'id' in your case)
+#             response = supabase.table("players").update(row.to_dict()).eq('id', player_id).execute()
     
-        # Mark the form as submitted
-        st.session_state.form_submitted = True
+#         # Mark the form as submitted
+#         st.session_state.form_submitted = True
 
-        # Display success message
-        st.success("Data successfully saved")
+#         # Display success message
+#         st.success("Data successfully saved")
 
 
-else:
-    st.dataframe(fplayers,hide_index=True)
+# else:
+#     st.dataframe(fplayers,hide_index=True)
