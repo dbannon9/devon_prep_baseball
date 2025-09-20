@@ -2,6 +2,12 @@
 
 import pandas as pd
 import streamlit as st
+import sys, shutil, pathlib
+
+# cache resets
+for p in pathlib.Path(".").rglob("__pycache__"):
+    shutil.rmtree(p, ignore_errors=True)
+
 
 #%% page definitions
 
