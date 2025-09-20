@@ -47,7 +47,7 @@ if authenticate():
       # view_practice_plans_page,
       # practice_planning_page2,
       # practice_planning_page,
-        rapsodo_input
+        data_input
       # video_upload_testing
         ])
     nav.run()
