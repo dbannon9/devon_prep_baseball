@@ -3,4 +3,6 @@ base = "dark"
 primaryColor = "#f1d71c"
 backgroundColor = "#000e29"
 secondaryBackgroundColor = "#00163d"
+
+[server]
 fileWatcherType = "none"
