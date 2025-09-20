@@ -82,7 +82,7 @@ if new_file:
                 st.success("Rapsodo Pitching Data is Up To Date")
             else:
                 pitch_upload = pitch_upload.to_dict(orient="records")
-                response = supabase.table("rapsodo_pitching").insert(pitch_upload).execute()
+                response = db.table("rapsodo_pitching").insert(pitch_upload).execute()
                 st.session_state.form_submitted = True
                 st.success("Rapsodo Pitching Data Successfully Uploaded")
 
@@ -92,7 +92,7 @@ if new_file:
                 st.success("Rapsodo Hitting Data is Up To Date")
             else:
                 hit_upload = hit_upload.to_dict(orient="records")
-                response = supabase.table("rapsodo_hitting").insert(hit_upload).execute()
+                response = db.table("rapsodo_hitting").insert(hit_upload).execute()
                 st.session_state.form_submitted = True
                 st.success("Rapsodo Hitting Data Successfully Uploaded")
 
@@ -100,7 +100,7 @@ if new_file:
             dk_upload = file_df[~file_df['UUID'].isin(swings['uuid'])]
             if len(dk_upload) == 0:
                 st.success("Diamond Kinetics Hitting Data is Up To Date")
-            response = supabase.table("swings").insert(dk_upload).execute()
+            response = db.table("swings").insert(dk_upload).execute()
             st.session_state.form_submitted = True
             st.success("Diamond Kinetics Data Successfully Uploaded")
 
