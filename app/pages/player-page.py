@@ -9,24 +9,23 @@ from decimal import Decimal
 import os
 from supabase import Client, create_client
 
-#%% create connection with supabase
+#%% Connect to Supabase
 
 # Use st.secrets to load the URL and key from secrets.toml
-supabase_url = st.secrets["supabase"]["SUPABASE_URL"]
-supabase_key = st.secrets["supabase"]["SUPABASE_KEY"]
+# supabase_url = st.secrets["supabase"]["SUPABASE_URL"]
+# supabase_key = st.secrets["supabase"]["SUPABASE_KEY"]
 
-# get secrets from toml
-supabase: Client = create_client(supabase_url, supabase_key)
+db = st.connection("supabase",type=SupabaseConnection)
 
-# Create the connection object using SupabaseConnection
-db = create_client(supabase_url, supabase_key)
+# # Create the connection object using SupabaseConnection
+# db = create_client(supabase_url, supabase_key)
 
 #%% Data Retrieval
 
 # Function to fetch data from any table
 def fetch_table_data(table_name):
     # Execute the SQL query
-    df = supabase.table(f"{table_name}").select("*").execute().data
+    df = db.query("*",f"{table_name}").execute()
     
     # Convert the fetched data into a pandas DataFrame
     return pd.DataFrame(df)
