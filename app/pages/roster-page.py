@@ -61,20 +61,26 @@ classdict = {
 players_show = players.copy()
 
 # assign class year names to each player based on graduation year
-def classdef(thing):
+def assign_class(players_show):
     class_years = []
-    for thing in players_show['grad_year']:
-        if isinstance(thing, Decimal):
-            thing = int(thing)
-        years_diff = math.ceil((date(thing, 9, 1) - date.today()).days / 365)
+    for gy in players_show['grad_year']:
+        if isinstance(gy, Decimal):
+            gy = int(gy)
+        years_diff = math.ceil((date(gy, 9, 1) - date.today()).days / 365)
+
         if years_diff >= 5:
-            return 5
-        elif years_diff <1:
-            return 0
-        class_year = classdict.get(years_diff)
+            class_year = 5
+        elif years_diff < 1:
+            class_year = 0
+        else:
+            class_year = classdict.get(years_diff)
+
         class_years.append(class_year)
+
     players_show['class'] = class_years
-classdef(players_show['grad_year'])
+    return players_show
+
+players_show = assign_class(players_show)
 
 # Create Players Full Name Column
 players_show['full_name'] = players_show['first_name'] + ' ' + players_show['last_name']
