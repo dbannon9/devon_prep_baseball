@@ -1,13 +1,13 @@
 #%% Imports
 
 import streamlit as st
+from st_supabase_connection import SupabaseConnection
 import pandas as pd
 import numpy as np
 from datetime import date, time
 import math
 from decimal import Decimal
 import os
-from st_supabase_connection import SupabaseConnection
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
