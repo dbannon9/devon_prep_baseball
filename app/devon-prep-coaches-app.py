@@ -16,7 +16,7 @@ player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":mater
 # practice_planning_page = st.Page("pages/practice-planning-page.py",title="Practice Planning",icon=":material/conversion_path:")
 # practice_planning_page2 = st.Page("pages/practice-planning-page-test2.py",title="TEST - Practice Planning",icon=":material/construction:")
 # video_upload_testing = st.Page("pages/video-upload-testing.py",title="Video Upload Testing",icon=":material/upload:")
-rapsodo_input = st.Page("pages/rapsodo-input.py",title="Raposodo Upload",icon=":material/upload:")
+data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
 
 #%% Authentication
 
