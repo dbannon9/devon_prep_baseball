@@ -13,7 +13,7 @@ from supabase import create_client, Client
 
 roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
 # note_input = st.Page("pages/note-input-page.py",title="Input Notes",icon=":material/edit_note:")
-player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
+# player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
 # team_notes_page = st.Page("pages/team-notes-page.py",title="Team Notes",icon=":material/group:")
 # arm_tracking_page = st.Page("pages/arm-tracking-page.py",title="Arm Tracking",icon=":material/flag:")
 # coach_page = st.Page("pages/coaches-page.py",title="Coach Summary",icon=":material/sports:")
@@ -46,7 +46,7 @@ if authenticate():
     nav = st.navigation([
         roster,
       # note_input,
-        player_page,
+      # player_page,
       # team_notes_page,
       # arm_tracking_page,
       # calendar_page,
