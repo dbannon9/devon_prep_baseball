@@ -4,21 +4,6 @@ import pandas as pd
 import streamlit as st
 import sys, shutil, pathlib
 
-
-
-
-# DEBUG
-
-if "supabase" not in st.secrets:
-    st.error("❌ Supabase secrets not found! Go to Streamlit Cloud > Settings > Secrets.")
-else:
-    st.success("✅ Supabase secrets loaded.")
-
-
-# END DEBUG
-
-
-
 # cache resets
 for p in pathlib.Path(".").rglob("__pycache__"):
     shutil.rmtree(p, ignore_errors=True)
@@ -27,16 +12,7 @@ for p in pathlib.Path(".").rglob("__pycache__"):
 #%% page definitions
 
 roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
-# note_input = st.Page("pages/note-input-page.py",title="Input Notes",icon=":material/edit_note:")
 player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
-# team_notes_page = st.Page("pages/team-notes-page.py",title="Team Notes",icon=":material/group:")
-# arm_tracking_page = st.Page("pages/arm-tracking-page.py",title="Arm Tracking",icon=":material/flag:")
-# coach_page = st.Page("pages/coaches-page.py",title="Coach Summary",icon=":material/sports:")
-# calendar_page = st.Page("pages/calendar-page.py",title="Schedule",icon=":material/calendar_month:")
-# view_practice_plans_page = st.Page("pages/view-practice-plans-page.py",title="View Practice Plans",icon=":material/sports:")
-# practice_planning_page = st.Page("pages/practice-planning-page.py",title="Practice Planning",icon=":material/conversion_path:")
-# practice_planning_page2 = st.Page("pages/practice-planning-page-test2.py",title="TEST - Practice Planning",icon=":material/construction:")
-# video_upload_testing = st.Page("pages/video-upload-testing.py",title="Video Upload Testing",icon=":material/upload:")
 data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
 
 #%% Authentication
