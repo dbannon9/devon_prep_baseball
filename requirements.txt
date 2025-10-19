@@ -1,6 +1,6 @@
 pandas==2.2.2
 streamlit==1.49.1
-supabase==2.19.0
+supabase==2.4.3
 fpdf==1.7.2
 matplotlib
 st-supabase-connection==2.0.0

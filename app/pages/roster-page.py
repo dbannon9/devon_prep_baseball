@@ -26,23 +26,28 @@ db = st.connection("supabase",type=SupabaseConnection)
 
 # Function to fetch data from any table
 def fetch_table_data(table_name):
-    # Execute the SQL query
-    df = db.query("*",f"{table_name}", ttl="1m").execute()
-    
-    # Convert the fetched data into a pandas DataFrame
-    return pd.DataFrame(df)
+    response = db.client.table(table_name).select("*").execute()
+
+    # Supabase v2 client: actual rows are in response.data
+    data = response.data
+    if not data:
+        st.warning(f"No data returned from table '{table_name}'.")
+        return pd.DataFrame()
+
+    # Normalize into DataFrame
+    df = pd.DataFrame(data)
+
+    # Set index
+    df.set_index('id', inplace=True)
+
+    return df
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
-players.set_index('id',inplace=True)
 coaches = fetch_table_data('coaches')
-coaches.set_index('id',inplace=True)
 notes = fetch_table_data('notes')
-notes.set_index('id',inplace=True)
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
-rapsodo_hitting.set_index('id',inplace=True)
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
-rapsodo_pitching.set_index('id',inplace=True)
 
 #%% Data Adjustments
 
@@ -56,24 +61,30 @@ classdict = {
         5: "Grad"
 }
 
-#create the display version of players
+# create the display version of players
 players_show = players.copy()
 
 # assign class year names to each player based on graduation year
-def classdef(thing):
+def classdef(df):
     class_years = []
-    for thing in players_show['grad_year']:
-        if isinstance(thing, Decimal):
-            thing = int(thing)
-        years_diff = math.ceil((date(thing, 9, 1) - date.today()).days / 365)
+    for grad_year in df['grad_year']:
+        if isinstance(grad_year, Decimal):
+            grad_year = int(grad_year)
+        # Calculate difference in years between grad date and today
+        years_diff = math.ceil((date(grad_year, 9, 1) - date.today()).days / 365)
+        # Cap within 0–5
         if years_diff >= 5:
-            return 5
-        elif years_diff <1:
-            return 0
-        class_year = classdict.get(years_diff)
+            years_diff = 5
+        elif years_diff < 1:
+            years_diff = 0
+        # Look up label from classdict
+        class_year = classdict.get(years_diff, "Unknown")
         class_years.append(class_year)
-    players_show['class'] = class_years
-classdef(players_show['grad_year'])
+    # Assign back to the DataFrame
+    df['class'] = class_years
+
+# Run the function on your display DataFrame
+classdef(players_show)
 
 # Create Players Full Name Column
 players_show['full_name'] = players_show['first_name'] + ' ' + players_show['last_name']
