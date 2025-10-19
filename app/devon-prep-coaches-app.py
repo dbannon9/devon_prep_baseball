@@ -12,6 +12,7 @@ for p in pathlib.Path(".").rglob("__pycache__"):
 #%% page definitions
 
 roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
+team_leaderboards = st.Page("pages/team-leaderboards.py",title="Leaderboards",icon=":material/social_leaderboard:")
 player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
 data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
 
@@ -36,15 +37,8 @@ st.set_page_config(layout="wide")
 if authenticate():
     nav = st.navigation([
         roster,
-      # note_input,
+        team_leaderboards,
         player_page,
-      # team_notes_page,
-      # arm_tracking_page,
-      # calendar_page,
-      # view_practice_plans_page,
-      # practice_planning_page2,
-      # practice_planning_page,
         data_input
-      # video_upload_testing
         ])
     nav.run()

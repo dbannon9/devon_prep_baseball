@@ -98,12 +98,20 @@ st.title('Player Summary Page')
 
 player_select = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id])
 
-## Display Rapsodo Stats
+## Prepare Rapsodo Stats
+players_reset = players.reset_index()
 
 # merge player_id onto rapsodo data
-players_reset = players.reset_index()  # brings 'id' back as a column
 raphit = rapsodo_hitting.merge(players_reset,left_on='Player ID', right_on='rapsodo_id', how='left').rename(columns = {'id':'player_id'})
 player_raphit = raphit[raphit['player_id']==player_select][raphit['ExitVelocity']!="-"]
+
+## Prepare DK Stats
+
+# merge player_id onto DK data
+dkhit = swings.merge(players_reset,left_on='player_id', right_on='id', how='left')
+player_dkhit = dkhit[dkhit['player_id']==player_select]
+
+## Display Hitting Stats
 
 rapsodo, diamond_kinetics = st.columns(2,gap="large")
 
@@ -117,12 +125,30 @@ with rapsodo:
         ev_max = max(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce'))
         ev_avg = round(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce').mean(), 1)
         ev_90 = round(np.percentile(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce').dropna(), 90), 1)
-        ev_df = pd.DataFrame({
+        rap_df = pd.DataFrame({
             'Metric': ['Max EV', '90th pct EV', 'Average EV'],
             'Value': [ev_max, ev_90, ev_avg]
         })
         
-        st.dataframe(ev_df, hide_index=True)
+        st.dataframe(rap_df, hide_index=True)
 
 with diamond_kinetics:
     st.subheader("Diamond Kinetics Data",divider = "yellow")
+
+    # Generate rapsodo data
+    if len(player_dkhit) < 1:
+        st.write('No Rapsodo Hitting Stats Available')
+    else:
+        hand_speed_avg = round(pd.to_numeric(player_dkhit['max_hand_speed'], errors='coerce').mean(), 1)
+        barrel_speed_avg = round(pd.to_numeric(player_dkhit['max_barrel_speed'], errors='coerce').mean(), 1)
+        attack_angle_avg = round(pd.to_numeric(player_dkhit['attack_angle'], errors='coerce').mean(), 1)
+        hand_speed_std = round(pd.to_numeric(player_dkhit['max_hand_speed'], errors='coerce').std(), 1)
+        barrel_speed_std = round(pd.to_numeric(player_dkhit['max_barrel_speed'], errors='coerce').std(), 1)
+        attack_angle_std = round(pd.to_numeric(player_dkhit['attack_angle'], errors='coerce').std(), 1)
+        dk_df = pd.DataFrame({
+            'Metric': ['Hand Speed', 'Barrel Speed', 'Attack Angle'],
+            'Average': [hand_speed_avg, barrel_speed_avg, attack_angle_avg],
+            'Standard Deviation': [hand_speed_std, barrel_speed_std, attack_angle_std]
+        })
+        
+        st.dataframe(dk_df, hide_index=True)
