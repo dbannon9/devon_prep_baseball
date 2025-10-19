@@ -4,6 +4,21 @@ import pandas as pd
 import streamlit as st
 import sys, shutil, pathlib
 
+
+
+
+# DEBUG
+
+if "supabase" not in st.secrets:
+    st.error("❌ Supabase secrets not found! Go to Streamlit Cloud > Settings > Secrets.")
+else:
+    st.success("✅ Supabase secrets loaded.")
+
+
+# END DEBUG
+
+
+
 # cache resets
 for p in pathlib.Path(".").rglob("__pycache__"):
     shutil.rmtree(p, ignore_errors=True)
