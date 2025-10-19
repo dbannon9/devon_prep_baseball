@@ -26,18 +26,22 @@ db = st.connection("supabase",type=SupabaseConnection)
 # Function to fetch data from any table
 def fetch_table_data(table_name):
     # Execute the SQL query
-    df = db.query("*",f"{table_name}").execute()
+    df = db.query("*",f"{table_name}", ttl="1m").execute()
     
     # Convert the fetched data into a pandas DataFrame
     return pd.DataFrame(df)
 
-# Fetch data from tables, then align id to supabase index
-rapsodo_pitching = fetch_table_data('rapsodo_pitching')
-rapsodo_pitching.set_index('id',inplace=True)
+# Fetch data from all tables, then align id to supabase index
+players = fetch_table_data('players')
+players.set_index('id',inplace=True)
+coaches = fetch_table_data('coaches')
+coaches.set_index('id',inplace=True)
+notes = fetch_table_data('notes')
+notes.set_index('id',inplace=True)
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_hitting.set_index('id',inplace=True)
-swings = fetch_table_data('swings')
-swings.set_index('id',inplace=True) 
+rapsodo_pitching = fetch_table_data('rapsodo_pitching')
+rapsodo_pitching.set_index('id',inplace=True)
 
 #%% .csv Data Dump
 

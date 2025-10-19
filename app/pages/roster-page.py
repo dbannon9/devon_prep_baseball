@@ -27,7 +27,7 @@ db = st.connection("supabase",type=SupabaseConnection)
 # Function to fetch data from any table
 def fetch_table_data(table_name):
     # Execute the SQL query
-    df = db.query("*",f"{table_name}").execute()
+    df = db.query("*",f"{table_name}", ttl="1m").execute()
     
     # Convert the fetched data into a pandas DataFrame
     return pd.DataFrame(df)

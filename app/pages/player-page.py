@@ -25,7 +25,7 @@ db = st.connection("supabase",type=SupabaseConnection)
 # Function to fetch data from any table
 def fetch_table_data(table_name):
     # Execute the SQL query
-    df = db.query("*",f"{table_name}").execute()
+    df = db.query("*",f"{table_name}", ttl="1m").execute()
     
     # Convert the fetched data into a pandas DataFrame
     return pd.DataFrame(df)
@@ -37,8 +37,6 @@ coaches = fetch_table_data('coaches')
 coaches.set_index('id',inplace=True)
 notes = fetch_table_data('notes')
 notes.set_index('id',inplace=True)
-video = fetch_table_data('video')
-video.set_index('id',inplace=True)
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_hitting.set_index('id',inplace=True)
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
