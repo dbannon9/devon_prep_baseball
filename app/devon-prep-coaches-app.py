@@ -46,7 +46,7 @@ if authenticate():
     nav = st.navigation([
         roster,
       # note_input,
-      player_page,
+        player_page,
       # team_notes_page,
       # arm_tracking_page,
       # calendar_page,
