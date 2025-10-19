@@ -10,15 +10,7 @@ import os
 from st_supabase_connection import SupabaseConnection
 
 #%% Connect to Supabase
-
-# Use st.secrets to load the URL and key from secrets.toml
-# supabase_url = st.secrets["supabase"]["SUPABASE_URL"]
-# supabase_key = st.secrets["supabase"]["SUPABASE_KEY"]
-
 db = st.connection("supabase",type=SupabaseConnection)
-
-# # Create the connection object using SupabaseConnection
-# db = create_client(supabase_url, supabase_key)
 
 #%% Data Retrieval
 
@@ -35,17 +27,19 @@ def fetch_table_data(table_name):
     # Normalize into DataFrame
     df = pd.DataFrame(data)
 
-    # Set index
-    df.set_index('id', inplace=True)
-
+   # Set index to 'id' if it exists, otherwise 'uuid'
+    if 'id' in df.columns:
+        df.set_index('id', inplace=True)
+    elif 'uuid' in df.columns:
+        df.set_index('uuid', inplace=True)
     return df
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
 coaches = fetch_table_data('coaches')
-notes = fetch_table_data('notes')
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
+swings = fetch_table_data('swings')
 
 #%% Data Adjustments
 
@@ -91,9 +85,6 @@ players_show['full_name'] = players_show['first_name'] + ' ' + players_show['las
 active_classes = ['Freshman','Sophomore','Junior','Senior']
 players_show['active'] = players_show['class'].isin(active_classes)
 
-# Assign types of notes
-note_types = ['Fielder','Hitter','Pitcher']
-
 # create currentplayers table
 currentplayers = players_show.query('active == True')
 
@@ -114,14 +105,24 @@ players_reset = players.reset_index()  # brings 'id' back as a column
 raphit = rapsodo_hitting.merge(players_reset,left_on='Player ID', right_on='rapsodo_id', how='left').rename(columns = {'id':'player_id'})
 player_raphit = raphit[raphit['player_id']==player_select][raphit['ExitVelocity']!="-"]
 
-# generate stats
-if len(player_raphit) < 1:
-    st.write('No Rapsodo Hitting Stats Available')
-else:
-    st.subheader("Rapsodo Hitting Stats")
-    ev_max = max(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce'))
-    ev_avg = round(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').mean(),1)
-    ev_90 = round(np.percentile(pd.to_numeric(player_raphit['ExitVelocity'],errors='coerce').dropna(), 90),1)
-    st.write(f"""Max EV: {ev_max}
-             90th pct EV: {ev_90}
-             Average EV: {ev_avg}""")
+rapsodo, diamond_kinetics = st.columns(2,gap="large")
+
+with rapsodo:
+    st.subheader("Rapsodo Data",divider = "yellow")
+    
+    # Generate rapsodo data
+    if len(player_raphit) < 1:
+        st.write('No Rapsodo Hitting Stats Available')
+    else:
+        ev_max = max(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce'))
+        ev_avg = round(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce').mean(), 1)
+        ev_90 = round(np.percentile(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce').dropna(), 90), 1)
+        ev_df = pd.DataFrame({
+            'Metric': ['Max EV', '90th pct EV', 'Average EV'],
+            'Value': [ev_max, ev_90, ev_avg]
+        })
+        
+        st.dataframe(ev_df, hide_index=True)
+
+with diamond_kinetics:
+    st.subheader("Diamond Kinetics Data",divider = "yellow")

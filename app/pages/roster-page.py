@@ -12,15 +12,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
 #%% Connect to Supabase
-
-# Use st.secrets to load the URL and key from secrets.toml
-# supabase_url = st.secrets["supabase"]["SUPABASE_URL"]
-# supabase_key = st.secrets["supabase"]["SUPABASE_KEY"]
-
 db = st.connection("supabase",type=SupabaseConnection)
-
-# # Create the connection object using SupabaseConnection
-# db = create_client(supabase_url, supabase_key)
 
 #%% Data Retrieval
 
@@ -37,17 +29,19 @@ def fetch_table_data(table_name):
     # Normalize into DataFrame
     df = pd.DataFrame(data)
 
-    # Set index
-    df.set_index('id', inplace=True)
-
+   # Set index to 'id' if it exists, otherwise 'uuid'
+    if 'id' in df.columns:
+        df.set_index('id', inplace=True)
+    elif 'uuid' in df.columns:
+        df.set_index('uuid', inplace=True)
     return df
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
 coaches = fetch_table_data('coaches')
-notes = fetch_table_data('notes')
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
+swings = fetch_table_data('swings')
 
 #%% Data Adjustments
 
@@ -93,9 +87,6 @@ players_show['full_name'] = players_show['first_name'] + ' ' + players_show['las
 active_classes = ['Freshman','Sophomore','Junior','Senior']
 players_show['active'] = players_show['class'].isin(active_classes)
 
-# Assign types of notes
-note_types = ['Fielder','Hitter','Pitcher']
-
 # create currentplayers table
 currentplayers = players_show.query('active == True')
 
@@ -139,21 +130,6 @@ raphit_group.rename(columns={
 
 # sort
 raphit_group.sort_values(by='Average EV', ascending=False, inplace=True)
-
-# # color gradient
-# def highlight_ev(df):
-#     return df.style.background_gradient(
-#         cmap='coolwarm',
-#         subset=['Max EV', 'Average EV', '90th pct EV']
-#     ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
-
-# # display
-# st.subheader("Rapsodo Leaderboard")
-# st.dataframe(
-#     highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
-#     hide_index=True,
-# )
-
 
 # Define custom colormap (deep navy replacing white)
 colors = ["blue", "black", "red"]  # Adjust as needed
