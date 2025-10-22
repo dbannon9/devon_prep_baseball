@@ -113,24 +113,7 @@ player_dkhit = dkhit[dkhit['player_id']==player_select]
 
 ## Display Hitting Stats
 
-rapsodo, diamond_kinetics = st.columns(2,gap="large")
-
-with rapsodo:
-    st.subheader("Rapsodo Data",divider = "yellow")
-    
-    # Generate rapsodo data
-    if len(player_raphit) < 1:
-        st.write('No Rapsodo Hitting Stats Available')
-    else:
-        ev_max = max(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce'))
-        ev_avg = round(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce').mean(), 1)
-        ev_90 = round(np.percentile(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce').dropna(), 90), 1)
-        rap_df = pd.DataFrame({
-            'Metric': ['Max EV', '90th pct EV', 'Average EV'],
-            'Value': [ev_max, ev_90, ev_avg]
-        })
-        
-        st.dataframe(rap_df, hide_index=True)
+diamond_kinetics, rapsodo = st.columns(2,gap="large")
 
 with diamond_kinetics:
     st.subheader("Diamond Kinetics Data",divider = "yellow")
@@ -152,3 +135,20 @@ with diamond_kinetics:
         })
         
         st.dataframe(dk_df, hide_index=True)
+
+with rapsodo:
+    st.subheader("Rapsodo Data",divider = "yellow")
+    
+    # Generate rapsodo data
+    if len(player_raphit) < 1:
+        st.write('No Rapsodo Hitting Stats Available')
+    else:
+        ev_max = max(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce'))
+        ev_avg = round(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce').mean(), 1)
+        ev_90 = round(np.percentile(pd.to_numeric(player_raphit['ExitVelocity'], errors='coerce').dropna(), 90), 1)
+        rap_df = pd.DataFrame({
+            'Metric': ['Max EV', '90th pct EV', 'Average EV'],
+            'Value': [ev_max, ev_90, ev_avg]
+        })
+        
+        st.dataframe(rap_df, hide_index=True)

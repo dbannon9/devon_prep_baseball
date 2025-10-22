@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from dateutil.relativedelta import relativedelta
 
-
 #%% Connect to Supabase
 db = st.connection("supabase",type=SupabaseConnection)
 
@@ -98,7 +97,7 @@ coach_options = coaches['name'].to_dict()
 
 #%% Leaderboard Page
 
-st.header("Player Tables")
+st.title("Team Leaderboards")
 
 classes_and_dates_column, inactive_column = st.columns(2)
 
@@ -113,11 +112,9 @@ with classes_and_dates_column:
 with inactive_column:
     inactive_toggle = st.toggle("Show Inactive Players?", value=False)
 
-#%% Rapsodo Leaderboards
+# Configure player tables based on above
 
-## Hitting
-
-# filter players by above filters
+players_reset = players_show.reset_index()
 
 # Default for inactive_toggle
 if 'inactive_toggle' not in locals():
@@ -125,17 +122,102 @@ if 'inactive_toggle' not in locals():
 
 # Filter by active status
 if not inactive_toggle:
-    filtered_players = players_show.query("active == True")
+    filtered_players = players_reset.query("active == True")
 else:
-    filtered_players = players_show.copy()  # show all
+    filtered_players = players_reset.copy()  # show all
 
 # Further filter by selected classes
 if classes_select:
     filtered_players = filtered_players[filtered_players['class'].isin(classes_select)]
 
+#%% Prepare DK Data
+
+
+# filter data by dates selected
+swings['created_date'] = pd.to_datetime(swings['created_date'], errors='coerce')
+filtered_swings = swings[
+    (swings['created_date'] >= pd.to_datetime(dates_select[0])) & 
+    (swings['created_date'] <= pd.to_datetime(dates_select[1])) &
+    (swings['player_id'].isin(filtered_players['id']))
+]
+
+# merge for id purposes
+dkhit = filtered_swings.merge(filtered_players,left_on='player_id', right_on='id', how='left')
+
+# group by id
+dkhit_group = dkhit.groupby('player_id').agg(
+    hand_speed_max=('max_hand_speed', 'max'),
+    hand_speed_avg=('max_hand_speed', 'mean'),
+    hand_speed_90=('max_hand_speed', lambda x: np.percentile(x, 90)),
+    hand_speed_std=('max_hand_speed', 'std'),
+
+    barrel_speed_max=('max_barrel_speed', 'max'),
+    barrel_speed_avg=('max_barrel_speed', 'mean'),
+    barrel_speed_90=('max_barrel_speed', lambda x: np.percentile(x, 90)),
+    barrel_speed_std=('max_barrel_speed', 'std'),
+
+    attack_angle_avg=('attack_angle', 'mean'),
+    attack_angle_std=('attack_angle', 'std'),
+
+    hand_cast_avg=('hand_cast', 'mean'),
+    hand_cast_std=('hand_cast', 'std'),
+
+    barrel_x_avg=('barrel_x', 'mean'),
+    barrel_x_std=('barrel_x', 'std'),
+
+    barrel_y_avg=('barrel_y', 'mean'),
+    barrel_y_std=('barrel_y', 'std'),
+
+    barrel_z_avg=('barrel_z', 'mean'),
+    barrel_z_std=('barrel_z', 'std')
+).reset_index()
+
+# join full_name back on
+dkhit_group = dkhit_group.merge(
+    filtered_players[['id', 'full_name', 'class']], 
+    left_on='player_id',
+    right_on='id',
+    how='left'
+)
+
+# column rename
+dkhit_group.rename(columns={
+    'full_name': 'Player',
+    'class': 'Class',
+
+    'hand_speed_max': 'Max Hand Speed',
+    'hand_speed_avg': 'Avg Hand Speed',
+    'hand_speed_90': '90p Hand Speed',
+    'hand_speed_std': 'Std Hand Speed',
+
+    'barrel_speed_max': 'Max Barrel Speed',
+    'barrel_speed_avg': 'Avg Barrel Speed',
+    'barrel_speed_90': '90p Barrel Speed',
+    'barrel_speed_std': 'Std Barrel Speed',
+
+    'attack_angle_avg': 'Avg Attack Angle',
+    'attack_angle_std': 'Std Attack Angle',
+
+    'hand_cast_avg': 'Avg Hand Cast',
+    'hand_cast_std': 'Std Hand Cast',
+
+    'barrel_x_avg': 'Avg Barrel X',
+    'barrel_x_std': 'Std Barrel X',
+
+    'barrel_y_avg': 'Avg Barrel Y',
+    'barrel_y_std': 'Std Barrel Y',
+
+    'barrel_z_avg': 'Avg Barrel Z',
+    'barrel_z_std': 'Std Barrel Z'
+}, inplace=True)
+
+dkhit_group.sort_values(by='Avg Barrel Speed', ascending=False, inplace=True)
+dkhit_group = dkhit_group.round(2)
+
+#%% Prepare Rapsodo Data
+
 # filter data by dates selected
 rapsodo_hitting['Date'] = pd.to_datetime(rapsodo_hitting['Date'], errors='coerce')
-
 filtered_rapsodo_hitting = rapsodo_hitting[
     (rapsodo_hitting['Date'] >= pd.to_datetime(dates_select[0])) & 
     (rapsodo_hitting['Date'] <= pd.to_datetime(dates_select[1]))
@@ -154,7 +236,7 @@ raphit_group = raphit.groupby('rapsodo_id').agg(
 
 # join full_name back on
 raphit_group = raphit_group.merge(
-    players_show[['rapsodo_id', 'full_name']], 
+    players_show[['rapsodo_id', 'full_name', 'class']], 
     on='rapsodo_id', 
     how='left'
 )
@@ -162,6 +244,7 @@ raphit_group = raphit_group.merge(
 # col rename
 raphit_group.rename(columns={
     'full_name': 'Player',
+    'class': 'Class',
     'ExitVelocity_max': 'Max EV',
     'ExitVelocity_avg': 'Average EV',
     'ExitVelocity_90th_percentile': '90th pct EV',
@@ -181,13 +264,38 @@ def highlight_ev(df):
         subset=['Max EV', 'Average EV', '90th pct EV']
     ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
 
-# Display leaderboard
-st.subheader("Rapsodo Leaderboard")
+#%% Display leaderboard
+
+# DK first
+
+st.subheader("Diamond Kinetics Leaderboard",divider = "yellow")
+if len(dkhit_group) == 0:
+    st.write("No Data Available for Selected Dates and Classes")
+else:
+    st.dataframe(dkhit_group[['Player', 'Class', 'Avg Attack Angle', 'Std Attack Angle', 'Avg Barrel Speed', '90p Barrel Speed', 'Std Barrel Speed', 'Avg Hand Speed', '90p Hand Speed', 'Std Hand Speed']],
+                    hide_index=True,
+                    column_config={
+                        "Avg Attack Angle": st.column_config.NumberColumn("Avg Attack Angle", format="%.2f"),
+                        "Std Attack Angle": st.column_config.NumberColumn("Std Attack Angle", format="%.2f"),
+                        "Avg Barrel Speed": st.column_config.NumberColumn("Avg Barrel Speed", format="%.2f"),
+                        "90p Barrel Speed": st.column_config.NumberColumn("90p Barrel Speed", format="%.2f"),
+                        "Std Barrel Speed": st.column_config.NumberColumn("Std Barrel Speed", format="%.2f"),
+                        "Avg Hand Speed": st.column_config.NumberColumn("Avg Hand Speed", format="%.2f"),
+                        "90p Hand Speed": st.column_config.NumberColumn("90p Hand Speed", format="%.2f"),
+                        "Std Hand Speed": st.column_config.NumberColumn("Std Hand Speed", format="%.2f"),
+                    },
+    )
+
+# Rapsodo
+
+st.subheader("Rapsodo Leaderboard", divider = "yellow")
 if len(raphit_group) == 0:
     st.write("No Data Available for Selected Dates and Classes")
 else:
     st.dataframe(
-        highlight_ev(raphit_group[['Player', 'Average EV', '90th pct EV', 'Max EV']]),
+        highlight_ev(raphit_group[['Player', 'Class', 'Average EV', '90th pct EV', 'Max EV']]),
         hide_index=True,
     )
+
+
 
