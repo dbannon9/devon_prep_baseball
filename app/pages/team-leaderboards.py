@@ -106,8 +106,16 @@ with classes_and_dates_column:
     dates_select = st.date_input("Select Dates",
                                  value=[datetime.today()-relativedelta(months=1),
                                         datetime.today()],
-                                 max_value=datetime.today()
+                                 max_value=datetime.today()+relativedelta(days=1)
                                  )
+    if len(dates_select)<2:
+        start_date = pd.to_datetime(dates_select[0])
+        end_date = datetime.today()
+    else:
+        start_date = pd.to_datetime(dates_select[0])
+        end_date = pd.to_datetime(dates_select[1])
+
+
 
 with inactive_column:
     inactive_toggle = st.toggle("Show Inactive Players?", value=False)
@@ -136,8 +144,8 @@ if classes_select:
 # filter data by dates selected
 swings['created_date'] = pd.to_datetime(swings['created_date'], errors='coerce')
 filtered_swings = swings[
-    (swings['created_date'] >= pd.to_datetime(dates_select[0])) & 
-    (swings['created_date'] <= pd.to_datetime(dates_select[1])) &
+    (swings['created_date'] >= pd.to_datetime(start_date)) & 
+    (swings['created_date'] <= pd.to_datetime(end_date)) &
     (swings['player_id'].isin(filtered_players['id']))
 ]
 
@@ -219,8 +227,8 @@ dkhit_group = dkhit_group.round(2)
 # filter data by dates selected
 rapsodo_hitting['Date'] = pd.to_datetime(rapsodo_hitting['Date'], errors='coerce')
 filtered_rapsodo_hitting = rapsodo_hitting[
-    (rapsodo_hitting['Date'] >= pd.to_datetime(dates_select[0])) & 
-    (rapsodo_hitting['Date'] <= pd.to_datetime(dates_select[1]))
+    (rapsodo_hitting['Date'] >= pd.to_datetime(start_date)) & 
+    (rapsodo_hitting['Date'] <= pd.to_datetime(end_date))
 ]
 
 # merge for id purposes

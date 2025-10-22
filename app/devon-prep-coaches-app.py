@@ -34,6 +34,8 @@ def authenticate():
 #%% Run the App
 st.set_page_config(layout="wide")
 
+st.logo(r'images\dp_logo_transparent.png', size='large')
+
 if authenticate():
     nav = st.navigation([
         roster,
