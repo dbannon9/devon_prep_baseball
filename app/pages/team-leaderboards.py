@@ -287,7 +287,7 @@ st.subheader("Diamond Kinetics Leaderboard",divider = "yellow")
 if len(dkhit_group) == 0:
     st.write("No Data Available for Selected Dates and Classes")
 else:
-    st.dataframe(dkhit_group[['Player', 'Class', 'Avg Attack Angle', 'Std Attack Angle', 'Avg Barrel Speed', 'Std Barrel Speed', 'Avg Hand Speed', 'Std Hand Speed']],
+    st.dataframe(dkhit_group[['Player', 'Class', 'Avg Attack Angle', 'Std Attack Angle', 'Avg Barrel Speed', 'Std Barrel Speed', 'Avg Hand Speed', 'Std Hand Speed', 'Avg Impact','Std Impact']],
                     hide_index=True,
                     column_config={
                         "Avg Attack Angle": st.column_config.NumberColumn("Avg Attack Angle", format="%.2f"),

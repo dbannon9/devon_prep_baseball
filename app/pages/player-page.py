@@ -451,7 +451,7 @@ with diamond_kinetics:
         aa_curve = dk_curves_class[dk_curves_class['metric'] == 'attack_angle'].iloc[0]
         hand_speed_pct = get_percentile(hand_speed_avg, hs_curve)
         barrel_speed_pct = get_percentile(barrel_speed_avg, bs_curve)
-        impact_momentum_pct = get_percentile(impact_momentum_avg, aa_curve)
+        impact_momentum_pct = get_percentile(impact_momentum_avg, im_curve)
         attack_angle_pct = get_percentile(attack_angle_avg, aa_curve)
         dk_df = pd.DataFrame({
             'Metric': ['Hand Speed', 'Barrel Speed', 'Impact', 'Attack Angle'],
