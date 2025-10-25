@@ -105,7 +105,7 @@ classes_and_dates_column, inactive_column = st.columns(2)
 with classes_and_dates_column:
     classes_select = st.multiselect("Select Classes", options=active_classes, default=active_classes)
     dates_select = st.date_input("Select Dates",
-                                 value=[datetime.today()-relativedelta(months=1),
+                                 value=[datetime.today()-relativedelta(months=6),
                                         datetime.today()],
                                  max_value=datetime.today()+relativedelta(days=1)
                                  )
