@@ -278,8 +278,8 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
             ax.set_ylim(-25, 25)
 
             # Axes lines
-            ax.axhline(0, color='lightgray', linewidth=0.8)
-            ax.axvline(0, color='lightgray', linewidth=0.8)
+            ax.axhline(0, color="#f1d71c", linewidth=0.8)
+            ax.axvline(0, color="#f1d71c", linewidth=0.8)
 
             # Title and labels
             # ax.set_title('Average Pitch Shapes by Pitch Type', color='white', fontsize=18, fontweight='bold')
@@ -355,8 +355,8 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
             ax_release.yaxis.set_major_locator(MultipleLocator(1))
 
             # Axes lines through origin
-            ax_release.axhline(0, color='lightgray', linewidth=0.8)
-            ax_release.axvline(0, color='lightgray', linewidth=0.8)
+            ax_release.axhline(5, color="#f1d71c", linewidth=0.8)
+            ax_release.axvline(0, color="#f1d71c", linewidth=0.8)
 
             # Title and Labels
             # ax_release.set_title('Average Release by Pitch Type', color='white', fontsize=18, fontweight='bold')
