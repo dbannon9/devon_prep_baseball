@@ -11,6 +11,7 @@ import os
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 from matplotlib.ticker import MultipleLocator
+from matplotlib.patches import Ellipse
 from dateutil.relativedelta import relativedelta
 
 #%% Connect to Supabase
@@ -185,6 +186,19 @@ pitch_type_replace_dict = {
     "TwoSeamFastball": "Two Seam"
 }
 
+# color map by pitch type
+pitch_colors = {
+    "Four Seam": "#c63316",
+    "Other": "#ffffff",
+    "-": "#ffffff",
+    "Splitter": "#fa7100",
+    "Slider": "#984893",
+    "Cutter": "#4d30ff",
+    "Changeup": "#f3ae00",
+    "Curveball": "#46a576",
+    "Two Seam": "#4f8fff"
+}
+
 rappitch["Pitch Type"] = rappitch["Pitch Type"].replace(pitch_type_replace_dict)
 
 player_rappitch = rappitch[rappitch['player_id']==player_select]
@@ -215,15 +229,18 @@ numeric_cols = [
 for col in numeric_cols:
     player_rappitch_clean[col] = pd.to_numeric(player_rappitch_clean[col], errors='coerce')
 
-# Group by Pitch Type: calculate mean and count
-pitch_types_player_rappitch = (
+# Group by Pitch Type: calculate mean and std
+pitch_types_stats = (
     player_rappitch_clean
     .groupby('Pitch Type')[numeric_cols]
-    .mean()
+    .agg(['mean', 'std'])
     .reset_index()
 )
 
-# Calculate counts per pitch type
+# Flatten multi-index columns
+pitch_types_stats.columns = ['_'.join(col).rstrip('_') for col in pitch_types_stats.columns.values]
+
+# Merge counts
 pitch_counts = (
     player_rappitch_clean
     .groupby('Pitch Type')
@@ -231,10 +248,9 @@ pitch_counts = (
     .reset_index(name='#')
 )
 
-# Merge counts into your means dataframe
-pitch_types_player_rappitch = pitch_types_player_rappitch.merge(pitch_counts, on='Pitch Type')
+pitch_types_player_rappitch = pitch_types_stats.merge(pitch_counts, left_on='Pitch Type', right_on='Pitch Type')
 pitch_types_player_rappitch = pitch_types_player_rappitch.sort_values(by='#', ascending=False)
-
+pitch_types_player_rappitch["color"] = pitch_types_player_rappitch["Pitch Type"].map(pitch_colors)
 
 #%% Display Pitching Stats
 
@@ -254,42 +270,57 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
 
             # Scatter plot
             ax.scatter(
-                pitch_types_player_rappitch['HB (trajectory)'],
-                pitch_types_player_rappitch['VB (trajectory)'],
-                color="#f1d71c",
+                pitch_types_player_rappitch['HB (trajectory)_mean'],
+                pitch_types_player_rappitch['VB (trajectory)_mean'],
+                color=pitch_types_player_rappitch['color'],
                 edgecolor="white",
                 s=80
             )
 
+            # Add ellipses for each pitch type
+            for i, row in pitch_types_player_rappitch.iterrows():
+                hb_std = row['HB (trajectory)_std']
+                vb_std = row['VB (trajectory)_std']
+                
+                ellipse = Ellipse(
+                    (row['HB (trajectory)_mean'], row['VB (trajectory)_mean']),
+                    width=2*hb_std,   # 2*std for ±1σ
+                    height=2*vb_std,
+                    edgecolor=row['color'],
+                    facecolor='none',
+                    linestyle='--',
+                    linewidth=1.5
+                )
+                ax.add_patch(ellipse)
+
             # Add labels for each point
             for i, row in pitch_types_player_rappitch.iterrows():
                 ax.text(
-                    row['HB (trajectory)'],
-                    row['VB (trajectory)'],
+                    row['HB (trajectory)_mean'],
+                    row['VB (trajectory)_mean'],
                     row['Pitch Type'],
-                    fontsize=11,        # slightly bigger labels
+                    fontsize=11,
                     ha='right',
                     color='white',
                     fontweight='medium'
                 )
 
             # Axes limits
-            ax.set_xlim(-25, 25)
-            ax.set_ylim(-25, 25)
+            ax.set_xlim(-30, 30)
+            ax.set_ylim(-30, 30)
 
             # Axes lines
             ax.axhline(0, color="#f1d71c", linewidth=0.8)
             ax.axvline(0, color="#f1d71c", linewidth=0.8)
 
-            # Title and labels
-            # ax.set_title('Average Pitch Shapes by Pitch Type', color='white', fontsize=18, fontweight='bold')
+            # Labels
             ax.set_xlabel('Horizontal Break (in)', color='white', fontsize=14, labelpad=10)
             ax.set_ylabel('Vertical Break (in)', color='white', fontsize=14, labelpad=10)
 
             # Grid and ticks
             ax.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
             ax.tick_params(colors='white', labelsize=12)
-            
+
             # Set spine colors to white
             for spine in ax.spines.values():
                 spine.set_color('white')
@@ -299,17 +330,30 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
 
         with table:
             pitch_types_player_rappitch.rename(columns = {
-                "Spin Efficiency (release)": "Spin Efficiency",
-                "HB (trajectory)": "H Break",
-                "VB (trajectory)": "V Break"
+                "Spin Efficiency (release)_mean": "Spin Efficiency",
+                "HB (trajectory)_mean": "H Break",
+                "VB (trajectory)_mean": "V Break",
+                "Velocity_mean": "Velocity",
+                "Total Spin_mean": "Spin Rate"
             }, inplace=True)
+
+            # Function to apply color styling
+            def color_pitch_type(val):
+                color = pitch_colors.get(val, "#000000")  # fallback color if missing
+                text_color = "black" if val in ["Other", "-"] else "white"
+                return f"background-color: {color}; color: {text_color}; font-weight: bold;"
+
+            # Apply styling to the dataframe
+            style_df = pitch_types_player_rappitch.style.applymap(
+                color_pitch_type, subset=["Pitch Type"]
+            )
             st.subheader("Pitch Stats", divider = "yellow")
-            st.dataframe(pitch_types_player_rappitch,
+            st.dataframe(style_df,
                          hide_index = True,
                          column_order=("Pitch Type",
                                        "#",
                                        "Velocity",
-                                       "Total Spin",
+                                       "Spin Rate",
                                        "Spin Efficiency",
                                        "H Break",
                                        "V Break"),
@@ -318,7 +362,7 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
                             "H Break": st.column_config.NumberColumn("H Break", format="%.1f"),
                             "V Break": st.column_config.NumberColumn("V Break", format="%.1f"),
                             "Velocity": st.column_config.NumberColumn("Velocity", format="%.1f"),
-                            "Total Spin": st.column_config.NumberColumn("Total Spin", format="%.0f"),
+                            "Spin Rate": st.column_config.NumberColumn("Spin Rate", format="%.0f"),
                             "Spin Efficiency": st.column_config.NumberColumn("Spin Efficiency", format="%.2f%%"),
                             }
                          )
@@ -331,24 +375,12 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
 
             # Scatter plot: X = Release Side, Y = Release Height
             ax_release.scatter(
-                pitch_types_player_rappitch['Release Side'],
-                pitch_types_player_rappitch['Release Height'],
-                color="#f1d71c",
+                pitch_types_player_rappitch['Release Side_mean'],
+                pitch_types_player_rappitch['Release Height_mean'],
+                color=pitch_types_player_rappitch['color'],
                 edgecolor="white",
                 s=80
             )
-
-            # Add labels for each point (Pitch Type)
-            for i, row in pitch_types_player_rappitch.iterrows():
-                ax_release.text(
-                    row['Release Side'],
-                    row['Release Height'],
-                    row['Pitch Type'],
-                    fontsize=11,
-                    ha='right',
-                    color='white',
-                    fontweight='medium'
-                )
 
             # Axes limits
             ax_release.set_xlim(-3, 3)
