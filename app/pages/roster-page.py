@@ -103,15 +103,23 @@ st.title("Devon Prep Baseball")
 st.subheader("Roster & Positions", divider = "yellow")
 edit_toggle = st.toggle('Edit?')
 ptoggle = st.toggle('Pitchers?')
+inactive_toggle = st.toggle("Show Inactive Players?", value=False)
+
+# Base query depending on inactive toggle
+if inactive_toggle:
+    filtered_players = players_show  # Show all players
+else:
+    filtered_players = players_show.query('active == True')  # Show only active players
+
 if ptoggle:
-    fplayers = players_show.query('pitcher == True & active == True')[['first_name','last_name','class']]
+    fplayers = filtered_players.query('pitcher == True')[['first_name','last_name','class']]
     fplayers.rename(columns={
         'first_name': 'First Name',
         'last_name': 'Last Name',
         'class': 'Grade Level'
-        }, inplace=True)
+    }, inplace=True)
 else:
-    fplayers = players_show[['first_name','last_name','class','pos_1','pos_2','pos_3']].fillna('')
+    fplayers = filtered_players[['first_name','last_name','class','pos_1','pos_2','pos_3']].fillna('')
     fplayers.rename(columns={
         'first_name': 'First Name',
         'last_name': 'Last Name',
@@ -129,12 +137,8 @@ if edit_toggle:
             player_id = row.name  # This accesses the index (which is 'id' in your case)
             response = db.table("players").update(row.to_dict()).eq('id', player_id).execute()
     
-        # Mark the form as submitted
         st.session_state.form_submitted = True
-
-        # Display success message
         st.success("Data successfully saved")
-
-
+        
 else:
-    st.dataframe(fplayers,hide_index=True)
+    st.dataframe(fplayers, hide_index=True)
