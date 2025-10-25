@@ -289,6 +289,10 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
             # Grid and ticks
             ax.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
             ax.tick_params(colors='white', labelsize=12)
+            
+            # Set spine colors to white
+            for spine in ax.spines.values():
+                spine.set_color('white')
 
             # Display
             st.pyplot(fig)
@@ -366,6 +370,11 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
             # Grid and ticks
             ax_release.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
             ax_release.tick_params(colors='white', labelsize=12)
+
+            # Set spine colors to white
+            for spine in ax_release.spines.values():
+                spine.set_color('white')
+
 
             # Display in Streamlit
             st.pyplot(fig_release)
