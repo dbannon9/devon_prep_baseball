@@ -43,6 +43,7 @@ coaches = fetch_table_data('coaches')
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
 swings = fetch_table_data('swings')
+dk_curves = fetch_table_data('dk_curves')
 
 #%% Data Adjustments
 
