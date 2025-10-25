@@ -181,7 +181,7 @@ player_rappitch = player_rappitch[
 
 # clean up data
 player_rappitch_clean = player_rappitch[
-    player_rappitch['Pitch Type'].notna() & (player_rappitch['Pitch Type'] != "-")
+    player_rappitch['Pitch Type'].notna() & (player_rappitch['Pitch Type'] != "-") & (player_rappitch['Pitch Type'] != "Other")
 ]
 
 # List of columns to convert to numeric
