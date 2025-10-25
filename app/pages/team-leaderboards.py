@@ -168,6 +168,9 @@ dkhit_group = dkhit.groupby('player_id').agg(
     attack_angle_avg=('attack_angle', 'mean'),
     attack_angle_std=('attack_angle', 'std'),
 
+    impact_momentum_avg=('impact_momentum', 'mean'),
+    impact_momentum_std=('impact_momentum', 'std'),
+
     hand_cast_avg=('hand_cast', 'mean'),
     hand_cast_std=('hand_cast', 'std'),
 
@@ -206,6 +209,9 @@ dkhit_group.rename(columns={
 
     'attack_angle_avg': 'Avg Attack Angle',
     'attack_angle_std': 'Std Attack Angle',
+
+    'impact_momentum_avg': 'Avg Impact',
+    'impact_momentum_std': 'Std Impact',
 
     'hand_cast_avg': 'Avg Hand Cast',
     'hand_cast_std': 'Std Hand Cast',
@@ -281,17 +287,17 @@ st.subheader("Diamond Kinetics Leaderboard",divider = "yellow")
 if len(dkhit_group) == 0:
     st.write("No Data Available for Selected Dates and Classes")
 else:
-    st.dataframe(dkhit_group[['Player', 'Class', 'Avg Attack Angle', 'Std Attack Angle', 'Avg Barrel Speed', '90p Barrel Speed', 'Std Barrel Speed', 'Avg Hand Speed', '90p Hand Speed', 'Std Hand Speed']],
+    st.dataframe(dkhit_group[['Player', 'Class', 'Avg Attack Angle', 'Std Attack Angle', 'Avg Barrel Speed', 'Std Barrel Speed', 'Avg Hand Speed', 'Std Hand Speed']],
                     hide_index=True,
                     column_config={
                         "Avg Attack Angle": st.column_config.NumberColumn("Avg Attack Angle", format="%.2f"),
                         "Std Attack Angle": st.column_config.NumberColumn("Std Attack Angle", format="%.2f"),
                         "Avg Barrel Speed": st.column_config.NumberColumn("Avg Barrel Speed", format="%.2f"),
-                        "90p Barrel Speed": st.column_config.NumberColumn("90p Barrel Speed", format="%.2f"),
                         "Std Barrel Speed": st.column_config.NumberColumn("Std Barrel Speed", format="%.2f"),
                         "Avg Hand Speed": st.column_config.NumberColumn("Avg Hand Speed", format="%.2f"),
-                        "90p Hand Speed": st.column_config.NumberColumn("90p Hand Speed", format="%.2f"),
                         "Std Hand Speed": st.column_config.NumberColumn("Std Hand Speed", format="%.2f"),
+                        "Avg Impact": st.column_config.NumberColumn("Avg Impact", format="%.2f"),
+                        "Std Impact": st.column_config.NumberColumn("Std Impact", format="%.2f"),
                     },
     )
 

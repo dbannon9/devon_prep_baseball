@@ -439,21 +439,25 @@ with diamond_kinetics:
     else:
         hand_speed_avg = round(pd.to_numeric(player_dkhit['max_hand_speed'], errors='coerce').mean(), 1)
         barrel_speed_avg = round(pd.to_numeric(player_dkhit['max_barrel_speed'], errors='coerce').mean(), 1)
+        impact_momentum_avg = round(pd.to_numeric(player_dkhit['impact_momentum'], errors='coerce').mean(), 1)
         attack_angle_avg = round(pd.to_numeric(player_dkhit['attack_angle'], errors='coerce').mean(), 1)
         hand_speed_std = round(pd.to_numeric(player_dkhit['max_hand_speed'], errors='coerce').std(), 1)
         barrel_speed_std = round(pd.to_numeric(player_dkhit['max_barrel_speed'], errors='coerce').std(), 1)
+        impact_momentum_std = round(pd.to_numeric(player_dkhit['impact_momentum'], errors='coerce').std(), 1)
         attack_angle_std = round(pd.to_numeric(player_dkhit['attack_angle'], errors='coerce').std(), 1)
         hs_curve = dk_curves_class[dk_curves_class['metric'] == 'hand_speed'].iloc[0]
         bs_curve = dk_curves_class[dk_curves_class['metric'] == 'barrel_speed'].iloc[0]
+        im_curve = dk_curves_class[dk_curves_class['metric'] == 'impact_momentum'].iloc[0]
         aa_curve = dk_curves_class[dk_curves_class['metric'] == 'attack_angle'].iloc[0]
         hand_speed_pct = get_percentile(hand_speed_avg, hs_curve)
         barrel_speed_pct = get_percentile(barrel_speed_avg, bs_curve)
+        impact_momentum_pct = get_percentile(impact_momentum_avg, aa_curve)
         attack_angle_pct = get_percentile(attack_angle_avg, aa_curve)
         dk_df = pd.DataFrame({
-            'Metric': ['Hand Speed', 'Barrel Speed', 'Attack Angle'],
-            'Average': [hand_speed_avg, barrel_speed_avg, attack_angle_avg],
-            'Standard Deviation': [hand_speed_std, barrel_speed_std, attack_angle_std],
-            'Percentile by Class': [hand_speed_pct, barrel_speed_pct, attack_angle_pct]
+            'Metric': ['Hand Speed', 'Barrel Speed', 'Impact', 'Attack Angle'],
+            'Average': [hand_speed_avg, barrel_speed_avg, impact_momentum_avg, attack_angle_avg],
+            'Standard Deviation': [hand_speed_std, barrel_speed_std, impact_momentum_std, attack_angle_std],
+            'Percentile by Class': [hand_speed_pct, barrel_speed_pct, impact_momentum_pct, attack_angle_pct]
         })
         dk_df = dk_df.round(1)
         st.dataframe(highlight_percentile(dk_df),
