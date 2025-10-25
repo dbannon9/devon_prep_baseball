@@ -309,5 +309,5 @@ else:
 #%% show definitions doc
 
 st.subheader("Diamond Kinetics Data Definitions", divider = "yellow")
-st.pdf(r'app/documents/dk_definitions.pdf')
+st.pdf(r'app/documents/dk_definitions.pdf',height='stretch')
 
