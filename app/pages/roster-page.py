@@ -47,12 +47,12 @@ swings = fetch_table_data('swings')
 
 # assign class levels to index of years
 classdict = {
-        0: "Middle",
+        0: "Grad",
         1: "Senior",
         2: "Junior",
         3: "Sophomore",
         4: "Freshman",
-        5: "Grad"
+        5: "Middle"
 }
 
 # create the display version of players
@@ -100,7 +100,7 @@ st.title("Devon Prep Baseball")
 
 #%% Roster Toggles
 
-st.subheader("Roster & Positions")
+st.subheader("Roster & Positions", divider = "yellow")
 edit_toggle = st.toggle('Edit?')
 ptoggle = st.toggle('Pitchers?')
 if ptoggle:

@@ -47,12 +47,12 @@ dk_curves = fetch_table_data('dk_curves')
 
 # assign class levels to index of years
 classdict = {
-        0: "Middle",
+        0: "Grad",
         1: "Senior",
         2: "Junior",
         3: "Sophomore",
         4: "Freshman",
-        5: "Grad"
+        5: "Middle"
 }
 
 # create the display version of players
