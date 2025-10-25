@@ -11,15 +11,7 @@ from st_supabase_connection import SupabaseConnection
 
 
 #%% Connect to Supabase
-
-# Use st.secrets to load the URL and key from secrets.toml
-# supabase_url = st.secrets["supabase"]["SUPABASE_URL"]
-# supabase_key = st.secrets["supabase"]["SUPABASE_KEY"]
-
 db = st.connection("supabase",type=SupabaseConnection)
-
-# # Create the connection object using SupabaseConnection
-# db = create_client(supabase_url, supabase_key)
 
 #%% Data Retrieval
 
@@ -36,17 +28,20 @@ def fetch_table_data(table_name):
     # Normalize into DataFrame
     df = pd.DataFrame(data)
 
-    # Set index
-    df.set_index('id', inplace=True)
-
+   # Set index to 'id' if it exists, otherwise 'uuid'
+    if 'id' in df.columns:
+        df.set_index('id', inplace=True)
+    elif 'uuid' in df.columns:
+        df.set_index('uuid', inplace=True)
     return df
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
 coaches = fetch_table_data('coaches')
-notes = fetch_table_data('notes')
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
+swings = fetch_table_data('swings')
+dk_curves = fetch_table_data('dk_curves')
 
 #%% Data Adjustments
 
@@ -92,9 +87,6 @@ players_show['full_name'] = players_show['first_name'] + ' ' + players_show['las
 active_classes = ['Freshman','Sophomore','Junior','Senior']
 players_show['active'] = players_show['class'].isin(active_classes)
 
-# Assign types of notes
-note_types = ['Fielder','Hitter','Pitcher']
-
 # create currentplayers table
 currentplayers = players_show.query('active == True')
 
@@ -104,22 +96,14 @@ coach_options = coaches['name'].to_dict()
 
 #%% .csv Data Dump
 
-st.title("Rapsodo Data Input")
-new_file = st.file_uploader("Dump Diamond Kinetics .csv File, or Rapsodo 'pitchinggroup' or 'hittinggroup' File Here",type='csv')
-if new_file:
-    file_df = pd.read_csv(new_file)
-    # dk, raposdo hitting, or rapsodo pitching?
-    file_cols = file_df.columns
+st.title("Data Input")
+new_file = st.file_uploader("Dump Diamond Kinetics .csv File, or Rapsodo 'pitchinggroup' or 'hittinggroup' File Here",type="csv")
 
-    # file_df.replace("-", np.nan, inplace=True)
-    file_df['Date'] = pd.to_datetime(file_df['Date']).dt.strftime('%Y-%m-%d')
-    
-    # upload button
-if new_file:
-    file_df = pd.read_csv(new_file)
+if new_file is not None:
+    file_df=pd.read_csv(new_file)
+    file_df.replace("-", None, inplace=True)
     file_cols = file_df.columns
-
-    # Determine file type immediately
+    # Determine file type
     if "Pitch ID" in file_cols:
         file_type = "rapsodo_pitching"
     elif "HitID" in file_cols:
@@ -130,7 +114,7 @@ if new_file:
         file_df.reset_index(drop=True, inplace=True)
     else:
         file_type = None
-        st.error("Unrecognized file type!")
+        st.error("Unrecognized file type.")
 
     # Standardize Date column if it exists
     if "Date" in file_cols:
@@ -166,4 +150,3 @@ if new_file:
             response = db.table("swings").insert(dk_upload).execute()
             st.session_state.form_submitted = True
             st.success("Diamond Kinetics Data Successfully Uploaded")
-

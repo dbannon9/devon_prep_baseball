@@ -1,15 +1,17 @@
 #%% Imports
 
 import streamlit as st
+from st_supabase_connection import SupabaseConnection
 import pandas as pd
 import numpy as np
-from datetime import date, time
+from datetime import date, time, datetime
 import math
 from decimal import Decimal
 import os
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
-from st_supabase_connection import SupabaseConnection
+from matplotlib.ticker import MultipleLocator
+from dateutil.relativedelta import relativedelta
 
 #%% Connect to Supabase
 db = st.connection("supabase",type=SupabaseConnection)
@@ -103,11 +105,32 @@ player_select = st.selectbox("Player", options=list(player_options.keys()), form
 
 players_reset = players_show.reset_index()
 
+dates_select = st.date_input("Select Dates",
+                                value=[datetime.today()-relativedelta(months=6),
+                                    datetime.today()],
+                                max_value=datetime.today()+relativedelta(days=1)
+                                )
+if len(dates_select)<2:
+    start_date = pd.to_datetime(dates_select[0])
+    end_date = datetime.today()
+else:
+    start_date = pd.to_datetime(dates_select[0])
+    end_date = pd.to_datetime(dates_select[1])
+
+
+
 #%% Prepare DK Stats
 
-# merge players onto DK data
+# merge players onto DK data and filter dates
+swings['created_date'] = pd.to_datetime(swings['created_date'], errors='coerce')
 dkhit = swings.merge(players_reset,left_on='player_id', right_on='id', how='left')
 player_dkhit = dkhit[dkhit['player_id']==player_select]
+player_dkhit = player_dkhit[
+    (player_dkhit['created_date'] >= pd.to_datetime(start_date)) & 
+    (player_dkhit['created_date'] <= pd.to_datetime(end_date))
+]
+
+# prep percentile data
 player_class = players_reset[players_reset['id']==player_select]['class'].iloc[0]
 dk_curves_class = dk_curves[dk_curves['class'] == player_class]
 
@@ -131,11 +154,176 @@ def get_percentile(value, curve_row):
     return None
 
 
-#%% Prepare Rapsodo Stats
+#%% Prepare Rapsodo Hitting Stats
 
 # merge player_id onto rapsodo data
 raphit = rapsodo_hitting.merge(players_reset,left_on='Player ID', right_on='rapsodo_id', how='left').rename(columns = {'id':'player_id'})
 player_raphit = raphit[raphit['player_id']==player_select][raphit['ExitVelocity']!="-"]
+player_raphit['Date'] = pd.to_datetime(player_raphit['Date'], errors='coerce')
+player_raphit = player_raphit[
+    (player_raphit['Date'] >= pd.to_datetime(start_date)) & 
+    (player_raphit['Date'] <= pd.to_datetime(end_date))
+]
+
+
+#%% Prepare Rapsodo Pitching Stats
+
+# merge player_id onto rapsodo data
+rappitch = rapsodo_pitching.merge(
+    players_reset,left_on='Player ID', right_on='rapsodo_id', how='left'
+    ).rename(columns = {'id':'player_id'})
+player_rappitch = rappitch[rappitch['player_id']==player_select]
+player_rappitch['Date'] = pd.to_datetime(player_rappitch['Date'], errors='coerce')
+player_rappitch = player_rappitch[
+    (player_rappitch['Date'] >= pd.to_datetime(start_date)) & 
+    (player_rappitch['Date'] <= pd.to_datetime(end_date))
+]
+
+# clean up data
+player_rappitch_clean = player_rappitch[
+    player_rappitch['Pitch Type'].notna() & (player_rappitch['Pitch Type'] != "-")
+]
+
+# List of columns to convert to numeric
+numeric_cols = [
+    'HB (trajectory)',
+    'VB (trajectory)',
+    'Velocity',
+    'Total Spin',
+    'Spin Efficiency (release)',
+    'Release Angle',
+    'Release Height',
+    'Release Side'
+]
+
+# Convert all columns to numeric
+for col in numeric_cols:
+    player_rappitch_clean[col] = pd.to_numeric(player_rappitch_clean[col], errors='coerce')
+
+# Group by Pitch Type: calculate mean and count
+pitch_types_player_rappitch = (
+    player_rappitch_clean
+    .groupby('Pitch Type')[numeric_cols]
+    .mean()
+    .reset_index()
+)
+
+# Calculate counts per pitch type
+pitch_counts = (
+    player_rappitch_clean
+    .groupby('Pitch Type')
+    .size()
+    .reset_index(name='Count')
+)
+
+# Merge counts into your means dataframe
+pitch_types_player_rappitch = pitch_types_player_rappitch.merge(pitch_counts, on='Pitch Type')
+pitch_types_player_rappitch = pitch_types_player_rappitch.sort_values(by='Count', ascending=False)
+
+
+#%% Display Pitching Stats
+
+if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
+    st.header("Pitching Data",divider = "yellow")
+    if len(player_rappitch) < 1:
+        st.write("No Rapsodo Pitching Stats Available")
+    else:
+        plot, table = st.columns(2,gap="large")
+        with plot:
+            st.subheader("Pitch Shapes", divider = "yellow")
+            # Plot
+            fig, ax = plt.subplots(figsize=(8, 8))
+            ax.scatter(pitch_types_player_rappitch['HB (trajectory)'], 
+                    pitch_types_player_rappitch['VB (trajectory)'])
+
+            # Add labels for each point
+            for i, row in pitch_types_player_rappitch.iterrows():
+                ax.text(row['HB (trajectory)'], row['VB (trajectory)'], row['Pitch Type'], fontsize=9, ha='right')
+
+            # Axes limits
+            ax.set_xlim(-25, 25)
+            ax.set_ylim(-25, 25)
+
+            # Axes lines through origin
+            ax.axhline(0, color='gray', linewidth=0.8)
+            ax.axvline(0, color='gray', linewidth=0.8)
+
+            ax.set_xlabel('Horizontal Break')
+            ax.set_ylabel('Vertical Break')
+            ax.set_title('Average Pitch Shapes by Pitch Type')
+            ax.grid(True)
+
+            # In Streamlit, display the figure like this:
+            st.pyplot(fig)
+        with table:
+            pitch_types_player_rappitch.rename(columns = {
+                "Spin Efficiency (release)": "Spin Efficiency",
+                "HB (trajectory)": "H Break",
+                "VB (trajectory)": "V Break"
+            }, inplace=True)
+            st.subheader("Pitch Stats", divider = "yellow")
+            st.dataframe(pitch_types_player_rappitch,
+                         hide_index = True,
+                         column_order=("Pitch Type",
+                                       "Count",
+                                       "Velocity",
+                                       "Total Spin",
+                                       "Spin Efficiency",
+                                       "H Break",
+                                       "V Break"),
+                         column_config={
+                            "Count": st.column_config.NumberColumn("Count", format="%.0f"),
+                            "H Break": st.column_config.NumberColumn("H Break", format="%.2f"),
+                            "V Break": st.column_config.NumberColumn("V Break", format="%.2f"),
+                            "Velocity": st.column_config.NumberColumn("Velocity", format="%.2f"),
+                            "Total Spin": st.column_config.NumberColumn("Total Spin", format="%.2f"),
+                            "Spin Efficiency": st.column_config.NumberColumn("Spin Efficiency", format="%.2f"),
+                            }
+                         )
+            st.subheader("Release Data", divider = "yellow")
+            
+            # Create figure
+            fig_release, ax_release = plt.subplots(figsize=(8, 3))
+
+            # Scatter plot: X = Release Side, Y = Release Height
+            ax_release.scatter(
+                pitch_types_player_rappitch['Release Side'], 
+                pitch_types_player_rappitch['Release Height']
+            )
+
+            # Add labels for each point (Pitch Type)
+            for i, row in pitch_types_player_rappitch.iterrows():
+                ax_release.text(
+                    row['Release Side'], 
+                    row['Release Height'], 
+                    row['Pitch Type'], 
+                    fontsize=9, 
+                    ha='right'
+                )
+
+            # Axes limits
+            ax_release.set_xlim(-3, 3)
+            ax_release.set_ylim(3, 7)
+            # ax_release.set_aspect('equal', adjustable='box')
+
+            # Show horizontal gridlines only at whole numbers
+            ax_release.yaxis.set_major_locator(MultipleLocator(1))
+
+            # Axes lines through origin (optional)
+            ax_release.axhline(0, color='gray', linewidth=0.8)
+            ax_release.axvline(0, color='gray', linewidth=0.8)
+
+            # Labels and title
+            ax_release.set_xlabel('Release Side')
+            ax_release.set_ylabel('Release Height')
+            ax_release.set_title('Average Release by Pitch Type')
+            ax_release.grid(True)
+
+            # Display in Streamlit
+            st.pyplot(fig_release)
+
+
+
 
 #%% Display Hitting Stats
 
@@ -152,6 +340,7 @@ def highlight_percentile(df):
         vmax=100
     ).format({'Percentile by Class': '{:.1f}'})
 
+st.header("Hitting Data",divider = "yellow")
 
 diamond_kinetics, rapsodo = st.columns(2,gap="large")
 
