@@ -9,13 +9,6 @@ for p in pathlib.Path(".").rglob("__pycache__"):
     shutil.rmtree(p, ignore_errors=True)
 
 
-#%% page definitions
-
-roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
-team_leaderboards = st.Page("pages/team-leaderboards.py",title="Leaderboards",icon=":material/social_leaderboard:")
-player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
-data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
-
 #%% Authentication
 
 def authenticate():
@@ -30,6 +23,13 @@ def authenticate():
     elif entered_password:
         st.sidebar.error("Incorrect password")
     return False
+
+#%% page definitions
+
+roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
+team_leaderboards = st.Page("pages/team-leaderboards.py",title="Leaderboards",icon=":material/social_leaderboard:")
+player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
+data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
 
 #%% Run the App
 st.set_page_config(layout="wide")
