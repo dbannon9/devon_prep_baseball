@@ -306,5 +306,7 @@ else:
         hide_index=True,
     )
 
+#%% show definitions doc
 
+st.pdf(r'app/documents/dk_definitions.pdf')
 
