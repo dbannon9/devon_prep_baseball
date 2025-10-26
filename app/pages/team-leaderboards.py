@@ -229,7 +229,7 @@ dkhit_group.rename(columns={
 dkhit_group.sort_values(by='Avg Barrel Speed', ascending=False, inplace=True)
 dkhit_group = dkhit_group.round(2)
 
-#%% Prepare Rapsodo Data
+#%% Prepare Rapsodo Hitting Data
 
 # filter data by dates selected
 rapsodo_hitting['Date'] = pd.to_datetime(rapsodo_hitting['Date'], errors='coerce')
@@ -279,6 +279,48 @@ def highlight_ev(df):
         subset=['Max EV', 'Average EV', '90th pct EV']
     ).format({'Max EV': '{:.1f}', 'Average EV': '{:.1f}', '90th pct EV': '{:.1f}'})
 
+#%% Prepare Rapsodo Pitching Data
+
+# Merge player data
+rappitch = rapsodo_pitching.merge(
+    players_reset, left_on='Player ID', right_on='rapsodo_id', how='left'
+).rename(columns={'id': 'player_id'})
+
+# Convert Date
+rappitch['Date'] = pd.to_datetime(rappitch['Date'], errors='coerce')
+rappitch = rappitch[
+    (rappitch['Date'] >= pd.to_datetime(start_date)) &
+    (rappitch['Date'] <= pd.to_datetime(end_date))
+]
+
+# Clean up data (no need to filter by pitch type)
+numeric_cols = [
+    'HB (trajectory)',
+    'VB (trajectory)',
+    'Velocity',
+    'Total Spin',
+    'Spin Efficiency (release)',
+    'Release Angle',
+    'Release Height',
+    'Release Side'
+]
+
+# Convert to numeric
+for col in numeric_cols:
+    rappitch[col] = pd.to_numeric(rappitch[col], errors='coerce')
+
+# Group by player
+player_release_stats = (
+    rappitch
+    .groupby('full_name')[['Release Side', 'Release Height']]
+    .agg('mean')
+    .reset_index()
+)
+
+# Flatten multi-index columns
+player_release_stats.columns = ['_'.join(col).rstrip('_') for col in player_release_stats.columns.values]
+
+
 #%% Display leaderboard
 
 # DK first
@@ -301,16 +343,70 @@ else:
                     },
     )
 
-# Rapsodo
+# # Rapsodo Hitting
 
-st.subheader("Rapsodo Leaderboard", divider = "yellow")
-if len(raphit_group) == 0:
+# st.subheader("Rapsodo Leaderboard", divider = "yellow")
+# if len(raphit_group) == 0:
+#     st.write("No Data Available for Selected Dates and Classes")
+# else:
+#     st.dataframe(
+#         highlight_ev(raphit_group[['Player', 'Class', 'Average EV', '90th pct EV', 'Max EV']]),
+#         hide_index=True,
+#     )
+
+# Rapsodo Pitching
+st.subheader("Release Points by Pitcher", divider="yellow")
+if len(player_release_stats) == 0:
     st.write("No Data Available for Selected Dates and Classes")
 else:
-    st.dataframe(
-        highlight_ev(raphit_group[['Player', 'Class', 'Average EV', '90th pct EV', 'Max EV']]),
-        hide_index=True,
+
+    # Create figure
+    fig_release, ax_release = plt.subplots(figsize=(8, 3))
+    fig_release.patch.set_facecolor("#000e29")
+    ax_release.set_facecolor("#000e29")
+
+    # Scatter plot: X = Release Side, Y = Release Height
+    ax_release.scatter(
+        player_release_stats['Release Side_mean'],
+        player_release_stats['Release Height_mean'],
+        color="#f1d71c",        # yellow
+        edgecolor="white",
+        s=80,
+        zorder=3
     )
+
+    # Add player names next to points
+    for _, row in player_release_stats.iterrows():
+        ax_release.text(
+            row['Release Side_mean'] + 0.05,  # small offset
+            row['Release Height_mean'],
+            row['full_name'],
+            color='white',
+            fontsize=10,
+            va='center'
+        )
+
+    # Axes limits
+    ax_release.set_xlim(-3, 3)
+    ax_release.set_ylim(3, 7)
+    ax_release.yaxis.set_major_locator(MultipleLocator(1))
+
+    # Axis line and grid
+    ax_release.axvline(0, color="#f1d71c", linewidth=0.8)
+    ax_release.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
+    ax_release.tick_params(colors='white', labelsize=12)
+
+    # Labels
+    ax_release.set_xlabel('Release Side (ft)', color='white', fontsize=14, labelpad=10)
+    ax_release.set_ylabel('Release Height (ft)', color='white', fontsize=14, labelpad=10)
+
+    # White spines
+    for spine in ax_release.spines.values():
+        spine.set_color('white')
+
+    # Display in Streamlit
+    st.pyplot(fig_release)
+
 
 #%% show definitions doc
 
