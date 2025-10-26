@@ -357,56 +357,77 @@ else:
 
 # Rapsodo Pitching
 st.subheader("Release Points by Pitcher", divider="yellow")
-if len(player_release_stats) == 0:
-    st.write("No Data Available for Selected Dates and Classes")
-else:
-    # Create figure
-    fig_release, ax_release = plt.subplots(figsize=(8, 3))
-    fig_release.patch.set_facecolor("#000e29")
-    ax_release.set_facecolor("#000e29")
 
-    # Scatter plot: X = Release Side, Y = Release Height
-    ax_release.scatter(
-        player_release_stats['Release Side_mean'],
-        player_release_stats['Release Height_mean'],
-        color="#f1d71c",
-        edgecolor="white",
-        s=80,
-        zorder=3
-    )
+chart, table = st.columns(2,gap='large')
 
-    # Add player names next to points
-    for _, row in player_release_stats.iterrows():
-        ax_release.text(
-            row['Release Side_mean'] + 0.05,  # small offset
-            row['Release Height_mean'],
-            row['full_name'],
-            color='white',
-            fontsize=10,
-            va='center'
+with chart:
+
+    if len(player_release_stats) == 0:
+        st.write("No Data Available for Selected Dates and Classes")
+    else:
+        # Create figure
+        fig_release, ax_release = plt.subplots(figsize=(8, 3))
+        fig_release.patch.set_facecolor("#000e29")
+        ax_release.set_facecolor("#000e29")
+
+        # Scatter plot: X = Release Side, Y = Release Height
+        ax_release.scatter(
+            player_release_stats['Release Side_mean'],
+            player_release_stats['Release Height_mean'],
+            color="#f1d71c",
+            edgecolor="white",
+            s=80,
+            zorder=3
         )
 
-    # Axes limits
-    ax_release.set_xlim(-3, 3)
-    ax_release.set_ylim(3, 7)
-    ax_release.yaxis.set_major_locator(MultipleLocator(1))
+        # Add player names next to points
+        for _, row in player_release_stats.iterrows():
+            ax_release.text(
+                row['Release Side_mean'] + 0.05,  # small offset
+                row['Release Height_mean'],
+                row['full_name'],
+                color='white',
+                fontsize=10,
+                va='center'
+            )
 
-    # Axis line and grid
-    ax_release.axvline(0, color="#f1d71c", linewidth=0.8)
-    ax_release.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
-    ax_release.tick_params(colors='white', labelsize=12)
+        # Axes limits
+        ax_release.set_xlim(-3, 3)
+        ax_release.set_ylim(3, 7)
+        ax_release.yaxis.set_major_locator(MultipleLocator(1))
 
-    # Labels
-    ax_release.set_xlabel('Release Side (ft)', color='white', fontsize=14, labelpad=10)
-    ax_release.set_ylabel('Release Height (ft)', color='white', fontsize=14, labelpad=10)
+        # Axis line and grid
+        ax_release.axvline(0, color="#f1d71c", linewidth=0.8)
+        ax_release.grid(True, color='lightgray', linestyle='--', linewidth=0.5)
+        ax_release.tick_params(colors='white', labelsize=12)
 
-    # White spines
-    for spine in ax_release.spines.values():
-        spine.set_color('white')
+        # Labels
+        ax_release.set_xlabel('Release Side (ft)', color='white', fontsize=14, labelpad=10)
+        ax_release.set_ylabel('Release Height (ft)', color='white', fontsize=14, labelpad=10)
 
-    # Display in Streamlit
-    st.pyplot(fig_release)
+        # White spines
+        for spine in ax_release.spines.values():
+            spine.set_color('white')
 
+        # Display in Streamlit
+        st.pyplot(fig_release)
+
+with table:
+    player_release_stats.rename(columns = {
+        "full_name": "Player"
+        "Release Side_mean": "Release Side",
+        "Release Height_mean": "Release Height"
+    }, inplace=True)
+    st.dataframe(player_release_stats,
+                hide_index = True,
+                column_order=("Player",
+                            "Release Side",
+                            "Release Height"),
+                column_config={
+                "Release Side": st.column_config.NumberColumn("Release Side", format="%.1f"),
+                "Release Height": st.column_config.NumberColumn("Release Height", format="%.1f"),
+                }
+                )
 
 #%% show definitions doc
 
