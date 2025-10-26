@@ -10,6 +10,7 @@ from decimal import Decimal
 import os
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+from matplotlib.ticker import MultipleLocator
 from dateutil.relativedelta import relativedelta
 
 #%% Connect to Supabase
@@ -367,9 +368,9 @@ else:
 
     # Scatter plot: X = Release Side, Y = Release Height
     ax_release.scatter(
-        player_release_stats['Release Side_mean'],
-        player_release_stats['Release Height_mean'],
-        color="#f1d71c",        # yellow
+        player_release_stats['Release Side'],
+        player_release_stats['Release Height'],
+        color="#f1d71c",
         edgecolor="white",
         s=80,
         zorder=3
@@ -378,8 +379,8 @@ else:
     # Add player names next to points
     for _, row in player_release_stats.iterrows():
         ax_release.text(
-            row['Release Side_mean'] + 0.05,  # small offset
-            row['Release Height_mean'],
+            row['Release Side'] + 0.05,  # small offset
+            row['Release Height'],
             row['full_name'],
             color='white',
             fontsize=10,
