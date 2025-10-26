@@ -390,8 +390,7 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
             # Horizontal gridlines at whole numbers
             ax_release.yaxis.set_major_locator(MultipleLocator(1))
 
-            # Axes lines through origin
-            ax_release.axhline(5, color="#f1d71c", linewidth=0.8)
+            # Axis line yellow
             ax_release.axvline(0, color="#f1d71c", linewidth=0.8)
 
             # Title and Labels
