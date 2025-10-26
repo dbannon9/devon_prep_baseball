@@ -414,7 +414,7 @@ with chart:
 
 with table:
     player_release_stats.rename(columns = {
-        "full_name": "Player"
+        "full_name": "Player",
         "Release Side_mean": "Release Side",
         "Release Height_mean": "Release Height"
     }, inplace=True)
