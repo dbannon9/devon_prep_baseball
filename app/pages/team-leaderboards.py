@@ -314,7 +314,7 @@ for col in numeric_cols:
 player_release_stats = (
     rappitch
     .groupby('full_name')[['Release Side', 'Release Height']]
-    .agg('mean')
+    .agg(['mean'])
     .reset_index()
 )
 
