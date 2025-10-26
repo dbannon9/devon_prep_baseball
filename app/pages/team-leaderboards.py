@@ -360,7 +360,7 @@ st.subheader("Release Points by Pitcher", divider="yellow")
 if len(player_release_stats) == 0:
     st.write("No Data Available for Selected Dates and Classes")
 else:
-
+    player_release_stats
     # Create figure
     fig_release, ax_release = plt.subplots(figsize=(8, 3))
     fig_release.patch.set_facecolor("#000e29")
