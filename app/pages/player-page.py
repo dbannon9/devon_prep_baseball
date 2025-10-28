@@ -344,9 +344,15 @@ if players_reset[players_reset['id']==player_select].iloc[0]['pitcher'] == True:
                 return f"background-color: {color}; color: {text_color}; font-weight: bold;"
 
             # Apply styling to the dataframe
-            style_df = pitch_types_player_rappitch.style.applymap(
-                color_pitch_type, subset=["Pitch Type"]
+            # Apply styling to the dataframe
+            style_df = (
+                pitch_types_player_rappitch.style
+                .applymap(color_pitch_type, subset=["Pitch Type"])  # keep your original coloring
+                .set_table_styles([
+                    {'selector': 'th', 'props': [('color', 'white'), ('font-weight', 'bold')]}  # header text
+                ])
             )
+
             st.subheader("Pitch Stats", divider = "yellow")
             st.dataframe(style_df,
                          hide_index = True,
