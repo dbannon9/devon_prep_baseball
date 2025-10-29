@@ -102,32 +102,35 @@ coach_options = coaches['name'].to_dict()
 
 st.title('Player Summary Page')
 
-# ✅ Only include active players
-active_players = players_show[players_show['active'] == True]
+playerselectcol, dateselectcol = st.columns([2], "large", border=True)
 
-player_options = dict(zip(active_players.index, active_players['full_name']))
+with playerselectcol:
 
-player_select = st.selectbox(
-    "Player",
-    options=list(player_options.keys()),
-    format_func=lambda id: player_options[id]
-)
+    active_players = players_show[players_show['active'] == True]
 
-players_reset = players_show.reset_index()
+    player_options = dict(zip(active_players.index, active_players['full_name']))
 
-dates_select = st.date_input("Select Dates",
-                                value=[datetime.today()-relativedelta(months=6),
-                                    datetime.today()],
-                                max_value=datetime.today()+relativedelta(days=1)
-                                )
-if len(dates_select)<2:
-    start_date = pd.to_datetime(dates_select[0])
-    end_date = datetime.today()
-else:
-    start_date = pd.to_datetime(dates_select[0])
-    end_date = pd.to_datetime(dates_select[1])
+    player_select = st.selectbox(
+        "Player",
+        options=list(player_options.keys()),
+        format_func=lambda id: player_options[id]
+    )
 
+with dateselectcol:
 
+    players_reset = players_show.reset_index()
+
+    dates_select = st.date_input("Select Dates",
+                                    value=[datetime.today()-relativedelta(months=6),
+                                        datetime.today()],
+                                    max_value=datetime.today()+relativedelta(days=1)
+                                    )
+    if len(dates_select)<2:
+        start_date = pd.to_datetime(dates_select[0])
+        end_date = datetime.today()
+    else:
+        start_date = pd.to_datetime(dates_select[0])
+        end_date = pd.to_datetime(dates_select[1])
 
 #%% Prepare DK Stats
 
