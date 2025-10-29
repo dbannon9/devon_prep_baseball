@@ -417,7 +417,7 @@ with hitting:
                     })
                     
                     st.dataframe(rap_df, hide_index=True)
-        #%% Timelines
+        #%% Hitting Timelines
         with hitting_timelines:
             st.subheader("Diamond Kinetics Metric by Date",divider = "yellow")
             if len(player_dkhit) == 0:
@@ -461,7 +461,6 @@ with hitting:
                     linewidth=2,
                     capsize=4,
                     color="#f1d71c",
-                    label=f"{metric_select} Mean ±1 STD",
                 )
                 # Set y limits and labels
                 curve_row = dk_curves_class[
@@ -682,7 +681,7 @@ with pitching:
 
                 # Display in Streamlit
                 st.pyplot(fig_release)
-        #%% Timelines
+        #%% Pitching Timelines
         with timelines:
             st.subheader("Pitch Velocity by Date",divider = "yellow")
             # Filter pitch types to only those available in dataset
