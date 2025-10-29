@@ -102,9 +102,10 @@ coach_options = coaches['name'].to_dict()
 
 st.title('Player Summary Page')
 
+# ✅ Only include active players
 active_players = players_show[players_show['active'] == True]
 
-player_options = dict(zip(active_players['id'], active_players['full_name']))
+player_options = dict(zip(active_players.index, active_players['full_name']))
 
 player_select = st.selectbox(
     "Player",
