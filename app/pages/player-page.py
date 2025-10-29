@@ -102,7 +102,7 @@ coach_options = coaches['name'].to_dict()
 
 st.title('Player Summary Page')
 
-playerselectcol, dateselectcol = st.columns(2, gap="large", border=True)
+playerselectcol, dateselectcol = st.columns(2, gap="medium", border=True)
 
 with playerselectcol:
 

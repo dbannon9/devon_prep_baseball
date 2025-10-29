@@ -101,10 +101,13 @@ coach_options = coaches['name'].to_dict()
 
 st.title("Team Leaderboards")
 
-classes_and_dates_column, inactive_column = st.columns(2)
+classes_and_inactive_column, dates_column = st.columns(2, gap="medium", border=True)
 
-with classes_and_dates_column:
+with classes_and_inactive_column:
     classes_select = st.multiselect("Select Classes", options=active_classes, default=active_classes)
+    inactive_toggle = st.toggle("Show Inactive Players?", value=False)
+
+with dates_column:
     dates_select = st.date_input("Select Dates",
                                  value=[datetime.today()-relativedelta(months=6),
                                         datetime.today()],
@@ -116,11 +119,6 @@ with classes_and_dates_column:
     else:
         start_date = pd.to_datetime(dates_select[0])
         end_date = pd.to_datetime(dates_select[1])
-
-
-
-with inactive_column:
-    inactive_toggle = st.toggle("Show Inactive Players?", value=False)
 
 # Configure player tables based on above
 
