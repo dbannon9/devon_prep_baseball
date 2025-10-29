@@ -448,7 +448,6 @@ with hitting:
                     player_date_dk_stats[mean_col],
                     marker="o",
                     linewidth=2,
-                    label=f"{metric_select} Mean",
                     color="#f1d71c"
                 )
 
@@ -461,6 +460,7 @@ with hitting:
                     linewidth=2,
                     capsize=4,
                     color="#f1d71c",
+                    label=f"{metric_select} Average",
                 )
                 # Set y limits and labels
                 curve_row = dk_curves_class[
@@ -484,7 +484,7 @@ with hitting:
                     color="white"
                 )
 
-                ax2.set_ylim(0, 100)
+                ax2.set_ylim(1, 99)
                 ax2.set_ylabel("Percentile (%)", color="white", fontsize=14)
                 ax2.tick_params(axis="y", colors="white")
 
