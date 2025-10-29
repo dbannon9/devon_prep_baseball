@@ -102,7 +102,15 @@ coach_options = coaches['name'].to_dict()
 
 st.title('Player Summary Page')
 
-player_select = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id])
+active_players = players_show[players_show['active'] == True]
+
+player_options = dict(zip(active_players['id'], active_players['full_name']))
+
+player_select = st.selectbox(
+    "Player",
+    options=list(player_options.keys()),
+    format_func=lambda id: player_options[id]
+)
 
 players_reset = players_show.reset_index()
 
