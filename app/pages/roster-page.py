@@ -101,9 +101,16 @@ st.title("Devon Prep Baseball")
 #%% Roster Toggles
 
 st.subheader("Roster & Positions", divider = "yellow")
-edit_toggle = st.toggle('Edit?')
-ptoggle = st.toggle('Pitchers?')
-inactive_toggle = st.toggle("Show Inactive Players?", value=False)
+edittogglecol, ptogglecol, inactivetogglecol = st.columns(3, gap="medium", border=True)
+
+with edittogglecol:
+    edit_toggle = st.toggle('Edit?')
+
+with ptogglecol:
+    ptoggle = st.toggle('Pitchers?')
+
+with inactivetogglecol:
+    inactive_toggle = st.toggle("Show Inactive Players?", value=False)
 
 # Base query depending on inactive toggle
 if inactive_toggle:
@@ -139,6 +146,6 @@ if edit_toggle:
     
         st.session_state.form_submitted = True
         st.success("Data successfully saved")
-        
+
 else:
     st.dataframe(fplayers, hide_index=True)
