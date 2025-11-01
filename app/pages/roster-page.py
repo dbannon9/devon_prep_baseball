@@ -4,7 +4,7 @@ import streamlit as st
 from st_supabase_connection import SupabaseConnection
 import pandas as pd
 import numpy as np
-from datetime import date, time
+from datetime import date, time, datetime
 import math
 from decimal import Decimal
 import os
@@ -136,16 +136,78 @@ else:
         'pos_3': 'Tertiary Position'
     }, inplace=True)
 
+import pandas as pd
+import numpy as np
+
+def clean_value(v):
+    if pd.isna(v):
+        return None
+    # Convert numpy types to native Python
+    if isinstance(v, (np.generic,)):
+        v = v.item()
+    # If it’s a float but represents a whole number, cast to int
+    if isinstance(v, float) and v.is_integer():
+        return int(v)
+    return v
+
 if edit_toggle:
     players_update = st.data_editor(players)
     save = st.button("Save")
+
     if save:
         for idx, row in players_update.iterrows():
-            player_id = row.name  # This accesses the index (which is 'id' in your case)
-            response = db.table("players").update(row.to_dict()).eq('id', player_id).execute()
-    
+            player_id = row.name
+
+            clean_row = {k: clean_value(v) for k, v in row.items()}
+
+            # Skip empty dicts (no data)
+            if clean_row:
+                response = (
+                    db.table("players")
+                    .update(clean_row)
+                    .eq("id", player_id)
+                    .execute()
+                )
+
         st.session_state.form_submitted = True
         st.success("Data successfully saved")
 
+
 else:
     st.dataframe(fplayers, hide_index=True)
+
+st.subheader("Input New Players", divider="yellow")
+default_year = datetime.now().year + 4
+positions = [None, "C", "1B", "2B", "3B", "SS", "OF", "UT"]
+
+with st.form("input_new_players", clear_on_submit=True, enter_to_submit=False, border=True):
+    first_name = st.text_input("First Name")
+    last_name = st.text_input("Last Name")
+    grad_year = st.number_input("HS Graduation Year", value=default_year)
+    pitcher = st.checkbox("Pitcher?", value=False)
+    pos_1 = st.selectbox("Primary Position", positions)
+    pos_2 = st.selectbox("Secondary Position", positions)
+    pos_3 = st.selectbox("Tertiary Position", positions)
+    rapsodo_id = st.text_input("Rapsodo ID")
+    player_submit = st.form_submit_button(label="Submit")
+
+def clean_value(value):
+    if value in ("", None):
+        return None
+    return value
+
+if player_submit:
+    new_player = {
+        "first_name": clean_value(first_name),
+        "last_name": clean_value(last_name),
+        "grad_year": clean_value(grad_year),
+        "pitcher": clean_value(pitcher),
+        "pos_1": clean_value(pos_1),
+        "pos_2": clean_value(pos_2),
+        "pos_3": clean_value(pos_3),
+        "rapsodo_id": clean_value(rapsodo_id),
+    }
+
+    response = db.client.table("players").insert(new_player).execute()
+    st.session_state.form_submitted = True
+    st.success("New Player Added")
