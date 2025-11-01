@@ -13,6 +13,7 @@ for p in pathlib.Path(".").rglob("__pycache__"):
 roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
 team_leaderboards = st.Page("pages/team-leaderboards.py",title="Leaderboards",icon=":material/social_leaderboard:")
 player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
+plate_discipline_tracking = st.Page("pages/plate-discipline-tracking.py",title="Plate Discipline Tracking",icon=":material/background_dot_small:")
 data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
 
 #%% Authentication
@@ -40,6 +41,7 @@ if authenticate():
         roster,
         team_leaderboards,
         player_page,
-        data_input
+        data_input,
+        plate_discipline_tracking
         ])
     nav.run()
