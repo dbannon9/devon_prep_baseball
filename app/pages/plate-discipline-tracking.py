@@ -108,21 +108,14 @@ swing_outcomes = [None,"Whiff","Foul","Weak Contact","Solid Contact"]
 batted_ball_types = [None,"Grounder", "Line Drive", "Fly Ball", "Pop Up"]
 
 # Hitter & handedness outside of form so it doesnt clear
-leftcol, rightcol = st.columns(2,gap='large')
-
-with leftcol:
-    pa_hitter = st.selectbox("Player", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
-    east_west_location = st.selectbox("In/Out Location",east_west_zones)
-    pitch_type = st.selectbox("Pitch Type",pitch_type)
-
-
-
-with rightcol:
-    pitcher_handedness = st.selectbox("Pitcher Handedness",handednesses)
-    north_south_location = st.selectbox("Up/Down Location",north_south_zones)
-    decision = st.selectbox("Decision",decisions)
-
-
+pa_hitter = st.selectbox("Player", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
+pitcher_handedness = st.selectbox("Pitcher Handedness",handednesses)
+st.divider()
+pitch_type = st.selectbox("Pitch Type",pitch_type)
+north_south_location = st.selectbox("Up/Down Location",north_south_zones)
+east_west_location = st.selectbox("In/Out Location",east_west_zones)
+st.divider()
+decision = st.selectbox("Decision",decisions)
 if decision == "Take":
     take_outcome = st.selectbox("Take Outcome",take_outcomes)
 elif decision == "Swing":
@@ -130,5 +123,6 @@ elif decision == "Swing":
     if swing_outcome in ["Weak Contact", "Solid Contact"]:
         batted_ball_type = st.selectbox("Batted Ball Type",batted_ball_types)
 
+st.divider()
 submit = st.button("Submit Pitch")
 
