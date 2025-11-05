@@ -38,7 +38,6 @@ def fetch_table_data(table_name):
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
-coaches = fetch_table_data('coaches')
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
 swings = fetch_table_data('swings')
@@ -93,7 +92,6 @@ currentplayers = players_show.query('active == True')
 # Prepare dropdown options
 player_options = players_show['full_name'].to_dict()
 active_player_options = currentplayers['full_name'].to_dict()
-coach_options = coaches['name'].to_dict()
 
 #%% Form
 st.title("Plate Discipline Tracking")

@@ -38,7 +38,6 @@ def fetch_table_data(table_name):
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
-coaches = fetch_table_data('coaches')
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
 swings = fetch_table_data('swings')
@@ -92,7 +91,6 @@ currentplayers = players_show.query('active == True')
 
 # Prepare dropdown options
 player_options = players_show['full_name'].to_dict()
-coach_options = coaches['name'].to_dict()
 
 #%% Home Page
  
@@ -175,6 +173,8 @@ if edit_toggle:
 
 else:
     st.dataframe(fplayers, hide_index=True)
+
+#%% Input New Players
 
 st.subheader("Input New Players", divider="yellow")
 default_year = datetime.now().year + 4
