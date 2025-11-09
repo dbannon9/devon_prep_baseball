@@ -108,7 +108,8 @@ if new_file is not None:
         file_type = "rapsodo_hitting"
     elif "user.battingOrientation" in file_cols:
         file_type = "dk_hitting"
-        file_df = file_df.iloc[2:, 15:]  # skip first 2 rows, drop first 15 columns
+        file_df = pd.read_csv(new_file, header=3)
+        file_df = file_df.iloc[:, 15:]  # drop first 15 columns
         file_df.reset_index(drop=True, inplace=True)
     else:
         file_type = None
@@ -142,7 +143,7 @@ if new_file is not None:
                 st.success("Rapsodo Hitting Data Successfully Uploaded")
 
         elif file_type == "dk_hitting":
-            dk_upload = file_df[~file_df['swings.uuid'].isin(swings['uuid'])]
+            dk_upload = file_df[~file_df['UUID'].isin(swings['uuid'])]
             if len(dk_upload) == 0:
                 st.success("Diamond Kinetics Hitting Data is Up To Date")
             response = db.table("swings").insert(dk_upload).execute()
