@@ -147,6 +147,8 @@ if new_file is not None:
             dk_upload = file_df[~file_df['UUID'].isin(swings.index)]
             if len(dk_upload) == 0:
                 st.success("Diamond Kinetics Hitting Data is Up To Date")
-            response = db.table("swings").insert(dk_upload).execute()
+            dk_upload = dk_upload.replace({np.nan: None})
+            records = dk_upload.to_dict(orient="records")
+            response = db.table("swings").insert(records).execute()
             st.session_state.form_submitted = True
             st.success("Diamond Kinetics Data Successfully Uploaded")
