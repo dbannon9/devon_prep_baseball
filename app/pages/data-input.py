@@ -108,9 +108,11 @@ if new_file is not None:
         file_type = "rapsodo_hitting"
     elif "user.battingOrientation" in file_cols:
         file_type = "dk_hitting"
-        file_df = pd.read_csv(new_file, header=3)
-        file_df = file_df.iloc[:, 15:]  # drop first 15 columns
+        file_df = file_df.copy()
+        file_df.columns = file_df.iloc[2]
+        file_df = file_df.iloc[3:, 15:]
         file_df.reset_index(drop=True, inplace=True)
+        file_df
     else:
         file_type = None
         st.error("Unrecognized file type.")
