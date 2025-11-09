@@ -110,6 +110,7 @@ if new_file is not None:
         file_type = "dk_hitting"
         file_df = file_df.iloc[2:, 15:]  # skip first 2 rows, drop first 15 columns
         file_df.reset_index(drop=True, inplace=True)
+        file_df.columns
     else:
         file_type = None
         st.error("Unrecognized file type.")
