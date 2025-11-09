@@ -108,9 +108,16 @@ if new_file is not None:
         file_type = "rapsodo_hitting"
     elif "user.battingOrientation" in file_cols:
         file_type = "dk_hitting"
+        cols = [
+            "uuid","created_date","created_datetime","swing_power","max_acceleration",
+            "impact_momentum","max_hand_speed","max_barrel_speed","speed_efficiency",
+            "trigger_to_impact","attack_angle","hand_cast","distance_in_zone",
+            "sensor_time_sec","vertical_angle","barrel_x","barrel_y","barrel_z",
+            "exit_velocity","potential_distance","player_id","bat_length"
+        ]
         file_df = file_df.copy()
-        file_df.columns = file_df.iloc[1]
         file_df = file_df.iloc[3:, 15:]
+        file_df.columns = cols
         file_df.reset_index(drop=True, inplace=True)
     else:
         file_type = None
