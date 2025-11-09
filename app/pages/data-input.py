@@ -152,7 +152,7 @@ if new_file is not None:
                 st.success("Rapsodo Hitting Data Successfully Uploaded")
 
         elif file_type == "dk_hitting":
-            dk_upload = file_df[~file_df['UUID'].isin(swings['uuid'])]
+            dk_upload = file_df[~file_df['uuid'].isin(swings['uuid'])]
             if len(dk_upload) == 0:
                 st.success("Diamond Kinetics Hitting Data is Up To Date")
             dk_upload = dk_upload.replace({np.nan: None})
