@@ -117,9 +117,9 @@ if new_file is not None:
         ]
         file_df = file_df.copy()
         file_df = file_df.iloc[3:, 15:]
-        file_df.columns # = cols
+        file_df = file_df.drop(columns=["swing.sensorDateTime"])
+        file_df.columns = cols
         file_df.reset_index(drop=True, inplace=True)
-        file_df
     else:
         file_type = None
         st.error("Unrecognized file type.")
