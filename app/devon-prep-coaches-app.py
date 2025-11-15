@@ -49,14 +49,6 @@ def fetch_table_data(table_name):
 # Fetch data from all tables, then align id to supabase index
 users = fetch_table_data('users')
 
-#%% page definitions
-
-roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
-team_leaderboards = st.Page("pages/team-leaderboards.py",title="Leaderboards",icon=":material/social_leaderboard:")
-player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
-plate_discipline_tracking = st.Page("pages/plate-discipline-tracking.py",title="Plate Discipline Tracking",icon=":material/background_dot_small:")
-data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
-
 #%% Run the App
 st.set_page_config(layout="wide")
 
@@ -83,10 +75,17 @@ if st.user.is_logged_in:
     if not users['email'].isin([st.user.email]).any():
         st.write("You do not have access to this app. Please contact your coach.")
     elif current_user_type == "Player":
+        #%% page definitions
+        player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
         nav = st.navigation([
             player_page,
         ])
     else:
+        roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
+        team_leaderboards = st.Page("pages/team-leaderboards.py",title="Leaderboards",icon=":material/social_leaderboard:")
+        player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
+        plate_discipline_tracking = st.Page("pages/plate-discipline-tracking.py",title="Plate Discipline Tracking",icon=":material/background_dot_small:")
+        data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
         nav = st.navigation([
             roster,
             team_leaderboards,
