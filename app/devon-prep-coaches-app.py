@@ -62,7 +62,7 @@ st.set_page_config(layout="wide")
 
 st.logo(r'app/images/dp_logo_transparent.png', size='large')
 
-@st.dialog("Welcome to The Devon Prep Baseball App. Log In to Continue.",width = "Large",)
+@st.dialog("Welcome to The Devon Prep Baseball App. Log In to Continue.",width = "Large",dismissible=False)
 def login_dialog():
     if st.button("Sign in with Google"):
         st.login(provider="google")
