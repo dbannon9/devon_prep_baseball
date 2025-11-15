@@ -5,3 +5,4 @@ fpdf==1.7.2
 matplotlib
 st-supabase-connection==2.0.0
 streamlit-pdf==1.0.8
+Authlib>=1.3.2
