@@ -62,13 +62,10 @@ st.set_page_config(layout="wide")
 
 st.logo(r'app/images/dp_logo_transparent.png', size='large')
 
-@st.dialog("Welcome to The Devon Prep Baseball App. Log In to Continue")
+@st.dialog("Welcome to The Devon Prep Baseball App. Log In to Continue.",width = "Large",)
 def login_dialog():
     if st.button("Sign in with Google"):
         st.login(provider="google")
-
-current_user_email = st.user.email
-current_user_type = users.loc[users['email'] == current_user_email, 'type'].iloc[0]
 
 if not st.user.is_logged_in:
     login_dialog()
@@ -81,6 +78,8 @@ with st.sidebar:
             st.logout()
 
 if st.user.is_logged_in:
+    current_user_email = st.user.email
+    current_user_type = users.loc[users['email'] == current_user_email, 'type'].iloc[0]
     if not users['email'].isin([st.user.email]).any():
         st.write("You do not have access to this app. Please contact your coach.")
     elif current_user_type == "Player":
