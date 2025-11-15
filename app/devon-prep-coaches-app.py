@@ -3,10 +3,51 @@
 import pandas as pd
 import streamlit as st
 import sys, shutil, pathlib
+import streamlit as st
+from st_supabase_connection import SupabaseConnection
+import pandas as pd
+import numpy as np
+from datetime import date, time, datetime
+import math
+from decimal import Decimal
+import os
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+from matplotlib.ticker import MultipleLocator
+from matplotlib.patches import Ellipse
+from dateutil.relativedelta import relativedelta
 
 # cache resets
 for p in pathlib.Path(".").rglob("__pycache__"):
     shutil.rmtree(p, ignore_errors=True)
+
+#%% Connect to Supabase
+db = st.connection("supabase",type=SupabaseConnection)
+
+#%% Data Retrieval
+
+# Function to fetch data from any table
+def fetch_table_data(table_name):
+    response = db.client.table(table_name).select("*").execute()
+
+    # Supabase v2 client: actual rows are in response.data
+    data = response.data
+    if not data:
+        st.warning(f"No data returned from table '{table_name}'.")
+        return pd.DataFrame()
+
+    # Normalize into DataFrame
+    df = pd.DataFrame(data)
+
+   # Set index to 'id' if it exists, otherwise 'uuid'
+    if 'id' in df.columns:
+        df.set_index('id', inplace=True)
+    elif 'uuid' in df.columns:
+        df.set_index('uuid', inplace=True)
+    return df
+
+# Fetch data from all tables, then align id to supabase index
+users = fetch_table_data('users')
 
 #%% page definitions
 
@@ -16,32 +57,42 @@ player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":mater
 plate_discipline_tracking = st.Page("pages/plate-discipline-tracking.py",title="Plate Discipline Tracking",icon=":material/background_dot_small:")
 data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
 
-#%% Authentication
-
-def authenticate():
-    st.sidebar.header('Login')
-    entered_password = st.sidebar.text_input("Password", type='password')
-    
-    # Access the password from secrets
-    correct_password = st.secrets["authentication"]["password"]
-
-    if entered_password == correct_password:
-        return True
-    elif entered_password:
-        st.sidebar.error("Incorrect password")
-    return False
-
 #%% Run the App
 st.set_page_config(layout="wide")
 
 st.logo(r'app/images/dp_logo_transparent.png', size='large')
 
-if authenticate():
-    nav = st.navigation([
-        roster,
-        team_leaderboards,
-        player_page,
-        data_input,
-        plate_discipline_tracking
+@st.dialog("Welcome to The Devon Prep Baseball App. Log In to Continue")
+def login_dialog():
+    if st.button("Sign in with Google"):
+        st.login(provider="google")
+
+current_user_email = st.user.email
+current_user_type = users.loc[users['email'] == current_user_email, 'type'].iloc[0]
+
+if not st.user.is_logged_in:
+    login_dialog()
+
+with st.sidebar:
+    if st.user.is_logged_in:
+        st.write(f"Logged in as **{st.user.name}**")
+
+        if st.button("Log out"):
+            st.logout()
+
+if st.user.is_logged_in:
+    if not users['email'].isin([st.user.email]).any():
+        st.write("You do not have access to this app. Please contact your coach.")
+    elif current_user_type == "Player":
+        nav = st.navigation([
+            player_page,
         ])
-    nav.run()
+    else:
+        nav = st.navigation([
+            roster,
+            team_leaderboards,
+            player_page,
+            data_input,
+            plate_discipline_tracking
+        ])
+        nav.run()
