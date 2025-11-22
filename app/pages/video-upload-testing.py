@@ -41,7 +41,6 @@ def fetch_table_data(table_name):
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
-coaches = fetch_table_data('coaches')
 video = fetch_table_data('video')
 
 #%% Data Adjustments
@@ -93,9 +92,6 @@ currentplayers = players_show.query('active == True')
 
 # Prepare dropdown options
 player_options = players_show['full_name'].to_dict()
-
-# Prepare dropdown options
-player_options = players['full_name'].to_dict()
 pitch_type_options = {
     "Four Seam",
     "Two Seam",
@@ -113,13 +109,13 @@ video_submit = None
 
 if vid is not None:
     with st.form(key='Input Key Video Information',clear_on_submit=True):
-        video_player = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id])  # Displays name
+        video_player = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id],index=None)  # Displays name
         video_date = st.date_input("Date", value=date.today())  # Default value to today's date
-        video_type = st.selectbox("Video Type", options=list({"Pitcher","Hitter","Fielder"}))
-        video_speed = st.selectbox("Video Speed", options=list({"Slo-Mo","Regular"}))
-        video_view = st.selectbox("View", options=list({"Pitcher's Mound","Home Plate","Open Side","Closed Side"}))
+        video_type = st.selectbox("Video Type", options=list({"Pitcher","Hitter","Fielder"}),index=None)
+        video_speed = st.selectbox("Video Speed", options=list({"Slo-Mo","Regular"}),index=None)
+        video_view = st.selectbox("View", options=list({"Pitcher's Mound","Home Plate","Open Side","Closed Side"}),index=None)
         if video_type == 'Pitcher':
-            video_pitch_type = st.selectbox("Pitch Type", options=list(pitch_type_options)) 
+            video_pitch_type = st.selectbox("Pitch Type", options=list(pitch_type_options),index=None) 
         if video_date is not None:
             video_date_str = video_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
         if video_type == "Pitcher":
@@ -133,11 +129,15 @@ elif vid is None:
 # Check if the user uploaded a video
 if video_submit:
     try:
+        file_bytes = vid.read()
         # Upload the video file to the Supabase storage bucket
-        response = db.storage.from_('pitching').upload(video_file_name, vid, file_options={"contentType": "video/quicktime"})
+        if video_type == 'Pitcher':
+            response = db.client.storage.from_("pitching").upload(video_file_name, file_bytes, file_options={"contentType": "video/quicktime"})
+            video_url = db.client.storage.from_("pitching").get_public_url(video_file_name)
 
-        # Get the public URL of the uploaded video
-        video_url = db.storage.from_('pitching').get_public_url(video_file_name)
+        else:
+            db.client.storage.from_("hitting").upload(video_file_name, file_bytes, file_options={"contentType": "video/quicktime"})
+            video_url = db.client.storage.from_("pitching").get_public_url(video_file_name)
 
         # Insert the video details into the database
         new_video_row = {
@@ -149,7 +149,7 @@ if video_submit:
             'speed': video_speed,
             'url': video_url
         }
-        insert_response = db.table("video").insert(new_video_row).execute()
+        insert_response = db.client.table("video").insert(new_video_row).execute()
 
         st.success("Video uploaded successfully and saved in the database.")
 

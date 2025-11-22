@@ -86,11 +86,14 @@ if st.user.is_logged_in:
         player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
         plate_discipline_tracking = st.Page("pages/plate-discipline-tracking.py",title="Plate Discipline Tracking",icon=":material/background_dot_small:")
         data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
+        video_upload = st.Page("pages/video-upload-testing.py",title="Video Upload",icon=":material/videocam:")
         nav = st.navigation([
             roster,
             team_leaderboards,
             player_page,
+            plate_discipline_tracking,
             data_input,
-            plate_discipline_tracking
+            video_upload
         ])
         nav.run()
+else: ""
