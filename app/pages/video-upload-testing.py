@@ -107,51 +107,72 @@ pitch_type_options = {
 vid = st.file_uploader("Place Video Here", type=['mp4', 'mov'])
 video_submit = None
 
-if vid is not None:
-    with st.form(key='Input Key Video Information',clear_on_submit=True):
-        video_player = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id],index=None)  # Displays name
-        video_date = st.date_input("Date", value=date.today())  # Default value to today's date
-        video_type = st.selectbox("Video Type", options=list({"Pitcher","Hitter","Fielder"}),index=None)
-        video_speed = st.selectbox("Video Speed", options=list({"Slo-Mo","Regular"}),index=None)
-        video_view = st.selectbox("View", options=list({"Pitcher's Mound","Home Plate","Open Side","Closed Side"}),index=None)
-        if video_type == 'Pitcher':
-            video_pitch_type = st.selectbox("Pitch Type", options=list(pitch_type_options),index=None) 
-        if video_date is not None:
-            video_date_str = video_date.isoformat()  # Converts the date object to 'YYYY-MM-DD'
-        if video_type == "Pitcher":
-            video_file_name = f"{video_player} - {video_type} - {video_pitch_type} - {video_speed} - {video_view} - {video_date_str}.mov"
-        else:
-            video_file_name = f"{video_player} - {video_type} - {video_speed} - {video_view} - {video_date_str}.mov"
-        video_submit = st.form_submit_button(label="Upload Video")
-elif vid is None:
+if vid is None:
     st.write("Please upload a video")
+else:
+    video_player = st.selectbox("Player", options=list(player_options.keys()), format_func=lambda id: player_options[id], index=None)
+    video_date = st.date_input("Date", value=date.today())
+    video_type = st.selectbox("Video Type", ["Pitcher", "Hitter", "Fielder"], index=None)
+    video_speed = st.selectbox("Video Speed", ["Slo-Mo", "Regular"], index=None)
+    video_view = st.selectbox("View", ["Pitcher's Mound","Home Plate","Open Side","Closed Side"], index=None)
+    video_pitch_type = None
+    if video_type == "Pitcher":
+        video_pitch_type = st.selectbox("Pitch Type", list(pitch_type_options), index=None)
+
+    video_submit = st.button("Upload Video")
 
 # Check if the user uploaded a video
-if video_submit:
-    try:
-        file_bytes = vid.read()
-        # Upload the video file to the Supabase storage bucket
-        if video_type == 'Pitcher':
-            response = db.client.storage.from_("pitching").upload(video_file_name, file_bytes, file_options={"contentType": "video/quicktime"})
-            video_url = db.client.storage.from_("pitching").get_public_url(video_file_name)
+if video_submit and vid is not None:
 
-        else:
-            db.client.storage.from_("hitting").upload(video_file_name, file_bytes, file_options={"contentType": "video/quicktime"})
-            video_url = db.client.storage.from_("pitching").get_public_url(video_file_name)
+    # Convert date
+    video_date_str = video_date.isoformat()
 
-        # Insert the video details into the database
-        new_video_row = {
-            'player_id': video_player,
-            'date': video_date_str,
-            'type': video_type,
-            'view': video_view,
-            'pitch_type': video_pitch_type,
-            'speed': video_speed,
-            'url': video_url
-        }
-        insert_response = db.client.table("video").insert(new_video_row).execute()
+    # Base filename
+    if video_type == "Pitcher":
+        base_name = f"{video_player} - {video_type} - {video_pitch_type} - {video_speed} - {video_view} - {video_date_str}"
+    else:
+        base_name = f"{video_player} - {video_type} - {video_speed} - {video_view} - {video_date_str}"
 
-        st.success("Video uploaded successfully and saved in the database.")
+    # ---- STEP 1: Generate a unique filename ----
+    ext = ".mov"
+    file_name = base_name + ext
 
-    except Exception as e:
-        st.error(f"An unexpected error occurred: {str(e)}")
+    bucket = "pitching" if video_type == "Pitcher" else "hitting"
+
+    # Get list of existing files in the bucket
+    existing_files = db.client.storage.from_(bucket).list()
+
+    existing_names = [f["name"] for f in existing_files]
+
+    counter = 1
+    while file_name in existing_names:
+        file_name = f"{base_name}-{counter}{ext}"
+        counter += 1
+
+    # ---- STEP 2: Upload ----
+    file_bytes = vid.read()
+
+    response = db.client.storage.from_(bucket).upload(
+        file_name,
+        file_bytes,
+        file_options={"contentType": "video/quicktime"}
+    )
+
+    video_url = db.client.storage.from_(bucket).get_public_url(file_name)
+
+    # ---- STEP 3: Insert database row ----
+    new_video_row = {
+        'player_id': video_player,
+        'date': video_date_str,
+        'type': video_type,
+        'view': video_view,
+        'speed': video_speed,
+        'url': video_url
+    }
+
+    if video_type == "Pitcher":
+        new_video_row['pitch_type'] = video_pitch_type
+
+    db.client.table("video").insert(new_video_row).execute()
+
+    st.success(f"Uploaded: {file_name}")

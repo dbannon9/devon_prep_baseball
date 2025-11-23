@@ -45,6 +45,7 @@ rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
 swings = fetch_table_data('swings')
 dk_curves = fetch_table_data('dk_curves')
+video = fetch_table_data('video')
 
 #%% Data Adjustments
 
@@ -228,6 +229,12 @@ if len(player_dkhit) > 0:
             lambda val: get_percentile(val, curve_lookup[metric]) if pd.notna(val) else None
         )
 
+#%% Prepare Video
+
+player_video = video[video['player_id']==player_select]
+player_hitting_video = player_video[player_video['type']=='Hitter']
+player_pitching_video = player_video[player_video['type']=='Pitcher']
+
 #%% Prepare Rapsodo Hitting Stats
 
 # merge player_id onto rapsodo data
@@ -365,10 +372,10 @@ hitting, pitching = st.tabs(["Hitting", "Pitching"])
 
 with hitting:
     st.header("Hitting Data",divider = "yellow")
-    if len(player_dkhit) == 0 and len(player_raphit) == 0:
+    if len(player_dkhit) == 0 and len(player_raphit) == 0 and len(player_video) == 0:
         st.write('No Hitting Data Available')
     else:
-        hitting_charts, hitting_timelines = st.tabs(["Charts & Data","Timelines"])
+        hitting_charts, hitting_timelines, hitting_videos = st.tabs(["Charts & Data","Timelines","Video"])
         #%% Hitting Charts
         with hitting_charts:
             # Define custom colormap (blue → black → red)
@@ -513,17 +520,25 @@ with hitting:
                 )
 
                 st.pyplot(fig)
-
+        
+        #%% Hitting Videos
+        with hitting_videos:
+            if len(player_hitting_video) == 0:
+                st.write("No Hitting Video Available")
+            else:
+                for _, row in player_hitting_video.iterrows():
+                    st.write(f"{row['date']} - {row['view']}:")
+                    st.video(row['url'], width=200)
 
     #%% Display Pitching Stats
 
 with pitching:
 
     st.header("Pitching Data",divider = "yellow")
-    if len(player_rappitch) < 1:
-        st.write("No Rapsodo Pitching Stats Available")
+    if len(player_rappitch) == 0 and len(player_pitching_video) == 0:
+        st.write("No Pitching Data Available")
     else:
-        charts, timelines = st.tabs(["Charts & Data","Timelines"])
+        charts, timelines, pitching_videos = st.tabs(["Charts & Data","Timelines", "Video"])
         #%% Charts and pitch type data
         with charts:
             plot, table = st.columns(2,gap="large")
@@ -743,4 +758,12 @@ with pitching:
 
             # Display in Streamlit
             st.pyplot(fig_vel)
-
+        
+        #%% Pitching Video
+        with pitching_videos:
+            if len(player_pitching_video) == 0:
+                st.write("No Pitching Video Available")
+            else:
+                for _, row in player_pitching_video.iterrows():
+                    st.write(f"{row['date']} - {row['view']} - {row['pitch_type']}:")
+                    st.video(row['url'], width=200)
