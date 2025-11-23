@@ -528,7 +528,7 @@ with hitting:
             else:
                 for _, row in player_hitting_video.iterrows():
                     st.write(f"{row['date']} - {row['view']}:")
-                    st.video(row['url'], width=200)
+                    st.video(row['url'], width=250)
 
     #%% Display Pitching Stats
 
@@ -766,4 +766,4 @@ with pitching:
             else:
                 for _, row in player_pitching_video.iterrows():
                     st.write(f"{row['date']} - {row['view']} - {row['pitch_type']}:")
-                    st.video(row['url'], width=200)
+                    st.video(row['url'], width=250)
