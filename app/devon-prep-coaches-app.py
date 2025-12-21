@@ -50,7 +50,7 @@ def fetch_table_data(table_name):
 users = fetch_table_data('users')
 
 #%% Run the App
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide",page_title="Devon Prep Baseball",page_icon=r'app/images/dp_logo_transparent.png')
 
 st.logo(r'app/images/dp_logo_transparent.png', size='large')
 
