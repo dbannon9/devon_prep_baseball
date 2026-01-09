@@ -21,6 +21,12 @@ from dateutil.relativedelta import relativedelta
 for p in pathlib.Path(".").rglob("__pycache__"):
     shutil.rmtree(p, ignore_errors=True)
 
+#%% set user session state
+
+if "user" not in st.session_state:
+    st.session_state["user"] = {}
+
+
 #%% Connect to Supabase
 db = st.connection("supabase",type=SupabaseConnection)
 
