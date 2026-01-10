@@ -83,8 +83,10 @@ if st.user.is_logged_in:
     elif current_user_type == "Player":
         #%% page definitions
         player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
+        glossary = st.Page("pages/data-glossary.py",title="Data Glossary",icon=":material/dictionary:")
         nav = st.navigation([
             player_page,
+            glossary
         ])
     else:
         roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
@@ -93,13 +95,15 @@ if st.user.is_logged_in:
         plate_discipline_tracking = st.Page("pages/plate-discipline-tracking.py",title="Plate Discipline Tracking",icon=":material/background_dot_small:")
         data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
         video_upload = st.Page("pages/video-upload-testing.py",title="Video Upload",icon=":material/videocam:")
+        glossary = st.Page("pages/data-glossary.py",title="Data Glossary",icon=":material/dictionary:")
         nav = st.navigation([
             roster,
             team_leaderboards,
             player_page,
             plate_discipline_tracking,
             data_input,
-            video_upload
+            video_upload,
+            glossary
         ])
         nav.run()
 else: ""
