@@ -15,7 +15,7 @@ sys.path.append('..')
 
 #%% Page Configuration
 
-st.set_page_config(page_title="Bandbox - Glossary", page_icon=r"app/images/bandbox.png", layout="wide")
+st.set_page_config(page_title="Data Glossary", page_icon=r"app/images/bandbox.png", layout="wide")
 
 #%% Connect to Supabase
 db = st.connection("supabase",type=SupabaseConnection)
