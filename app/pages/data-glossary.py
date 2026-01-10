@@ -12,21 +12,10 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 import sys
 sys.path.append('..')
-from utils import get_auth_manager, get_supabase_client, get_active_organization, get_active_team
 
 #%% Page Configuration
 
 st.set_page_config(page_title="Bandbox - Glossary", page_icon=r"app/images/bandbox.png", layout="wide")
-
-#%% Authentication Check
-auth = get_auth_manager()
-supabase_client = get_supabase_client()
-
-if not auth.check_authentication():
-    st.error("You must be logged in to access this page.")
-    st.stop()
-
-current_user = auth.get_current_user()
 
 #%% Connect to Supabase
 db = st.connection("supabase",type=SupabaseConnection)
