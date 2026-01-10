@@ -15,7 +15,7 @@ sys.path.append('..')
 
 #%% Page Configuration
 
-st.set_page_config(page_title="Data Glossary", page_icon=r"app/images/bandbox.png", layout="wide")
+st.set_page_config(page_title="Data Glossary", page_icon=r"app/images/dp_logo_transparent.png", layout="wide")
 
 #%% Connect to Supabase
 db = st.connection("supabase",type=SupabaseConnection)
@@ -47,7 +47,7 @@ glossary = fetch_table_data('glossary')
 
 #%% Page
 
-st.title("Bandbox Glossary")
+st.title("Data Glossary")
 st.markdown("_Read up on all the data you see throughout the app_")
 st.html(
     '''
