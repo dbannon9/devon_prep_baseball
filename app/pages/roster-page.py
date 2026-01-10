@@ -38,6 +38,7 @@ def fetch_table_data(table_name):
 
 # Fetch data from all tables, then align id to supabase index
 players = fetch_table_data('players')
+users = fetch_table_data('users')
 rapsodo_hitting = fetch_table_data('rapsodo_hitting')
 rapsodo_pitching = fetch_table_data('rapsodo_pitching')
 swings = fetch_table_data('swings')
@@ -184,6 +185,7 @@ with st.form("input_new_players", clear_on_submit=True, enter_to_submit=False, b
     first_name = st.text_input("First Name")
     last_name = st.text_input("Last Name")
     grad_year = st.number_input("HS Graduation Year", value=default_year)
+    email = st.text_input("Email")
     pitcher = st.checkbox("Pitcher?", value=False)
     pos_1 = st.selectbox("Primary Position", positions)
     pos_2 = st.selectbox("Secondary Position", positions)
@@ -207,7 +209,13 @@ if player_submit:
         "pos_3": clean_value(pos_3),
         "rapsodo_id": clean_value(rapsodo_id),
     }
-
     response = db.client.table("players").insert(new_player).execute()
+    new_player_id = response.data[0]["id"]
+    new_user = {
+        "email": clean_value(email),
+        "type": "Player",
+        "player_id": clean_value(new_player_id)
+    }
+    response2 = db.client.table("users")
     st.session_state.form_submitted = True
     st.success("New Player Added")

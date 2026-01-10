@@ -46,6 +46,7 @@ rapsodo_pitching = fetch_table_data('rapsodo_pitching')
 swings = fetch_table_data('swings')
 dk_curves = fetch_table_data('dk_curves')
 video = fetch_table_data('video')
+users = fetch_table_data('users')
 
 #%% Data Adjustments
 
@@ -97,6 +98,10 @@ currentplayers = players_show.query('active == True')
 # Prepare dropdown options
 player_options = players_show['full_name'].to_dict()
 
+#%% User Stuff
+current_user_email = st.user.email
+current_user_type = users.loc[users['email'] == current_user_email, 'type'].iloc[0]
+
 #%% Player Page
 
 st.title('Player Summary Page')
@@ -109,11 +114,15 @@ with playerselectcol:
 
     player_options = dict(zip(active_players.index, active_players['full_name']))
 
-    player_select = st.selectbox(
-        "Player",
-        options=list(player_options.keys()),
-        format_func=lambda id: player_options[id]
-    )
+    if current_user_type == "Player":
+        player_select = users.loc[users['email'] == current_user_email, 'player_id'].iloc[0]
+        st.markdown(f"Showing player data for ***{players.loc[players['id'] == player_select, 'full_name'].iloc[0]}***")
+    else:
+        player_select = st.selectbox(
+            "Player",
+            options=list(player_options.keys()),
+            format_func=lambda id: player_options[id]
+        )
 
 with dateselectcol:
 
@@ -189,7 +198,7 @@ if len(player_dkhit) > 0:
     attack_angle_pct = get_percentile(attack_angle_avg, aa_curve)
     trigger_to_impact_pct = 100 - get_percentile(trigger_to_impact_avg, ti_curve)
     dk_df = pd.DataFrame({
-        'Metric': ['Hand Speed', 'Barrel Speed', 'Trigger', 'Impact', 'Attack Angle'],
+        'Metric': ['Hand Speed', 'Barrel Speed', 'Trigger to Impact', 'Impact Momentum', 'Attack Angle'],
         'Average': [hand_speed_avg, barrel_speed_avg, trigger_to_impact_avg, impact_momentum_avg, attack_angle_avg],
         'Standard Deviation': [hand_speed_std, barrel_speed_std, trigger_to_impact_std, impact_momentum_std, attack_angle_std],
         'Percentile by Class': [hand_speed_pct, barrel_speed_pct, trigger_to_impact_pct, impact_momentum_pct, attack_angle_pct]
