@@ -93,17 +93,22 @@ active_player_options = currentplayers['full_name'].to_dict()
 
 
 #%% Get recent data from table
-
 today_str = date.today().isoformat()
+dk_session_today = dk_sessions["session_date"] == today_str
 
-if len(dk_sessions)==0:
+if len(dk_session_today)==0:
     max_swing_today = 0
 else:
     max_swing_today = (dk_sessions.loc[
-        dk_sessions["session_date"] == today_str,
+        dk_session_today,
         "swing_number"
     ]
     ).max()
+    last_bat_length = (
+        dk_session_today
+        .sort_values("created_at")
+        .iloc[-1]["bat_length"]
+    )
 
 #%% Form
 st.title("DK Session Tracking")
@@ -111,6 +116,7 @@ st.title("DK Session Tracking")
 # form
 session_date = st.date_input("Session Date", value=date.today())
 hitter = st.selectbox("Hitter", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
+bat_length = st.number_input("Bat Length",value=last_bat_length)
 st.markdown(f"_Most recent swing number today: ***{max_swing_today}***_")
 start_swing = st.number_input("Start Swing Number",value=max_swing_today+1)
 end_swing = st.number_input("End Swing Number",value=max_swing_today+5)
