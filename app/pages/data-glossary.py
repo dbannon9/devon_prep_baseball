@@ -49,67 +49,65 @@ glossary = fetch_table_data('glossary')
 
 st.title("Data Glossary")
 st.markdown("_Read up on all the data you see throughout the app_")
-st.html(
-    '''
-    <style>
-    hr {
-        border-color: yellow;
-    }
-    </style>
-    '''
-)
-#%% Hitting Glossary Display
-st.header("Hitting Data", divider="yellow")
 
-# Filter to Hitting only
-hitting_glossary = glossary[glossary['type'] == 'Hitting']
+#%% Tabs
+hitting, pitching = st.tabs(["Hitting", "Pitching"])
 
-# Get ordered levels
-hitting_levels = hitting_glossary['level'].dropna().unique()
+with hitting:
 
-for level in hitting_levels:
-    st.subheader(level, divider="yellow")
+    #%% Hitting Glossary Display
+    st.header("Hitting Data", divider="yellow")
 
-    level_df = hitting_glossary[hitting_glossary['level'] == level]
+    # Filter to Hitting only
+    hitting_glossary = glossary[glossary['type'] == 'Hitting']
 
-    for _, row in level_df.iterrows():
-        expander_label = row['term']
+    # Get ordered levels
+    hitting_levels = hitting_glossary['level'].dropna().unique()
 
-        # Add unit to label if available
-        if pd.notna(row.get('unit')):
-            expander_label += f" ({row['unit']})"
+    for level in hitting_levels:
+        st.subheader(level, divider="yellow")
 
-        with st.expander(expander_label):
-            if row.get('sentence_definition'):
-                st.markdown(f"**Definition:** {row['sentence_definition']}")
+        level_df = hitting_glossary[hitting_glossary['level'] == level]
 
-            if row.get('paragraph_definition'):
-                st.markdown(row['paragraph_definition'])
+        for _, row in level_df.iterrows():
+            expander_label = row['term']
 
-#%% Pitching Glossary Display
-st.header("Pitching Data", divider="yellow")
+            # Add unit to label if available
+            if pd.notna(row.get('unit')):
+                expander_label += f" ({row['unit']})"
 
-# Filter to Pitching only
-pitching_glossary = glossary[glossary['type'] == 'Pitching']
+            with st.expander(expander_label):
+                if row.get('sentence_definition'):
+                    st.markdown(f"**Definition:** {row['sentence_definition']}")
 
-# Get ordered levels
-pitching_levels = pitching_glossary['level'].dropna().unique()
+                if row.get('paragraph_definition'):
+                    st.markdown(row['paragraph_definition'])
 
-for level in pitching_levels:
-    st.subheader(level, divider="yellow")
+with pitching:
+    #%% Pitching Glossary Display
+    st.header("Pitching Data", divider="yellow")
 
-    level_df = pitching_glossary[pitching_glossary['level'] == level]
+    # Filter to Pitching only
+    pitching_glossary = glossary[glossary['type'] == 'Pitching']
 
-    for _, row in level_df.iterrows():
-        expander_label = row['term']
+    # Get ordered levels
+    pitching_levels = pitching_glossary['level'].dropna().unique()
 
-        # Add unit to label if available
-        if pd.notna(row.get('unit')):
-            expander_label += f" ({row['unit']})"
+    for level in pitching_levels:
+        st.subheader(level, divider="yellow")
 
-        with st.expander(expander_label):
-            if row.get('sentence_definition'):
-                st.markdown(f"**Definition:** {row['sentence_definition']}")
+        level_df = pitching_glossary[pitching_glossary['level'] == level]
 
-            if row.get('paragraph_definition'):
-                st.markdown(row['paragraph_definition'])
+        for _, row in level_df.iterrows():
+            expander_label = row['term']
+
+            # Add unit to label if available
+            if pd.notna(row.get('unit')):
+                expander_label += f" ({row['unit']})"
+
+            with st.expander(expander_label):
+                if row.get('sentence_definition'):
+                    st.markdown(f"**Definition:** {row['sentence_definition']}")
+
+                if row.get('paragraph_definition'):
+                    st.markdown(row['paragraph_definition'])
