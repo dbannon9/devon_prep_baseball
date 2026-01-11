@@ -106,7 +106,6 @@ else:
     ).max()
     last_bat_length = (
         dk_session_today
-        .sort_values("created_at")
         .iloc[-1]["bat_length"]
     )
 
