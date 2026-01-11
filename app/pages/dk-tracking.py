@@ -91,30 +91,19 @@ currentplayers = players_show.query('active == True')
 player_options = players_show['full_name'].to_dict()
 active_player_options = currentplayers['full_name'].to_dict()
 
-#%% Rerun logic:
-
-if st.session_state.get("reset_pitch_fields", False):
-
-    for key in [
-        "pitch_type", "v_location", "h_location",
-        "decision", "take_outcome", "swing_outcome", "batted_ball_type"
-    ]:
-        if key in st.session_state:
-            st.session_state[key] = None
-
-    # Clear the flag
-    st.session_state["reset_pitch_fields"] = False
 
 #%% Get recent data from table
+
 today_str = date.today().isoformat()
 
-max_swing_today = (
-    dk_sessions.loc[
+if len(dk_sessions)==0:
+    max_swing_today = 0
+else:
+    max_swing_today = (dk_sessions.loc[
         dk_sessions["session_date"] == today_str,
         "swing_number"
     ]
-    .max()
-)
+    ).max()
 
 #%% Form
 st.title("DK Session Tracking")
