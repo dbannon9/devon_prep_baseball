@@ -129,7 +129,8 @@ if submit:
         {
             "session_date": session_date_iso,
             "swing_number": swing_num,
-            "player_id": hitter
+            "player_id": hitter,
+            "bat_length": bat_length
         }
     for swing_num in range(start_swing, end_swing + 1)
     ]
