@@ -100,7 +100,7 @@ dk_session_today = dk_sessions[
 
 if dk_session_today.empty:
     max_swing_today = 0
-    last_bat_length = None
+    last_bat_length = 32
 else:
     max_swing_today = dk_session_today["swing_number"].max()
     last_bat_length = dk_session_today.iloc[-1]["bat_length"]
