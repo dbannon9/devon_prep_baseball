@@ -94,20 +94,16 @@ active_player_options = currentplayers['full_name'].to_dict()
 
 #%% Get recent data from table
 today_str = date.today().isoformat()
-dk_session_today = dk_sessions["session_date"] == today_str
+dk_session_today = dk_sessions[
+    dk_sessions["session_date"] == today_str
+]
 
-if len(dk_session_today)==0:
+if dk_session_today.empty:
     max_swing_today = 0
+    last_bat_length = None
 else:
-    max_swing_today = (dk_sessions.loc[
-        dk_session_today,
-        "swing_number"
-    ]
-    ).max()
-    last_bat_length = (
-        dk_session_today
-        .iloc[-1]["bat_length"]
-    )
+    max_swing_today = dk_session_today["swing_number"].max()
+    last_bat_length = dk_session_today.iloc[-1]["bat_length"]
 
 #%% Form
 st.title("DK Session Tracking")
