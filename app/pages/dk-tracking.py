@@ -107,11 +107,11 @@ else:
 
 #%% Form
 st.title("DK Session Tracking")
-st.markdown(f"_Most recent swing number today: ***{max_swing_today}***_")
 
 # form
 session_date = st.date_input("Session Date", value=date.today())
 hitter = st.selectbox("Hitter", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
+st.markdown(f"_Most recent swing number today: ***{max_swing_today}***_")
 start_swing = st.number_input("Start Swing Number",value=max_swing_today+1)
 end_swing = st.number_input("End Swing Number",value=max_swing_today+5)
 session_date_iso = session_date.isoformat()
