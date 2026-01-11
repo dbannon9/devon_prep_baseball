@@ -112,7 +112,10 @@ st.title("DK Session Tracking")
 session_date = st.date_input("Session Date", value=date.today())
 hitter = st.selectbox("Hitter", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
 bat_length = st.number_input("Bat Length",value=int(last_bat_length))
-st.markdown(f"_Most recent swing number today: ***{max_swing_today}***_")
+if max_swing_today == 0:
+    st.markdown(f"No swings yet today. Start session below with swing 1.")
+else:
+    st.markdown(f"_Most recent swing number today: ***{max_swing_today}***_")
 start_swing = st.number_input("Start Swing Number",value=int(max_swing_today+1))
 end_swing = st.number_input("End Swing Number",value=int(max_swing_today+5))
 session_date_iso = session_date.isoformat()
