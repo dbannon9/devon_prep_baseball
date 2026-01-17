@@ -385,7 +385,7 @@ ax.set_xlabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
 ax.set_ylabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
 
 # Lock Y range
-ax.set_ylim(45, 75)
+ax.set_ylim(45, 70)
 
 # Grid & ticks
 ax.grid(True, color="lightgray", linestyle="--", linewidth=0.5, alpha=0.5)
