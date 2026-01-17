@@ -437,17 +437,17 @@ ax.set_xlim(150, 240)
 
 # Define middle points for quadrants
 x_mid = dkhit_group['Avg Trigger'].median()  # or a fixed value
-y_mid = (ax.get_ylim()[0] + ax.get_ylim()[1]) / 2
+y_mid = dkhit_group['Avg Barrel Speed'].median()
 
 # Draw vertical and horizontal lines
 ax.axvline(x_mid, color="white", linestyle="--", linewidth=1.2)
 ax.axhline(y_mid, color="white", linestyle="--", linewidth=1.2)
 
 # Color quadrants (light alpha so points still visible)
-ax.fill_betweenx([y_mid, 75], ax.get_xlim()[0], x_mid, color="#ffcccc", alpha=0.1)  # Top left
-ax.fill_betweenx([y_mid, 75], x_mid, ax.get_xlim()[1], color="#ccffcc", alpha=0.1)  # Top right
-ax.fill_betweenx([45, y_mid], x_mid, ax.get_xlim()[1], color="#ccccff", alpha=0.1)  # Bottom right
-ax.fill_betweenx([45, y_mid], ax.get_xlim()[0], x_mid, color="#ffffcc", alpha=0.1)  # Bottom left
+ax.fill_betweenx([y_mid, 75], ax.get_xlim()[0], x_mid, color="#ffcccc")  # Top left
+ax.fill_betweenx([y_mid, 75], x_mid, ax.get_xlim()[1], color="#ccffcc")  # Top right
+ax.fill_betweenx([45, y_mid], x_mid, ax.get_xlim()[1], color="#ccccff")  # Bottom right
+ax.fill_betweenx([45, y_mid], ax.get_xlim()[0], x_mid, color="#ffffcc")  # Bottom left
 
 # Quadrant labels
 ax.text(ax.get_xlim()[0] + 0.5, y_mid + 2, "Short and Powerful", color="white", fontsize=12, weight="bold")
