@@ -353,7 +353,7 @@ else:
 st.subheader("Barrel Speed vs. Trigger to Impact", divider="yellow")
 
 # Slightly wider than tall = square-ish once stretched
-batspeed_fig, ax = plt.subplots(figsize=(10, 7))
+batspeed_fig, ax = plt.subplots(figsize=(10, 5))
 batspeed_fig.patch.set_facecolor("#000e29")
 ax.set_facecolor("#000e29")
 
