@@ -405,9 +405,9 @@ offset_x = 2   # units of X-axis (ms)
 offset_y = 1   # units of Y-axis (mph)
 
 ax.text(150 + offset_x, 70 - offset_y, "Short and Powerful", color="white", fontsize=8, weight="bold", ha="left", va="top") # Top-left
-ax.text(240 - offset_x, 70 - offset_y, "Quick to the Ball, but Lacking Impact", color="white", fontsize=8, weight="bold", ha="right", va="top") # Top-right
+ax.text(240 - offset_x, 70 - offset_y, "Powerful, but Lacking Quickness", color="white", fontsize=8, weight="bold", ha="right", va="top") # Top-right
 ax.text(240 - offset_x, 45 + offset_y, "Long and Slow", color="white", fontsize=8, weight="bold", ha="right", va="bottom") # Bottom-right
-ax.text(150 + offset_x, 45 + offset_y, "Powerful, but Lacking Quickness", color="white", fontsize=8, weight="bold", ha="left", va="bottom") # Bottom-left
+ax.text(150 + offset_x, 45 + offset_y, "Quick to the Ball, but Lacking Impact", color="white", fontsize=8, weight="bold", ha="left", va="bottom") # Bottom-left
 
 # Labels
 ax.set_xlabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
