@@ -386,7 +386,7 @@ ax.set_ylabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
 
 # Lock Y and X range
 ax.set_ylim(45, 70)
-ax.set_xlim(160, 230)
+ax.set_xlim(150, 240)
 
 # Grid & ticks
 ax.grid(True, color="lightgray", linestyle="--", linewidth=0.5, alpha=0.5)
