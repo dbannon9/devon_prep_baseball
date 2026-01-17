@@ -400,6 +400,77 @@ for spine in ax.spines.values():
 st.pyplot(batspeed_fig, use_container_width=True)
 
 
+#%% TESTING NEW PLOT STUFF
+
+st.subheader("Barrel Speed vs. Trigger to Impact", divider="yellow")
+
+batspeed_fig, ax = plt.subplots(figsize=(10, 5))
+batspeed_fig.patch.set_facecolor("#000e29")
+ax.set_facecolor("#000e29")
+
+# Scatter plot
+ax.scatter(
+    dkhit_group['Avg Trigger'],
+    dkhit_group['Avg Barrel Speed'],
+    color="#f1d71c",
+    edgecolor="white",
+    s=90,
+    alpha=0.9
+)
+
+# Optional labels
+for _, row in dkhit_group.iterrows():
+    ax.text(
+        row['Avg Trigger'],
+        row['Avg Barrel Speed'],
+        row['Player'],
+        fontsize=10,
+        color="white",
+        ha="left",
+        va="bottom",
+        alpha=0.9
+    )
+
+# Lock Y range
+ax.set_ylim(45, 70)
+ax.set_xlim(150, 240)
+
+# Define middle points for quadrants
+x_mid = dkhit_group['Avg Trigger'].median()  # or a fixed value
+y_mid = (ax.get_ylim()[0] + ax.get_ylim()[1]) / 2
+
+# Draw vertical and horizontal lines
+ax.axvline(x_mid, color="white", linestyle="--", linewidth=1.2)
+ax.axhline(y_mid, color="white", linestyle="--", linewidth=1.2)
+
+# Color quadrants (light alpha so points still visible)
+ax.fill_betweenx([y_mid, 75], ax.get_xlim()[0], x_mid, color="#ffcccc", alpha=0.1)  # Top left
+ax.fill_betweenx([y_mid, 75], x_mid, ax.get_xlim()[1], color="#ccffcc", alpha=0.1)  # Top right
+ax.fill_betweenx([45, y_mid], x_mid, ax.get_xlim()[1], color="#ccccff", alpha=0.1)  # Bottom right
+ax.fill_betweenx([45, y_mid], ax.get_xlim()[0], x_mid, color="#ffffcc", alpha=0.1)  # Bottom left
+
+# Quadrant labels
+ax.text(ax.get_xlim()[0] + 0.5, y_mid + 2, "Short and Powerful", color="white", fontsize=12, weight="bold")
+ax.text(x_mid + 0.5, y_mid + 2, "Quick to the Ball, but Lacking Impact", color="white", fontsize=12, weight="bold")
+ax.text(x_mid + 0.5, y_mid - 8, "Long and Slow", color="white", fontsize=12, weight="bold")
+ax.text(ax.get_xlim()[0] + 0.5, y_mid - 8, "Powerful, but Lacking Quickness", color="white", fontsize=12, weight="bold")
+
+# Labels
+ax.set_xlabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
+ax.set_ylabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
+
+# Grid & ticks
+ax.grid(True, color="lightgray", linestyle="--", linewidth=0.5, alpha=0.5)
+ax.tick_params(colors="white", labelsize=12)
+
+# Spines
+for spine in ax.spines.values():
+    spine.set_color("white")
+
+# Render
+st.pyplot(batspeed_fig, use_container_width=True)
+
+
 #%% Rapsodo Hitting
 
 # st.subheader("Rapsodo Leaderboard", divider = "yellow")
