@@ -352,26 +352,26 @@ else:
 
 st.subheader("Barrel Speed vs. Trigger to Impact", divider="yellow")
 
-# Create figure (square, but will stretch nicely in Streamlit)
+# Create figure
 batspeed_fig, ax = plt.subplots(figsize=(9, 9))
 batspeed_fig.patch.set_facecolor("#000e29")
 ax.set_facecolor("#000e29")
 
-# Scatter plot — all points yellow
+# Scatter plot — FLIPPED AXES
 ax.scatter(
-    dkhit_group['Avg Barrel Speed'],
     dkhit_group['Avg Trigger'],
+    dkhit_group['Avg Barrel Speed'],
     color="#f1d71c",
     edgecolor="white",
     s=90,
     alpha=0.9
 )
 
-# OPTIONAL: label each player
+# OPTIONAL: label each player (flipped)
 for _, row in dkhit_group.iterrows():
     ax.text(
-        row['Avg Barrel Speed'],
         row['Avg Trigger'],
+        row['Avg Barrel Speed'],
         row['Player'],
         fontsize=10,
         color="white",
@@ -380,9 +380,9 @@ for _, row in dkhit_group.iterrows():
         alpha=0.9
     )
 
-# Axis labels
-ax.set_xlabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
-ax.set_ylabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
+# Axis labels (flipped)
+ax.set_xlabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
+ax.set_ylabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
 
 # Grid & ticks
 ax.grid(True, color="lightgray", linestyle="--", linewidth=0.5, alpha=0.5)
@@ -392,7 +392,7 @@ ax.tick_params(colors="white", labelsize=12)
 for spine in ax.spines.values():
     spine.set_color("white")
 
-# Force square feel
+# Keep as-is for now (we'll fix this next)
 ax.set_aspect("equal", adjustable="box")
 
 # Render full-width
