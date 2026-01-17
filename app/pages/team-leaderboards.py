@@ -403,6 +403,7 @@ st.pyplot(batspeed_fig, use_container_width=True)
 #%% TESTING NEW PLOT STUFF
 
 st.subheader("Barrel Speed vs. Trigger to Impact", divider="yellow")
+show_names = st.toggle("Show Player Names?",value=True)
 
 batspeed_fig, ax = plt.subplots(figsize=(10, 5))
 batspeed_fig.patch.set_facecolor("#000e29")
@@ -421,16 +422,17 @@ ax.scatter(
 
 # Optional labels
 for _, row in dkhit_group.iterrows():
-    ax.text(
-        row['Avg Trigger'],
-        row['Avg Barrel Speed'],
-        row['Player'],
-        fontsize=10,
-        color="white",
-        ha="left",
-        va="bottom",
-        alpha=0.9
-    )
+    if show_names:
+        ax.text(
+            row['Avg Trigger'],
+            row['Avg Barrel Speed'],
+            row['Player'],
+            fontsize=10,
+            color="white",
+            ha="left",
+            va="bottom",
+            alpha=0.9
+        )
 
 # Lock Axes
 ax.set_ylim(45, 70)
