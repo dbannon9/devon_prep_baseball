@@ -352,53 +352,51 @@ else:
 
 st.subheader("Barrel Speed vs. Trigger to Impact", divider="yellow")
 
-st.write(dkhit_group.columns)
+# Create figure (square, but will stretch nicely in Streamlit)
+batspeed_fig, ax = plt.subplots(figsize=(9, 9))
+batspeed_fig.patch.set_facecolor("#000e29")
+ax.set_facecolor("#000e29")
 
-# # Create figure (square, but will stretch nicely in Streamlit)
-# batspeed_fig, ax = plt.subplots(figsize=(9, 9))
-# batspeed_fig.patch.set_facecolor("#000e29")
-# ax.set_facecolor("#000e29")
+# Scatter plot — all points yellow
+ax.scatter(
+    dkhit_group['Avg Barrel Speed'],
+    dkhit_group['Avg Trigger'],
+    color="#f1d71c",
+    edgecolor="white",
+    s=90,
+    alpha=0.9
+)
 
-# # Scatter plot — all points yellow
-# ax.scatter(
-#     dkhit_group['Avg Barrel Speed'],
-#     dkhit_group['Avg Trigger'],
-#     color="#f1d71c",
-#     edgecolor="white",
-#     s=90,
-#     alpha=0.9
-# )
+# OPTIONAL: label each player
+for _, row in dkhit_group.iterrows():
+    ax.text(
+        row['Avg Barrel Speed'],
+        row['Avg Trigger'],
+        row['Player'],
+        fontsize=10,
+        color="white",
+        ha="left",
+        va="bottom",
+        alpha=0.9
+    )
 
-# # OPTIONAL: label each player
-# for _, row in dkhit_group.iterrows():
-#     ax.text(
-#         row['Avg Barrel Speed'],
-#         row['Avg Trigger'],
-#         row['full_name'],
-#         fontsize=10,
-#         color="white",
-#         ha="left",
-#         va="bottom",
-#         alpha=0.9
-#     )
+# Axis labels
+ax.set_xlabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
+ax.set_ylabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
 
-# # Axis labels
-# ax.set_xlabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
-# ax.set_ylabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
+# Grid & ticks
+ax.grid(True, color="lightgray", linestyle="--", linewidth=0.5, alpha=0.5)
+ax.tick_params(colors="white", labelsize=12)
 
-# # Grid & ticks
-# ax.grid(True, color="lightgray", linestyle="--", linewidth=0.5, alpha=0.5)
-# ax.tick_params(colors="white", labelsize=12)
+# Spines
+for spine in ax.spines.values():
+    spine.set_color("white")
 
-# # Spines
-# for spine in ax.spines.values():
-#     spine.set_color("white")
+# Force square feel
+ax.set_aspect("equal", adjustable="box")
 
-# # Force square feel
-# ax.set_aspect("equal", adjustable="box")
-
-# # Render full-width
-# st.pyplot(batspeed_fig, use_container_width=True)
+# Render full-width
+st.pyplot(batspeed_fig, use_container_width=True)
 
 
 #%% Rapsodo Hitting
