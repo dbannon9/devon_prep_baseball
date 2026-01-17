@@ -431,7 +431,7 @@ for _, row in dkhit_group.iterrows():
         alpha=0.9
     )
 
-# Lock Y range
+# Lock Axes
 ax.set_ylim(45, 70)
 ax.set_xlim(150, 240)
 
@@ -444,16 +444,19 @@ ax.axvline(x_mid, color="white", linestyle="--", linewidth=1.2)
 ax.axhline(y_mid, color="white", linestyle="--", linewidth=1.2)
 
 # Color quadrants (light alpha so points still visible)
-ax.fill_betweenx([y_mid, 75], ax.get_xlim()[0], x_mid, color="#ffcccc")  # Top left
-ax.fill_betweenx([y_mid, 75], x_mid, ax.get_xlim()[1], color="#ccffcc")  # Top right
-ax.fill_betweenx([45, y_mid], x_mid, ax.get_xlim()[1], color="#ccccff")  # Bottom right
-ax.fill_betweenx([45, y_mid], ax.get_xlim()[0], x_mid, color="#ffffcc")  # Bottom left
+ax.fill_betweenx([y_mid, 75], ax.get_xlim()[0], x_mid, color="#1b7e00", alpha=0.1)  # Top left
+ax.fill_betweenx([y_mid, 75], x_mid, ax.get_xlim()[1], color="#f1d71c", alpha=0.1)  # Top right
+ax.fill_betweenx([45, y_mid], x_mid, ax.get_xlim()[1], color="#ff0000", alpha=0.1)  # Bottom right
+ax.fill_betweenx([45, y_mid], ax.get_xlim()[0], x_mid, color="#f1d71c", alpha=0.1)  # Bottom left
 
-# Quadrant labels
-ax.text(ax.get_xlim()[0] + 0.5, y_mid + 2, "Short and Powerful", color="white", fontsize=12, weight="bold")
-ax.text(x_mid + 0.5, y_mid + 2, "Quick to the Ball, but Lacking Impact", color="white", fontsize=12, weight="bold")
-ax.text(x_mid + 0.5, y_mid - 8, "Long and Slow", color="white", fontsize=12, weight="bold")
-ax.text(ax.get_xlim()[0] + 0.5, y_mid - 8, "Powerful, but Lacking Quickness", color="white", fontsize=12, weight="bold")
+# Offsets to keep text inside the plot
+offset_x = 2   # units of X-axis (ms)
+offset_y = 1   # units of Y-axis (mph)
+
+ax.text(150 + offset_x, 70 - offset_y, "Short and Powerful", color="white", fontsize=8, weight="bold", ha="left", va="top") # Top-left
+ax.text(240 - offset_x, 70 - offset_y, "Quick to the Ball, but Lacking Impact", color="white", fontsize=8, weight="bold", ha="right", va="top") # Top-right
+ax.text(240 - offset_x, 45 + offset_y, "Long and Slow", color="white", fontsize=8, weight="bold", ha="right", va="bottom") # Bottom-right
+ax.text(150 + offset_x, 45 + offset_y, "Powerful, but Lacking Quickness", color="white", fontsize=8, weight="bold", ha="left", va="bottom")# Bottom-left
 
 # Labels
 ax.set_xlabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
