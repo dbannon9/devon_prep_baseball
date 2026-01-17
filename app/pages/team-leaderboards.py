@@ -352,12 +352,12 @@ else:
 
 st.subheader("Barrel Speed vs. Trigger to Impact", divider="yellow")
 
-# Create figure
-batspeed_fig, ax = plt.subplots(figsize=(9, 9))
+# Create figure — taller than wide
+batspeed_fig, ax = plt.subplots(figsize=(9, 11))
 batspeed_fig.patch.set_facecolor("#000e29")
 ax.set_facecolor("#000e29")
 
-# Scatter plot — FLIPPED AXES
+# Scatter plot (Trigger on X, Barrel Speed on Y)
 ax.scatter(
     dkhit_group['Avg Trigger'],
     dkhit_group['Avg Barrel Speed'],
@@ -367,7 +367,7 @@ ax.scatter(
     alpha=0.9
 )
 
-# OPTIONAL: label each player (flipped)
+# Optional: player labels
 for _, row in dkhit_group.iterrows():
     ax.text(
         row['Avg Trigger'],
@@ -380,9 +380,12 @@ for _, row in dkhit_group.iterrows():
         alpha=0.9
     )
 
-# Axis labels (flipped)
+# Axis labels
 ax.set_xlabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
 ax.set_ylabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
+
+# Lock vertical range
+ax.set_ylim(45, 75)
 
 # Grid & ticks
 ax.grid(True, color="lightgray", linestyle="--", linewidth=0.5, alpha=0.5)
@@ -392,10 +395,7 @@ ax.tick_params(colors="white", labelsize=12)
 for spine in ax.spines.values():
     spine.set_color("white")
 
-# Keep as-is for now (we'll fix this next)
-ax.set_aspect("equal", adjustable="box")
-
-# Render full-width
+# Render full-width without vertical explosion
 st.pyplot(batspeed_fig, use_container_width=True)
 
 
