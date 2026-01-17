@@ -415,7 +415,8 @@ ax.scatter(
     color="#f1d71c",
     edgecolor="white",
     s=90,
-    alpha=0.9
+    alpha=0.9,
+    zorder=5
 )
 
 # Optional labels
