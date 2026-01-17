@@ -229,8 +229,8 @@ dkhit_group.rename(columns={
     'barrel_z_std': 'Std Barrel Z'
 }, inplace=True)
 
-##dkhit_group.sort_values(by='Avg Barrel Speed', ascending=False, inplace=True)
-##dkhit_group = dkhit_group.round(2)
+dkhit_group.sort_values(by='Avg Barrel Speed', ascending=False, inplace=True)
+dkhit_group = dkhit_group.round(2)
 
 #%% Prepare Rapsodo Hitting Data
 
@@ -332,11 +332,6 @@ st.subheader("Diamond Kinetics Leaderboard",divider = "yellow")
 if len(dkhit_group) == 0:
     st.write("No Data Available for Selected Dates and Classes")
 else:
-    ## DEBUG TRIGGER ##
-    st.write(
-    dkhit_group[['Avg Trigger', 'Std Trigger']].isna().all()
-    )
-    ## END DEBUG TRIGGER, uncomment sort and round! ##
     st.dataframe(dkhit_group[['Player', 'Class', 'Avg Attack Angle', 'Std Attack Angle', 'Avg Barrel Speed', 'Std Barrel Speed', 'Avg Hand Speed', 'Std Hand Speed', 'Avg Trigger', 'Std Trigger', 'Avg Impact','Std Impact']],
                     hide_index=True,
                     column_config={
