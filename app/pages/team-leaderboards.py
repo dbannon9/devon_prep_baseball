@@ -229,6 +229,12 @@ dkhit_group.rename(columns={
     'barrel_z_std': 'Std Barrel Z'
 }, inplace=True)
 
+## DEBUG TRIGGER ##
+st.write(
+    dkhit_group[['Avg Trigger', 'Std Trigger']].isna().all()
+)
+
+
 dkhit_group.sort_values(by='Avg Barrel Speed', ascending=False, inplace=True)
 dkhit_group = dkhit_group.round(2)
 
