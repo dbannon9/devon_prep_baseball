@@ -384,8 +384,9 @@ for _, row in dkhit_group.iterrows():
 ax.set_xlabel("Avg Trigger (ms)", color="white", fontsize=14, labelpad=10)
 ax.set_ylabel("Avg Barrel Speed (mph)", color="white", fontsize=14, labelpad=10)
 
-# Lock Y range
+# Lock Y and X range
 ax.set_ylim(45, 70)
+ax.set_xlim(160, 220)
 
 # Grid & ticks
 ax.grid(True, color="lightgray", linestyle="--", linewidth=0.5, alpha=0.5)
