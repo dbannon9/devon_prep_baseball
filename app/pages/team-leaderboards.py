@@ -168,6 +168,9 @@ dkhit_group = dkhit.groupby('player_id').agg(
     impact_momentum_avg=('impact_momentum', 'mean'),
     impact_momentum_std=('impact_momentum', 'std'),
 
+    trigger_to_impact_avg=('trigger_to_impact', 'mean'),
+    trigger_to_impact_std=('trigger_to_impact', 'std'),
+
     hand_cast_avg=('hand_cast', 'mean'),
     hand_cast_std=('hand_cast', 'std'),
 
@@ -209,6 +212,9 @@ dkhit_group.rename(columns={
 
     'impact_momentum_avg': 'Avg Impact',
     'impact_momentum_std': 'Std Impact',
+
+    'trigger_to_impact_avg': 'Avg Trigger',
+    'trigger_to_impact_std': 'Std Trigger',
 
     'hand_cast_avg': 'Avg Hand Cast',
     'hand_cast_std': 'Std Hand Cast',
