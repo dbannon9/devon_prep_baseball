@@ -81,32 +81,32 @@ if st.user.is_logged_in:
         st.write("You do not have access to this app. Please contact your coach.")
     else:
         current_user_type = users.loc[users['email'] == current_user_email, 'type'].iloc[0]
-    if current_user_type == "Player":
-        #%% page definitions
-        player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
-        glossary = st.Page("pages/data-glossary.py",title="Data Glossary",icon=":material/dictionary:")
-        nav = st.navigation([
-            player_page,
-            glossary
-        ])
-    else:
-        roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
-        team_leaderboards = st.Page("pages/team-leaderboards.py",title="Leaderboards",icon=":material/social_leaderboard:")
-        player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
-        plate_discipline_tracking = st.Page("pages/plate-discipline-tracking.py",title="Plate Discipline Tracking",icon=":material/background_dot_small:")
-        dk_sessions = st.Page("pages/dk-tracking.py",title="DK Session Tracking",icon=":material/diamond:")
-        data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
-        video_upload = st.Page("pages/video-upload-testing.py",title="Video Upload",icon=":material/videocam:")
-        glossary = st.Page("pages/data-glossary.py",title="Data Glossary",icon=":material/dictionary:")
-        nav = st.navigation([
-            roster,
-            team_leaderboards,
-            player_page,
-            plate_discipline_tracking,
-            dk_sessions,
-            data_input,
-            video_upload,
-            glossary
-        ])
-        nav.run()
+        if current_user_type == "Player":
+            #%% page definitions
+            player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
+            glossary = st.Page("pages/data-glossary.py",title="Data Glossary",icon=":material/dictionary:")
+            nav = st.navigation([
+                player_page,
+                glossary
+            ])
+        else:
+            roster = st.Page("pages/roster-page.py",title="Home",icon=":material/tsunami:")
+            team_leaderboards = st.Page("pages/team-leaderboards.py",title="Leaderboards",icon=":material/social_leaderboard:")
+            player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
+            plate_discipline_tracking = st.Page("pages/plate-discipline-tracking.py",title="Plate Discipline Tracking",icon=":material/background_dot_small:")
+            dk_sessions = st.Page("pages/dk-tracking.py",title="DK Session Tracking",icon=":material/diamond:")
+            data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
+            video_upload = st.Page("pages/video-upload-testing.py",title="Video Upload",icon=":material/videocam:")
+            glossary = st.Page("pages/data-glossary.py",title="Data Glossary",icon=":material/dictionary:")
+            nav = st.navigation([
+                roster,
+                team_leaderboards,
+                player_page,
+                plate_discipline_tracking,
+                dk_sessions,
+                data_input,
+                video_upload,
+                glossary
+            ])
+            nav.run()
 else: ""
