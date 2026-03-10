@@ -77,10 +77,11 @@ with st.sidebar:
 
 if st.user.is_logged_in:
     current_user_email = st.user.email
-    current_user_type = users.loc[users['email'] == current_user_email, 'type'].iloc[0]
     if not users['email'].isin([st.user.email]).any():
         st.write("You do not have access to this app. Please contact your coach.")
-    elif current_user_type == "Player":
+    else:
+        current_user_type = users.loc[users['email'] == current_user_email, 'type'].iloc[0]
+    if current_user_type == "Player":
         #%% page definitions
         player_page = st.Page("pages/player-page.py",title="Player Summary",icon=":material/bar_chart:")
         glossary = st.Page("pages/data-glossary.py",title="Data Glossary",icon=":material/dictionary:")
