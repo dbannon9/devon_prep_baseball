@@ -132,10 +132,16 @@ for timeframe in goals_sorted["timeframe"].unique():
     with st.expander(f"{timeframe}"):
 
         for _, row in df_timeframe.iterrows():
-            st.markdown(f"**Statistic: ** {row['statistic']}")
-            st.markdown(f"**Baseline: ** {row['baseline']}")
-            st.markdown(f"**Target: ** {row['target']}")
-            st.markdown("---")  # optional divider between records
+            st.markdown(
+                f"""
+                <b>Statistic:</b> {row['statistic']}<br>
+                <b>Baseline:</b> {row['baseline']}<br>
+                <b>Target:</b> {row['target']}
+                <hr>
+                """,
+                unsafe_allow_html=True
+            )
+
 
 # # # # # # #%% Input New Players
 
