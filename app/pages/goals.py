@@ -131,6 +131,8 @@ for timeframe in goals_sorted["timeframe"].unique():
     goal_num = 1
     with st.expander(f"{timeframe}"):
         goal_len = len(df_timeframe)
+        if goal_len > goal_num:
+            st.divider()
         for _, row in df_timeframe.iterrows():
             st.subheader(f"Goal #{goal_num}")
             st.markdown(
@@ -142,11 +144,7 @@ for timeframe in goals_sorted["timeframe"].unique():
                 """,
                 unsafe_allow_html=True
             )
-            if goal_len > goal_num:
-                st.divider()
-                goal_num = goal_num + 1
-            else:
-                goal_num = goal_num + 1        
+            goal_num = goal_num + 1     
 
 
 # # # # # # #%% Input New Players
