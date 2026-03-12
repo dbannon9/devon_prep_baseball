@@ -128,19 +128,17 @@ for timeframe in goals_sorted["timeframe"].unique():
 
     # Filter dataframe for that timeframe
     df_timeframe = goals_sorted[goals_sorted["timeframe"] == timeframe]
-
+    goal_num = 1
     with st.expander(f"{timeframe}"):
 
         for _, row in df_timeframe.iterrows():
-            st.markdown(
-                f"""
-                <b>Statistic:</b> {row['statistic']}<br>
-                <b>Baseline:</b> {row['baseline']}<br>
-                <b>Target:</b> {row['target']}
-                <hr>
-                """,
-                unsafe_allow_html=True
-            )
+            st.header(f"Goal {goal_num}")
+            st.write("**Statistic:**", row["statistic"])
+            st.write("**Baseline:**", row["baseline"])
+            st.write("**Target:**", row["target"])
+            goal_num = goal_num + 1
+            st.divider()
+        
 
 
 # # # # # # #%% Input New Players
