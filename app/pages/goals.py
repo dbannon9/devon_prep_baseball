@@ -145,7 +145,8 @@ for timeframe in goals_sorted["timeframe"].unique():
             goal_num = goal_num + 1
             if goal_len < goal_num:
                 st.divider()
-            else:                
+            else:
+                st.write("")                
         
 
 
