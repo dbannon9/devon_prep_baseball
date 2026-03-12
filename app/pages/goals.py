@@ -142,12 +142,11 @@ for timeframe in goals_sorted["timeframe"].unique():
                 """,
                 unsafe_allow_html=True
             )
-            goal_num = goal_num + 1
             if goal_len > goal_num:
                 st.divider()
+                goal_num = goal_num + 1
             else:
-                st.write("")                
-        
+                goal_num = goal_num + 1        
 
 
 # # # # # # #%% Input New Players
