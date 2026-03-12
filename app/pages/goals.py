@@ -130,7 +130,7 @@ for timeframe in goals_sorted["timeframe"].unique():
     df_timeframe = goals_sorted[goals_sorted["timeframe"] == timeframe]
     goal_num = 1
     with st.expander(f"{timeframe}"):
-        goal_len = len(timeframe)
+        goal_len = len(df_timeframe)
         for _, row in df_timeframe.iterrows():
             st.subheader(f"Goal #{goal_num}")
             st.markdown(
