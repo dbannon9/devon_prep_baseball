@@ -146,47 +146,45 @@ for timeframe in goals_sorted["timeframe"].unique():
             goal_num = goal_num + 1     
 
 
-# # # # # # #%% Input New Players
+# #%% Input New Goals
 
-# # # # # # st.subheader("Input New Players", divider="yellow")
-# # # # # # default_year = datetime.now().year + 4
-# # # # # # positions = [None, "C", "1B", "2B", "3B", "SS", "OF", "UT"]
+st.subheader("Input New Goals", divider="yellow")
+next_year = datetime.now().year + 1
+this_year = datetime.now().year
+last_year = datetime.now().year - 1
+goal_timeframes = [f"{next_year} Season", f"{next_year} Offseason", f"{this_year} Season", f"{this_year} Offseason", f"{last_year} Season", f"{last_year} Offseason"]
+# stat_options = [""] # COME BACK TO STAT OPTIONS
 
-# # # # # # with st.form("input_new_players", clear_on_submit=True, enter_to_submit=False, border=True):
-# # # # # #     first_name = st.text_input("First Name")
-# # # # # #     last_name = st.text_input("Last Name")
-# # # # # #     grad_year = st.number_input("HS Graduation Year", value=default_year)
-# # # # # #     email = st.text_input("Email")
-# # # # # #     pitcher = st.checkbox("Pitcher?", value=False)
-# # # # # #     pos_1 = st.selectbox("Primary Position", positions)
-# # # # # #     pos_2 = st.selectbox("Secondary Position", positions)
-# # # # # #     pos_3 = st.selectbox("Tertiary Position", positions)
-# # # # # #     rapsodo_id = st.text_input("Rapsodo ID")
-# # # # # #     player_submit = st.form_submit_button(label="Submit")
+with st.form("input_new_goals", clear_on_submit=True, enter_to_submit=False, border=True):
+    player_id = st.selectbox("Player", player_options)
+    timeframe = st.selectbox("Timeframe", goal_timeframes)
+    statistic = st.text_input("Statistic")
+    is_measurable = st.checkbox("Measurable?",value=True)
+    baseline = st.number_input("Baseline") # COME BACK TO CONTINGENT NUMBER TYPES BY STAT OPTION
+    target = st.number_input("Target", value=False) # COME BACK TO CONTINGENT NUMBER TYPES BY STAT OPTION
+    goal_submit = st.form_submit_button(label="Submit")
 
-# # # # # # def clean_value(value):
-# # # # # #     if value in ("", None):
-# # # # # #         return None
-# # # # # #     return value
+def clean_value(value):
+    if value in ("", None):
+        return None
+    return value
 
-# # # # # # if player_submit:
-# # # # # #     new_player = {
-# # # # # #         "first_name": clean_value(first_name),
-# # # # # #         "last_name": clean_value(last_name),
-# # # # # #         "grad_year": clean_value(grad_year),
-# # # # # #         "pitcher": clean_value(pitcher),
-# # # # # #         "pos_1": clean_value(pos_1),
-# # # # # #         "pos_2": clean_value(pos_2),
-# # # # # #         "pos_3": clean_value(pos_3),
-# # # # # #         "rapsodo_id": clean_value(rapsodo_id),
-# # # # # #     }
-# # # # # #     response = db.client.table("players").insert(new_player).execute()
-# # # # # #     new_player_id = response.data[0]["id"]
-# # # # # #     new_user = {
-# # # # # #         "email": clean_value(email),
-# # # # # #         "type": "Player",
-# # # # # #         "player_id": clean_value(new_player_id)
-# # # # # #     }
-# # # # # #     response2 = db.client.table("users")
-# # # # # #     st.session_state.form_submitted = True
-# # # # # #     st.success("New Player Added")
+if goal_submit:
+    new_goal = {
+        "player_id": clean_value(player_id),
+        "timeframe": clean_value(timeframe),
+        "statistic": clean_value(statistic),
+        "is_measurable": is_measurable,
+        "baseline": clean_value(baseline),
+        "target": clean_value(target),
+    }
+#     response = db.client.table("players").insert(new_player).execute()
+#     new_player_id = response.data[0]["id"]
+#     new_user = {
+#         "email": clean_value(email),
+#         "type": "Player",
+#         "player_id": clean_value(new_player_id)
+#     }
+#     response2 = db.client.table("users")
+#     st.session_state.form_submitted = True
+#     st.success("New Player Added")
