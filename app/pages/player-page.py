@@ -103,7 +103,7 @@ current_user_email = st.user.email
 current_user_type = users.loc[users['email'] == current_user_email, 'type'].iloc[0]
 
 #%% Player Page
-
+exclude_low_intent=False
 st.title('Player Summary Page')
 
 playerselectcol, dateselectcol = st.columns(2, gap="medium", border=True)
@@ -263,120 +263,125 @@ player_raphit = player_raphit[
 
 
 #%% Prepare Rapsodo Pitching Stats
+def prep_rapsodo_pitching_stats():
+    # merge player_id onto rapsodo data
+    rappitch = rapsodo_pitching.merge(
+        players_reset,left_on='Player ID', right_on='rapsodo_id', how='left'
+        ).rename(columns = {'id':'player_id'})
 
-# merge player_id onto rapsodo data
-rappitch = rapsodo_pitching.merge(
-    players_reset,left_on='Player ID', right_on='rapsodo_id', how='left'
-    ).rename(columns = {'id':'player_id'})
+    pitch_type_replace_dict = {
+        "Fastball": "Four Seam",
+        "Other": "Other",
+        "-": "-",
+        "Splitter": "Splitter",
+        "Slider": "Slider",
+        "Cutter": "Cutter",
+        "ChangeUp": "Changeup",
+        "CurveBall": "Curveball",
+        "TwoSeamFastball": "Two Seam"
+    }
 
-pitch_type_replace_dict = {
-    "Fastball": "Four Seam",
-    "Other": "Other",
-    "-": "-",
-    "Splitter": "Splitter",
-    "Slider": "Slider",
-    "Cutter": "Cutter",
-    "ChangeUp": "Changeup",
-    "CurveBall": "Curveball",
-    "TwoSeamFastball": "Two Seam"
-}
+    # color map by pitch type
+    pitch_colors = {
+        "Four Seam": "#c63316",
+        "Other": "#ffffff",
+        "-": "#ffffff",
+        "Splitter": "#fa7100",
+        "Slider": "#984893",
+        "Cutter": "#4d30ff",
+        "Changeup": "#f3ae00",
+        "Curveball": "#46a576",
+        "Two Seam": "#4f8fff"
+    }
 
-# color map by pitch type
-pitch_colors = {
-    "Four Seam": "#c63316",
-    "Other": "#ffffff",
-    "-": "#ffffff",
-    "Splitter": "#fa7100",
-    "Slider": "#984893",
-    "Cutter": "#4d30ff",
-    "Changeup": "#f3ae00",
-    "Curveball": "#46a576",
-    "Two Seam": "#4f8fff"
-}
+    rappitch["Pitch Type"] = rappitch["Pitch Type"].replace(pitch_type_replace_dict)
 
-rappitch["Pitch Type"] = rappitch["Pitch Type"].replace(pitch_type_replace_dict)
+    player_rappitch = rappitch[rappitch['player_id']==player_select]
+    player_rappitch['Date'] = pd.to_datetime(player_rappitch['Date'], errors='coerce')
+    player_rappitch = player_rappitch[
+        (player_rappitch['Date'] >= pd.to_datetime(start_date)) & 
+        (player_rappitch['Date'] <= pd.to_datetime(end_date))
+    ]
 
-player_rappitch = rappitch[rappitch['player_id']==player_select]
-player_rappitch['Date'] = pd.to_datetime(player_rappitch['Date'], errors='coerce')
-player_rappitch = player_rappitch[
-    (player_rappitch['Date'] >= pd.to_datetime(start_date)) & 
-    (player_rappitch['Date'] <= pd.to_datetime(end_date))
-]
+    #low_intent exclusion logic
+    if exclude_low_intent:
+        player_rappitch = player_rappitch[player_rappitch["Intent Type"]=="high_intent"]
 
-# clean up data
-player_rappitch_clean = player_rappitch[
-    player_rappitch['Pitch Type'].notna() & (player_rappitch['Pitch Type'] != "-") & (player_rappitch['Pitch Type'] != "Other")
-]
+    # clean up data
+    player_rappitch_clean = player_rappitch[
+        player_rappitch['Pitch Type'].notna() & (player_rappitch['Pitch Type'] != "-") & (player_rappitch['Pitch Type'] != "Other")
+    ]
 
-# List of columns to convert to numeric
-numeric_cols = [
-    'HB (trajectory)',
-    'VB (trajectory)',
-    'Velocity',
-    'Total Spin',
-    'Spin Efficiency (release)',
-    'Release Angle',
-    'Release Height',
-    'Release Side'
-]
+    # List of columns to convert to numeric
+    numeric_cols = [
+        'HB (trajectory)',
+        'VB (trajectory)',
+        'Velocity',
+        'Total Spin',
+        'Spin Efficiency (release)',
+        'Release Angle',
+        'Release Height',
+        'Release Side'
+    ]
 
-# Convert all columns to numeric
-for col in numeric_cols:
-    player_rappitch_clean[col] = pd.to_numeric(player_rappitch_clean[col], errors='coerce')
+    # Convert all columns to numeric
+    for col in numeric_cols:
+        player_rappitch_clean[col] = pd.to_numeric(player_rappitch_clean[col], errors='coerce')
 
-# Group by Pitch Type: calculate mean and std
-pitch_types_stats = (
-    player_rappitch_clean
-    .groupby('Pitch Type')[numeric_cols]
-    .agg(['mean', 'std'])
-    .reset_index()
-)
+    # Group by Pitch Type: calculate mean and std
+    pitch_types_stats = (
+        player_rappitch_clean
+        .groupby('Pitch Type')[numeric_cols]
+        .agg(['mean', 'std'])
+        .reset_index()
+    )
 
-# Flatten multi-index columns
-pitch_types_stats.columns = ['_'.join(col).rstrip('_') for col in pitch_types_stats.columns.values]
+    # Flatten multi-index columns
+    pitch_types_stats.columns = ['_'.join(col).rstrip('_') for col in pitch_types_stats.columns.values]
 
-# Merge counts
-pitch_counts = (
-    player_rappitch_clean
-    .groupby('Pitch Type')
-    .size()
-    .reset_index(name='#')
-)
+    # Merge counts
+    pitch_counts = (
+        player_rappitch_clean
+        .groupby('Pitch Type')
+        .size()
+        .reset_index(name='#')
+    )
 
-pitch_types_player_rappitch = pitch_types_stats.merge(pitch_counts, left_on='Pitch Type', right_on='Pitch Type')
-pitch_types_player_rappitch = pitch_types_player_rappitch.sort_values(by='#', ascending=False)
-pitch_types_player_rappitch["color"] = pitch_types_player_rappitch["Pitch Type"].map(pitch_colors)
+    pitch_types_player_rappitch = pitch_types_stats.merge(pitch_counts, left_on='Pitch Type', right_on='Pitch Type')
+    pitch_types_player_rappitch = pitch_types_player_rappitch.sort_values(by='#', ascending=False)
+    pitch_types_player_rappitch["color"] = pitch_types_player_rappitch["Pitch Type"].map(pitch_colors)
 
-### Timeline Data
+    ### Timeline Data
 
-pitch_types_by_date_stats = (
-    player_rappitch_clean
-    .groupby(['Date', 'Pitch Type'])[numeric_cols]
-    .agg(['mean', 'std'])
-    .reset_index()
-)
+    pitch_types_by_date_stats = (
+        player_rappitch_clean
+        .groupby(['Date', 'Pitch Type'])[numeric_cols]
+        .agg(['mean', 'std'])
+        .reset_index()
+    )
 
-# Flatten multi-index columns
-pitch_types_by_date_stats.columns = ['_'.join(col).rstrip('_') for col in pitch_types_by_date_stats.columns.values]
+    # Flatten multi-index columns
+    pitch_types_by_date_stats.columns = ['_'.join(col).rstrip('_') for col in pitch_types_by_date_stats.columns.values]
 
-# Merge pitch counts by Date + Pitch Type
-pitch_counts_by_date = (
-    player_rappitch_clean
-    .groupby(['Date', 'Pitch Type'])
-    .size()
-    .reset_index(name='#')
-)
+    # Merge pitch counts by Date + Pitch Type
+    pitch_counts_by_date = (
+        player_rappitch_clean
+        .groupby(['Date', 'Pitch Type'])
+        .size()
+        .reset_index(name='#')
+    )
 
-# add pitch counts on
-pitch_types_by_date = pitch_types_by_date_stats.merge(
-    pitch_counts_by_date,
-    left_on=['Date', 'Pitch Type'],
-    right_on=['Date', 'Pitch Type']
-)
+    # add pitch counts on
+    pitch_types_by_date = pitch_types_by_date_stats.merge(
+        pitch_counts_by_date,
+        left_on=['Date', 'Pitch Type'],
+        right_on=['Date', 'Pitch Type']
+    )
 
-# Sort by velo and add colors
-pitch_types_by_date = pitch_types_by_date.sort_values(['Date', 'Velocity_mean'], ascending=[True, False])
-pitch_types_by_date["color"] = pitch_types_by_date["Pitch Type"].map(pitch_colors)
+    # Sort by velo and add colors
+    pitch_types_by_date = pitch_types_by_date.sort_values(['Date', 'Velocity_mean'], ascending=[True, False])
+    pitch_types_by_date["color"] = pitch_types_by_date["Pitch Type"].map(pitch_colors)
+    return pitch_types_player_rappitch, player_rappitch, pitch_counts, pitch_counts_by_date, pitch_types_by_date, pitch_types_by_date_stats, player_rappitch_clean, pitch_colors
 
 
 #%% Create Hitting and Pitching Tabs
@@ -549,12 +554,19 @@ with hitting:
     #%% Display Pitching Stats
 
 with pitching:
-
+    
     st.header("Pitching Data",divider = "yellow")
-    ##### COME BACK TO LOW INTENT EXCLUSION LATER #####
-    # low_intent_exclude = st.toggle("Exclude Low Intent Pitches?")
-    # if low_intent_exclude:
-    #     pitch_types_player_rappitch = pitch_types_player_rappitch[pitch_types_player_rappitch["Intent Type"]=="high_intent"]
+    low_intent_exclude = st.toggle("Exclude Low Intent Pitches?")
+    (
+        pitch_types_player_rappitch,
+        player_rappitch,
+        pitch_counts,
+        pitch_counts_by_date,
+        pitch_types_by_date,
+        pitch_types_by_date_stats,
+        player_rappitch_clean,
+        pitch_colors
+    ) = prep_rapsodo_pitching_stats()
     if len(player_rappitch) == 0 and len(player_pitching_video) == 0:
         st.write("No Pitching Data Available")
     else:
