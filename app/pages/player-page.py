@@ -199,9 +199,9 @@ if len(player_dkhit) > 0:
     trigger_to_impact_pct = 100 - get_percentile(trigger_to_impact_avg, ti_curve)
     dk_df = pd.DataFrame({
         'Metric': ['Hand Speed', 'Barrel Speed', 'Trigger to Impact', 'Impact Momentum', 'Attack Angle'],
-        'Average': [hand_speed_avg, barrel_speed_avg, trigger_to_impact_avg, impact_momentum_avg, attack_angle_avg],
-        'Standard Deviation': [hand_speed_std, barrel_speed_std, trigger_to_impact_std, impact_momentum_std, attack_angle_std],
-        'Percentile by Class': [hand_speed_pct, barrel_speed_pct, trigger_to_impact_pct, impact_momentum_pct, attack_angle_pct]
+        'Avg': [hand_speed_avg, barrel_speed_avg, trigger_to_impact_avg, impact_momentum_avg, attack_angle_avg],
+        'StD': [hand_speed_std, barrel_speed_std, trigger_to_impact_std, impact_momentum_std, attack_angle_std],
+        'Percentile': [hand_speed_pct, barrel_speed_pct, trigger_to_impact_pct, impact_momentum_pct, attack_angle_pct]
     })
 
     # Create date-grouped dataset
@@ -406,10 +406,10 @@ with hitting:
             def highlight_percentile(df):
                 return df.style.background_gradient(
                     cmap=custom_cmap,
-                    subset=['Percentile by Class'],
+                    subset=['Percentile'],
                     vmin=0,
                     vmax=100
-                ).format({'Percentile by Class': '{:.1f}'})
+                ).format({'Percentile': '{:.1f}'})
 
             diamond_kinetics, rapsodo = st.columns(2,gap="large")
 
@@ -424,9 +424,9 @@ with hitting:
                     st.dataframe(highlight_percentile(dk_df),
                                 hide_index=True,
                                 column_config={
-                                    'Average':st.column_config.NumberColumn("Average", format="%.1f"),
-                                    'Standard Deviation':st.column_config.NumberColumn("Standard Deviation", format="%.1f"),
-                                    'Percentile by Class':st.column_config.NumberColumn("Percentile by Class", format="%.1f")
+                                    'Avg':st.column_config.NumberColumn("Avg", format="%.1f"),
+                                    'StD':st.column_config.NumberColumn("StD", format="%.1f"),
+                                    'Percentile':st.column_config.NumberColumn("Percentile", format="%.1f")
                                 })
 
             with rapsodo:
