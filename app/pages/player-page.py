@@ -551,6 +551,9 @@ with hitting:
 with pitching:
 
     st.header("Pitching Data",divider = "yellow")
+    low_intent_exclude = st.selectbox("Exclude Low Intent Pitches?")
+    if low_intent_exclude:
+        pitch_types_player_rappitch = pitch_types_player_rappitch[pitch_types_player_rappitch["Intent Type"]=="high_intent"]
     if len(player_rappitch) == 0 and len(player_pitching_video) == 0:
         st.write("No Pitching Data Available")
     else:
