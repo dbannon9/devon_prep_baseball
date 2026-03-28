@@ -556,7 +556,7 @@ with hitting:
 with pitching:
     
     st.header("Pitching Data",divider = "yellow")
-    low_intent_exclude = st.toggle("Exclude Low Intent Pitches?")
+    exclude_low_intent = st.toggle("Exclude Low Intent Pitches?")
     (
         pitch_types_player_rappitch,
         player_rappitch,
