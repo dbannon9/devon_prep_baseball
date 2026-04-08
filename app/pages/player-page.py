@@ -641,6 +641,14 @@ with pitching:
 
                 # Display
                 st.pyplot(fig)
+                pitch_types_player_rappitch,
+                player_rappitch,
+                pitch_counts,
+                pitch_counts_by_date,
+                pitch_types_by_date,
+                pitch_types_by_date_stats,
+                player_rappitch_clean,
+
 
             with table:
                 pitch_types_player_rappitch.rename(columns = {
