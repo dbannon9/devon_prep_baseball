@@ -641,6 +641,11 @@ with pitching:
 
                 # Display
                 st.pyplot(fig)
+                rappitch = rapsodo_pitching.merge(
+                    players_reset,left_on='Player ID', right_on='rapsodo_id', how='left'
+                    ).rename(columns = {'id':'player_id'})
+                rappitch
+
 
             with table:
                 pitch_types_player_rappitch.rename(columns = {
