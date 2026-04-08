@@ -19,24 +19,45 @@ db = st.connection("supabase",type=SupabaseConnection)
 
 #%% Data Retrieval
 
-# Function to fetch data from any table
-def fetch_table_data(table_name):
-    response = db.client.table(table_name).select("*").execute()
+def fetch_table_data(table_name, batch_size=1000):
+    all_data = []
+    start = 0
 
-    # Supabase v2 client: actual rows are in response.data
-    data = response.data
-    if not data:
+    while True:
+        response = (
+            db.client
+            .table(table_name)
+            .select("*")
+            .range(start, start + batch_size - 1)
+            .execute()
+        )
+
+        batch = response.data
+
+        if not batch:
+            break
+
+        all_data.extend(batch)
+
+        # Move to next batch
+        start += batch_size
+
+        # Stop if last batch was smaller than batch_size
+        if len(batch) < batch_size:
+            break
+
+    if not all_data:
         st.warning(f"No data returned from table '{table_name}'.")
         return pd.DataFrame()
 
-    # Normalize into DataFrame
-    df = pd.DataFrame(data)
+    df = pd.DataFrame(all_data)
 
-   # Set index to 'id' if it exists, otherwise 'uuid'
+    # Set index
     if 'id' in df.columns:
         df.set_index('id', inplace=True)
     elif 'uuid' in df.columns:
         df.set_index('uuid', inplace=True)
+
     return df
 
 # Fetch data from all tables, then align id to supabase index
@@ -641,11 +662,6 @@ with pitching:
 
                 # Display
                 st.pyplot(fig)
-                rappitch = rapsodo_pitching.merge(
-                    players_reset,left_on='Player ID', right_on='rapsodo_id', how='left'
-                    ).rename(columns = {'id':'player_id'})
-                rappitch
-
 
             with table:
                 pitch_types_player_rappitch.rename(columns = {
