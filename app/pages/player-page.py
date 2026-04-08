@@ -641,7 +641,6 @@ with pitching:
 
                 # Display
                 st.pyplot(fig)
-                rappitch
 
             with table:
                 pitch_types_player_rappitch.rename(columns = {
