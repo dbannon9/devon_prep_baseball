@@ -151,7 +151,7 @@ with outcome_col:
     st.subheader("Outcome",divider="yellow")
     outcome = st.radio("**Outcome**", outcomes, key="outcome",index=None,label_visibility="collapsed")
 with contact_quality_col:
-    st.subheader("Contact Quality",divider="yellow") if outcome in swing_outcomes else st.write("")
+    st.subheader("Contact Quality",divider="yellow") if outcome in contact_outcomes else st.write("")
     contact_quality = st.radio("**Contact Quality**",options=contact_qualities, key="contact_quality",index=None,label_visibility="collapsed") if outcome in contact_outcomes else st.write("")
 with empty_col:
     ""
