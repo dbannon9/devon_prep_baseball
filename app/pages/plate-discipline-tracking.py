@@ -100,7 +100,7 @@ if st.session_state.get("reset_pitch_fields", False):
 
     for key in [
         "pitch_type", "v_location", "h_location",
-        "decision", "take_outcome", "swing_outcome", "batted_ball_type"
+        "decision", "outcome", "contact_quality"
     ]:
         if key in st.session_state:
             st.session_state[key] = None
