@@ -151,8 +151,11 @@ with outcome_col:
     st.subheader("Outcome",divider="yellow")
     outcome = st.radio("**Outcome**", outcomes, key="outcome",index=None,label_visibility="collapsed")
 with contact_quality_col:
-    st.subheader("Contact Quality",divider="yellow") if outcome in contact_outcomes else st.write("")
-    contact_quality = st.radio("**Contact Quality**",options=contact_qualities, key="contact_quality",index=None,label_visibility="collapsed") if outcome in contact_outcomes else st.write("")
+    if outcome in contact_outcomes:
+        st.subheader("Contact Quality",divider="yellow")
+        contact_quality = st.radio("**Contact Quality**",options=contact_qualities, key="contact_quality",index=None,label_visibility="collapsed")
+    else:
+        ""
 with empty_col:
     ""
 decision = "Take" if outcome in take_outcomes else "Swing"
@@ -174,7 +177,7 @@ if submit:
         'decision': decision,
         'outcome': outcome,
         'made_contact': made_contact,
-        'contact_quality': contact_quality
+        'contact_quality': contact_quality if outcome in contact_outcomes else None
     }
     response = db.client.table("plate_discipline").insert(new_pitch).execute()
     st.success("Pitch Submitted Successfully")
