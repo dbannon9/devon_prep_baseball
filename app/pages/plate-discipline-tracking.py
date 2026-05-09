@@ -126,25 +126,25 @@ contact_qualities = ["Soft","Medium","Hard"]
 # form
 date_col, hitter_col, handedness_col = st.columns(3,gap="small")
 with date_col:
-    pa_date = st.date_input("Today's Date", value=date.today())
+    pa_date = st.date_input("**Today's Date**", value=date.today())
 with hitter_col:
-    pa_hitter = st.selectbox("Hitter", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
+    pa_hitter = st.selectbox("**Hitter**", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
 with handedness_col:
-    pitcher_handedness = st.selectbox("Pitcher Handedness",handednesses,index=None)
+    pitcher_handedness = st.selectbox("**Pitcher Handedness**",handednesses,index=None)
 st.divider()
 type_col, v_loc_col, h_loc_col = st.columns(3,gap="small")
 with type_col:
-    pitch_type_select = st.radio("Pitch Type", pitch_type, key="pitch_type",index=None)
+    pitch_type_select = st.radio("**Pitch Type**", pitch_type, key="pitch_type",index=None)
 with v_loc_col:
-    v_location = st.radio("Up/Down Location", v_zones, key="v_location",index=None)
+    v_location = st.radio("**Up/Down Location**", v_zones, key="v_location",index=None)
 with h_loc_col:
-    h_location = st.radio("In/Out Location", h_zones, key="h_location",index=None)
+    h_location = st.radio("**In/Out Location**", h_zones, key="h_location",index=None)
 st.divider()
 outcome_col, contact_quality_col, empty_col = st.columns(3,gap="small")
 with outcome_col:
-    outcome = st.radio("Outcome", outcomes, key="outcome",index=None)
+    outcome = st.radio("**Outcome**", outcomes, key="outcome",index=None)
 with contact_quality_col:
-    contact_quality = st.radio("Contact Quality", contact_qualities, key="contact_quality",index=None) if outcome in swing_outcomes else None
+    contact_quality = st.radio("**Contact Quality**", contact_qualities, key="contact_quality",index=None) if outcome in swing_outcomes else None
 with empty_col:
     ""
 decision = "Take" if outcome in take_outcomes else "Swing"
