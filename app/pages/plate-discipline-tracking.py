@@ -126,11 +126,14 @@ contact_qualities = ["Soft","Medium","Hard"]
 # form
 date_col, hitter_col, handedness_col = st.columns(3,gap="small")
 with date_col:
-    pa_date = st.date_input("**Today's Date**", value=date.today())
+    st.subheader("Today's Date")
+    pa_date = st.date_input(label_visibility="hidden", value=date.today())
 with hitter_col:
-    pa_hitter = st.selectbox("**Hitter**", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
+    st.subheader("Hitter")
+    pa_hitter = st.selectbox(label_visibility="hidden", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
 with handedness_col:
-    pitcher_handedness = st.selectbox("**Pitcher Handedness**",handednesses,index=None)
+    st.subheader("Pitcher Handedness")
+    pitcher_handedness = st.selectbox(label_visibility="hidden",options=handednesses,index=None)
 st.divider()
 type_col, v_loc_col, h_loc_col = st.columns(3,gap="small")
 with type_col:
