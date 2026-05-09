@@ -146,7 +146,7 @@ with outcome_col:
 with contact_quality_col:
     contact_quality = st.radio("Contact Quality", contact_qualities, key="contact_quality",index=None) if outcome in swing_outcomes else None
 with empty_col:
-    None
+    ""
 decision = "Take" if outcome in take_outcomes else "Swing"
 made_contact = True if outcome in contact_outcomes else False
 
