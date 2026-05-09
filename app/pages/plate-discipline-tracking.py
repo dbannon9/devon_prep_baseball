@@ -112,28 +112,30 @@ if st.session_state.get("reset_pitch_fields", False):
 #%% Form
 st.title("Plate Discipline Tracking")
 handednesses = ["Right","Left"]
-zones = [None,"Heart","Shadow","Chase","Waste"]
-h_zones = [None,"Waste In","Shadow In","Heart","Shadow Out","Waste Out"]
-v_zones = [None,"Waste Up","Shadow Up","Heart","Shadow Down","Waste Down"]
-pitch_type = [None,"Fastball","Breaking Ball","Offspeed"]
-decisions = [None,"Take","Swing"]
-take_outcomes = [None,"Ball","Strike"]
-swing_outcomes = [None,"Whiff","Foul","Weak Contact","Solid Contact"]
-batted_ball_types = [None,"Grounder", "Line Drive", "Fly Ball", "Pop Up"]
+zones = ["Heart","Shadow","Chase","Waste"]
+h_zones = ["Waste In","Shadow In","Heart","Shadow Out","Waste Out"]
+v_zones = ["Waste Up","Shadow Up","Heart","Shadow Down","Waste Down"]
+pitch_type = ["Fastball","Breaking Ball","Offspeed"]
+decisions = ["Take","Swing"]
+outcomes = ["Ball","Called Strike","Whiff","Foul","Grounder", "Line Drive", "Fly Ball", "Pop Up"]
+take_outcomes = ["Ball","Called Strike"]
+swing_outcomes = ["Whiff","Foul","Grounder", "Line Drive", "Fly Ball", "Pop Up"]
+contact_outcomes = ["Grounder", "Line Drive", "Fly Ball", "Pop Up"]
+contact_qualities = ["Soft","Medium","Hard"]
 
 # form
 pa_date = st.date_input("Today's Date", value=date.today())
 pa_hitter = st.selectbox("Hitter", options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id])
 pitcher_handedness = st.selectbox("Pitcher Handedness",handednesses,index=None)
 st.divider()
-pitch_type = st.selectbox("Pitch Type", pitch_type, key="pitch_type",index=None)
-v_location = st.selectbox("Up/Down Location", v_zones, key="v_location",index=None)
-h_location = st.selectbox("In/Out Location", h_zones, key="h_location",index=None)
+pitch_type_select = st.radio("Pitch Type", pitch_type, key="pitch_type",index=None)
+v_location = st.radio("Up/Down Location", v_zones, key="v_location",index=None)
+h_location = st.radio("In/Out Location", h_zones, key="h_location",index=None)
 st.divider()
-decision = st.selectbox("Decision", decisions, key="decision",index=None)
-take_outcome = st.selectbox("Take Outcome", take_outcomes, key="take_outcome",index=None) if decision == "Take" else None
-swing_outcome = st.selectbox("Swing Outcome", swing_outcomes, key="swing_outcome",index=None) if decision == "Swing" else None
-batted_ball_type = st.selectbox("Batted Ball Type", batted_ball_types, key="batted_ball_type",index=None) if swing_outcome in ["Weak Contact","Solid Contact"] else None
+outcome = st.radio("Outcome", outcomes, key="outcome",index=None)
+contact_quality = st.radio("Contact Quality", contact_qualities, key="contact_quality",index=None) if outcome in swing_outcomes else None
+decision = "Take" if outcome in take_outcomes else "Swing"
+made_contact = True if outcome in contact_outcomes else False
 
 pa_date_iso = pa_date.isoformat()
 
@@ -145,12 +147,13 @@ if submit:
         'date': pa_date_iso,  # Use the string version of the date
         'player_id': pa_hitter,
         'pitcher_handedness': pitcher_handedness,
-        'pitch_type': pitch_type,
+        'pitch_type': pitch_type_select,
         'v_location': v_location,
         'h_location': h_location,
         'decision': decision,
-        'outcome': take_outcome if decision == 'Take' else swing_outcome,
-        'batted_ball_type': batted_ball_type if decision == 'Swing' else None,
+        'outcome': outcome,
+        'made_contact': made_contact,
+        'contact_quality': contact_quality
     }
     response = db.client.table("plate_discipline").insert(new_pitch).execute()
     st.success("Pitch Submitted Successfully")
