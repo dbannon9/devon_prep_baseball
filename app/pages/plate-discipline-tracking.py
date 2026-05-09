@@ -126,32 +126,32 @@ contact_qualities = ["Soft","Medium","Hard"]
 # form
 date_col, hitter_col, handedness_col = st.columns(3,gap="small")
 with date_col:
-    st.subheader("Today's Date")
+    st.subheader("Today's Date",divider="yellow")
     pa_date = st.date_input("Today's Date", value=date.today(),label_visibility="collapsed")
 with hitter_col:
-    st.subheader("Hitter")
+    st.subheader("Hitter",divider="yellow")
     pa_hitter = st.selectbox("Hitter",options=list(active_player_options.keys()), format_func=lambda id: active_player_options[id],label_visibility="collapsed")
 with handedness_col:
-    st.subheader("Pitcher Handedness")
+    st.subheader("Pitcher Handedness",divider="yellow")
     pitcher_handedness = st.selectbox("Pitcher Handedness",options=handednesses,index=None,label_visibility="collapsed")
 st.divider()
 type_col, v_loc_col, h_loc_col = st.columns(3,gap="small")
 with type_col:
-    st.subheader("Pitch Type")
+    st.subheader("Pitch Type",divider="yellow")
     pitch_type_select = st.radio("**Pitch Type**", pitch_type, key="pitch_type",index=None,label_visibility="collapsed")
 with v_loc_col:
-    st.subheader("Up/Down Location")
+    st.subheader("Up/Down Location",divider="yellow")
     v_location = st.radio("**Up/Down Location**", v_zones, key="v_location",index=None,label_visibility="collapsed")
 with h_loc_col:
-    st.subheader("In/Out Location")
+    st.subheader("In/Out Location",divider="yellow")
     h_location = st.radio("**In/Out Location**", h_zones, key="h_location",index=None,label_visibility="collapsed")
 st.divider()
 outcome_col, contact_quality_col, empty_col = st.columns(3,gap="small")
 with outcome_col:
-    st.subheader("Outcome")
+    st.subheader("Outcome",divider="yellow")
     outcome = st.radio("**Outcome**", outcomes, key="outcome",index=None,label_visibility="collapsed")
 with contact_quality_col:
-    st.subheader("Contact Quality")
+    st.subheader("Contact Quality",divider="yellow")
     contact_quality = st.radio("**Contact Quality**", contact_qualities, key="contact_quality",index=None,label_visibility="collapsed") if outcome in swing_outcomes else None
 with empty_col:
     ""
