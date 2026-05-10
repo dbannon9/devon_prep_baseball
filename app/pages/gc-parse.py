@@ -100,7 +100,7 @@ active_player_options = currentplayers['full_name'].to_dict()
 
 # PA Results
 gc_pa_results = ['Strikeout','Walk','Single','Double','Triple','Home Run','Fly Out','Ground Out','Line Out','Fielder''s Choice','Runner out','Double Play','Triple Play','Pop Out','Hit By Pitch','Catcher''s Interference','Intentional Walk','Error']
-gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','Strike 2 swinging','Strike 3 looking','Strike 3 swinging','Foul','Ball 1','Ball 2','Ball 3','Ball 4','In Play']
+gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','Strike 2 swinging','Strike 3 looking','Strike 3 swinging','Foul','Ball 1','Ball 2','Ball 3','Ball 4','In play']
 
 txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False)
 
@@ -123,6 +123,6 @@ if not txtdata.empty:
     txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
     txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev)
     pattern = '|'.join(gc_pitch_results)
-    txtdata['pitch_result_count'] = txtdata['text'].str.findall(pattern).str.len()
+    txtdata['is_pitch_sequence'] = txtdata['text'].str.findall(pattern).str.len() > 0
 
 txtdata
