@@ -110,7 +110,7 @@ if not txtdata.empty:
     # Team Assignments
     dp_col, other_col = st.columns(2,gap="small")
     with dp_col:
-        dp_team_abbrev = st.text_input("Input Opponent's GC Abbreviation",default='DVNP')
+        dp_team_abbrev = st.text_input("Input Opponent's GC Abbreviation",value='DVNP')
     with other_col:
         other_team_abbrev = st.text_input("Input Opponent's GC Abbreviation")
 
