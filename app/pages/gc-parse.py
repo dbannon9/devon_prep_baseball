@@ -96,9 +96,9 @@ active_player_options = currentplayers['full_name'].to_dict()
 
 #%% Testing
 
-txtfile = st.file_uploader("Dump GC Text File Here",accept_multiple_files=False)
-if txtfile = None:
-    ""
-else:
-    txtdata = pd.read_fwf(txtfile)
-    txtdata
+# txtfile = st.file_uploader("Dump GC Text File Here",accept_multiple_files=False)
+# if txtfile == None:
+#     ""
+# else:
+#     txtdata = pd.read_fwf(txtfile,headers=None)
+#     txtdata
