@@ -123,4 +123,5 @@ if not txtdata.empty:
     cols = ['is_inning_change','is_pa_result','is_out_change','is_pitch_sequence','is_score_change']
     txtdata['is_outcome_string'] = ~txtdata[cols].any(axis=1)
 
-txtdata
+pitch_sequences = txtdata[txtdata['is_pitch_sequence']]
+pitch_sequences
