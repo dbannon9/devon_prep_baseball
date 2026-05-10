@@ -111,7 +111,7 @@ if not txtdata.empty:
         regex=True,
         na=False
     )
-    txtdata['is_pa_result'] = txtdata['text'] in gc_pa_results
+    txtdata['is_pa_result'] = txtdata['text'].isin(gc_pa_results)
     txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
 
 
