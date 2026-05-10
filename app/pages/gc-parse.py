@@ -10,6 +10,7 @@ from decimal import Decimal
 import os
 import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
+import re as re
 
 #%% Connect to Supabase
 db = st.connection("supabase",type=SupabaseConnection)
@@ -97,8 +98,5 @@ active_player_options = currentplayers['full_name'].to_dict()
 #%% Testing
 
 txtfile = st.file_uploader("Dump GC Text File Here",accept_multiple_files=False)
-if txtfile == None:
-    ""
-else:
-    txtdata = pd.read_fwf(txtfile,header=None)
-    txtdata
+txtdata = pd.read_fwf(txtfile,header=None) if txtfile != None else ""
+txtdata['is_inning_change'] = re.search('Top \d',txtdata) or re.search('Bottom \d',txtdata)
