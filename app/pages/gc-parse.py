@@ -99,5 +99,5 @@ active_player_options = currentplayers['full_name'].to_dict()
 
 txtfile = st.file_uploader("Dump GC Text File Here",accept_multiple_files=False)
 txtdata = pd.read_fwf(txtfile,header=None) if txtfile != None else ""
-txtdata['is_inning_change'] = re.search('Top \d',txtdata) or re.search('Bottom \d',txtdata)
+txtdata['is_inning_change'] = re.search('Top \d',txtdata.str) or re.search('Bottom \d',txtdata.str)
 txtdata
