@@ -96,8 +96,15 @@ player_options = players_show['full_name'].to_dict()
 active_player_options = currentplayers['full_name'].to_dict()
 
 #%% Testing
+txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False)
 
-txtfile = st.file_uploader("Dump GC Text File Here",accept_multiple_files=False)
-txtdata = pd.read_fwf(txtfile,header=None) if txtfile != None else ""
-txtdata['is_inning_change'] = re.search('Top \d',txtdata.str) or re.search('Bottom \d',txtdata.str)
+txtdata = pd.read_fwf(txtfile, header=None) if txtfile is not None else pd.DataFrame()
+
+if not txtdata.empty:
+    txtdata['is_inning_change'] = txtdata[0].str.contains(
+        r'Top \d|Bottom \d',
+        regex=True,
+        na=False
+    )
+
 txtdata
