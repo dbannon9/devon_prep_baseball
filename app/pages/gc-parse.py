@@ -99,3 +99,7 @@ active_player_options = currentplayers['full_name'].to_dict()
 txtfile = st.file_uploader("Dump GC Text File Here",accept_multiple_files=False)
 txtdata = pd.DataFrame(txtfile)
 txtdata
+
+txttxt = st.text_input("Dump GC Text Here")
+txttxtdf = pd.DataFrame(txttxt)
+txttxtdf
