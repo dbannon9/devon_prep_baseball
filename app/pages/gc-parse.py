@@ -101,5 +101,8 @@ txtdata = pd.DataFrame(txtfile)
 txtdata
 
 txttxt = st.text_input("Dump GC Text Here")
-txttxtdf = pd.DataFrame(txttxt)
-txttxtdf
+if txttxt != None:
+    txttxtdf = pd.DataFrame(txttxt)
+    txttxtdf
+else:
+    None
