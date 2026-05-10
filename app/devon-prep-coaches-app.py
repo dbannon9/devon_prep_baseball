@@ -99,7 +99,7 @@ if st.user.is_logged_in:
             data_input = st.Page("pages/data-input.py",title="Data Upload",icon=":material/upload:")
             video_upload = st.Page("pages/video-upload-testing.py",title="Video Upload",icon=":material/videocam:")
             glossary = st.Page("pages/data-glossary.py",title="Data Glossary",icon=":material/dictionary:")
-            gc_parser = st.Page("pages/gc-parse.py",title="GC Data Load",icon="material/g_mobiledata_badge")
+            gc_parser = st.Page("pages/gc-parse.py",title="GC Data Load",icon=":material/g_mobiledata_badge:")
             nav = st.navigation([
                 roster,
                 team_leaderboards,
