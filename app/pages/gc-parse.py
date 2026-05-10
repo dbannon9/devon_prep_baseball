@@ -121,6 +121,9 @@ if not txtdata.empty:
     )
     txtdata['is_pa_result'] = txtdata['text'].isin(gc_pa_results)
     txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
-    txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev | other_team_abbrev)
+    if other_team_abbrev != None:
+        txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev) | txtdata['text'].str.contains(other_team_abbrev)
+    else:
+        txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev)
 
 txtdata
