@@ -97,6 +97,7 @@ active_player_options = currentplayers['full_name'].to_dict()
 
 #%% Testing
 
+
 # PA Results
 gc_pa_results = ['Strikeout','Walk','Single','Double','Triple','Home Run','Fly Out','Ground Out','Line Out','Fielder''s Choice','Runner out','Double Play','Triple Play','Pop Out','Hit By Pitch','Catcher''s Interference','Intentional Walk','Error']
 gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','Strike 2 swinging','Strike 3 looking','Strike 3 swinging','Foul','Ball 1','Ball 2','Ball 3','Ball 4','In Play']
@@ -106,6 +107,13 @@ txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False
 txtdata = pd.read_fwf(txtfile, header=None).rename(columns={0:'text'}) if txtfile is not None else pd.DataFrame()
 
 if not txtdata.empty:
+    # Team Assignments
+    dp_col, other_col = st.columns(2,gap="small")
+    with dp_col:
+        dp_team_abbrev = st.text_input("Input Opponent's GC Abbreviation",default='DVNP')
+    with other_col:
+        other_team_abbrev = st.text_input("Input Opponent's GC Abbreviation")
+
     txtdata['is_inning_change'] = txtdata['text'].str.contains(
         r'Top \d|Bottom \d',
         regex=True,
@@ -113,6 +121,6 @@ if not txtdata.empty:
     )
     txtdata['is_pa_result'] = txtdata['text'].isin(gc_pa_results)
     txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
-
+    txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev & other_team_abbrev)
 
 txtdata
