@@ -121,9 +121,8 @@ if not txtdata.empty:
     )
     txtdata['is_pa_result'] = txtdata['text'].isin(gc_pa_results)
     txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
-    if not other_team_abbrev.empty:
-        txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev) | txtdata['text'].str.contains(other_team_abbrev)
-    else:
-        txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev)
+    txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev)
+    pattern = '|'.join(gc_pitch_results)
+    txtdata['pitch_result_count'] = txtdata['text'].str.findall(pattern).str.len()
 
 txtdata
