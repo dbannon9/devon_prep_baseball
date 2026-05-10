@@ -103,17 +103,16 @@ gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','S
 
 txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False)
 
-txtdata = pd.read_fwf(txtfile, header=None) if txtfile is not None else pd.DataFrame()
-txtdata['text'] = txtdata[0]
+txtdata = pd.read_fwf(txtfile, header=None).rename(columns={0:'text'}) if txtfile is not None else pd.DataFrame()
 
-if not txtdata.empty:
-    txtdata['is_inning_change'] = txtdata['text'].str.contains(
-        r'Top \d|Bottom \d',
-        regex=True,
-        na=False
-    )
-    txtdata['is_pa_result'] = txtdata['text'] in gc_pa_results
-    txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
+# if not txtdata.empty:
+#     txtdata['is_inning_change'] = txtdata['text'].str.contains(
+#         r'Top \d|Bottom \d',
+#         regex=True,
+#         na=False
+#     )
+#     txtdata['is_pa_result'] = txtdata['text'] in gc_pa_results
+#     txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
 
 
 txtdata
