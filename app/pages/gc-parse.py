@@ -97,5 +97,9 @@ active_player_options = currentplayers['full_name'].to_dict()
 #%% Testing
 
 txtfile = st.file_uploader("Dump GC Text File Here",accept_multiple_files=False)
-txtdata = pd.read_csv(txtfile,sep='\n',header=None)
-txtdata
+
+with open(txtfile, 'r') as f:
+    lines = f.read().splitlines()
+
+df = pd.DataFrame(lines, columns=['text_column'])
+df
