@@ -114,17 +114,13 @@ if not txtdata.empty:
     with other_col:
         other_team_abbrev = st.text_input("Input Opponent's GC Abbreviation")
 
-    txtdata['is_inning_change'] = txtdata['text'].str.contains(
-        r'Top \d|Bottom \d',
-        regex=True,
-        na=False
-    )
+    txtdata['is_inning_change'] = txtdata['text'].str.contains(r'Top \d|Bottom \d',regex=True,na=False)
     txtdata['is_pa_result'] = txtdata['text'].isin(gc_pa_results)
     txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
     pattern = '|'.join(gc_pitch_results)
     txtdata['is_pitch_sequence'] = txtdata['text'].str.findall(pattern).str.len() > 0
     txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev)
-    cols = ['is_pa_result','is_out_change','is_pitch_sequence','is_score_change']
+    cols = ['is_inning_change','is_pa_result','is_out_change','is_pitch_sequence','is_score_change']
     txtdata['is_outcome_string'] = ~txtdata[cols].any(axis=1)
 
 txtdata
