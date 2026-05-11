@@ -104,7 +104,7 @@ gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','S
 
 txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False)
 
-txtdata = pd.read_fwf(txtfile, header=None).rename(columns={0:'text'}) if txtfile is not None else pd.DataFrame()
+txtdata = pd.read_csv(txtfile, header=None,names=['text']) if txtfile is not None else pd.DataFrame()
 
 if not txtdata.empty:
     # Team Assignments
@@ -123,5 +123,5 @@ if not txtdata.empty:
     cols = ['is_inning_change','is_pa_result','is_out_change','is_pitch_sequence','is_score_change']
     txtdata['is_outcome_string'] = ~txtdata[cols].any(axis=1)
 
-pitch_sequences = txtdata[txtdata['is_pitch_sequence']]
-pitch_sequences
+    pitch_sequences = txtdata[txtdata['is_pitch_sequence']]
+    pitch_sequences
