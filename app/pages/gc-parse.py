@@ -104,7 +104,10 @@ gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','S
 
 txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False)
 
-txtdata = pd.read_csv(txtfile, header=None,names=['text'],sep="\n",engine='python') if txtfile is not None else pd.DataFrame()
+# txtdata = pd.read_csv(txtfile, header=None,names=['text'],sep="\n",engine='python') if txtfile is not None else pd.DataFrame()
+
+lines = txtfile.getvalue().decode("utf-8").splitlines()
+txtdata = pd.DataFrame(lines, columns=['text'])
 
 if not txtdata.empty:
     # Team Assignments
