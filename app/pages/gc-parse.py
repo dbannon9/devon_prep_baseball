@@ -102,10 +102,8 @@ active_player_options = currentplayers['full_name'].to_dict()
 gc_pa_results = ['Strikeout','Walk','Single','Double','Triple','Home Run','Fly Out','Ground Out','Line Out','Fielder''s Choice','Runner out','Double Play','Triple Play','Pop Out','Hit By Pitch','Catcher''s Interference','Intentional Walk','Error']
 gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','Strike 2 swinging','Strike 3 looking','Strike 3 swinging','Foul','Ball 1','Ball 2','Ball 3','Ball 4','In play']
 
-txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False)
-if not txtfile:
-    txtlines = txtfile.getvalue().decode("utf-8").splitlines()
-    txtdata = pd.DataFrame(txtlines, columns=['text'])
+txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False).getvalue().decode("utf-8").splitlines()
+txtdata = pd.DataFrame(txtfile, columns=['text'])
 
 if not txtdata.empty:
     # Team Assignments
