@@ -103,11 +103,8 @@ gc_pa_results = ['Strikeout','Walk','Single','Double','Triple','Home Run','Fly O
 gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','Strike 2 swinging','Strike 3 looking','Strike 3 swinging','Foul','Ball 1','Ball 2','Ball 3','Ball 4','In play']
 
 txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False)
-
-# txtdata = pd.read_csv(txtfile, header=None,names=['text'],sep="\n",engine='python') if txtfile is not None else pd.DataFrame()
-
-lines = txtfile.getvalue().decode("utf-8").splitlines()
-txtdata = pd.DataFrame(lines, columns=['text'])
+txtlines = txtfile.getvalue().decode("utf-8").splitlines()
+txtdata = pd.DataFrame(txtlines, columns=['text'])
 
 if not txtdata.empty:
     # Team Assignments
@@ -128,3 +125,6 @@ if not txtdata.empty:
 
     pitch_sequences = txtdata[txtdata['is_pitch_sequence']]
     pitch_sequences
+
+    outcome_strings_and_sequences = txtdata[txtdata['is_outcome_string']|txtdata['is_pitch_sequence']]
+    outcome_strings_and_sequences
