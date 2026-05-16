@@ -96,6 +96,7 @@ active_player_options = currentplayers['full_name'].to_dict()
 #%% Testing
 
 # PA Results
+txtdata = []
 gc_pa_results = ['Strikeout','Walk','Single','Double','Triple','Home Run','Fly Out','Ground Out','Line Out','Fielder''s Choice','Runner Out','Double Play','Triple Play','Pop Out','Hit By Pitch','Catcher''s Interference','Intentional Walk','Error']
 gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','Strike 2 swinging','Strike 3 looking','Strike 3 swinging','Foul','Ball 1','Ball 2','Ball 3','Ball 4','In play']
 devon_teams = ['Varsity','Junior Varsity','Freshman']
