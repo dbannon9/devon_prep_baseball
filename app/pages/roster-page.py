@@ -180,11 +180,14 @@ else:
 st.subheader("Input New Players", divider="yellow")
 default_year = datetime.now().year + 4
 positions = [None, "C", "1B", "2B", "3B", "SS", "OF", "UT"]
+handedness = ["Right","Left","Switch"]
 
 with st.form("input_new_players", clear_on_submit=True, enter_to_submit=False, border=True):
     first_name = st.text_input("First Name")
     last_name = st.text_input("Last Name")
     grad_year = st.number_input("HS Graduation Year", value=default_year)
+    bats = st.selectbox("Bats",options=handedness)
+    throws = st.selectbox("Throws",options=handedness)
     email = st.text_input("Email")
     pitcher = st.checkbox("Pitcher?", value=False)
     pos_1 = st.selectbox("Primary Position", positions)
@@ -203,6 +206,8 @@ if player_submit:
         "first_name": clean_value(first_name),
         "last_name": clean_value(last_name),
         "grad_year": clean_value(grad_year),
+        "bats": clean_value(bats),
+        "throws": clean_value(throws),
         "pitcher": clean_value(pitcher),
         "pos_1": clean_value(pos_1),
         "pos_2": clean_value(pos_2),
