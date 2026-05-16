@@ -96,7 +96,6 @@ active_player_options = currentplayers['full_name'].to_dict()
 #%% Testing
 
 # PA Results
-txtdata = []
 gc_pa_results = ['Strikeout','Walk','Single','Double','Triple','Home Run','Fly Out','Ground Out','Line Out','Fielder''s Choice','Runner Out','Double Play','Triple Play','Pop Out','Hit By Pitch','Catcher''s Interference','Intentional Walk','Error']
 gc_pitch_results = ['Strike 1 looking','Strike 1 swinging','Strike 2 looking','Strike 2 swinging','Strike 3 looking','Strike 3 swinging','Foul','Ball 1','Ball 2','Ball 3','Ball 4','In play']
 devon_teams = ['Varsity','Junior Varsity','Freshman']
@@ -110,99 +109,99 @@ if txtfile == '':
     txtfileparsed = txtfile.getvalue().decode("utf-8").splitlines()
     txtdata = pd.DataFrame(txtfile, columns=['text'])
 
-if not txtdata.empty:
-    # Team Assignments
-    txtdata['is_inning_change'] = txtdata['text'].str.contains(r'Top \d|Bottom \d',regex=True,na=False)
-    txtdata['is_pa_result'] = txtdata['text'].isin(gc_pa_results)
-    txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
-    pattern = '|'.join(gc_pitch_results)
-    txtdata['is_pitch_sequence'] = txtdata['text'].str.findall(pattern).str.len() > 0
-    txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev)
-    cols = ['is_inning_change','is_pa_result','is_out_change','is_pitch_sequence','is_score_change']
-    txtdata['is_outcome_string'] = ~txtdata[cols].any(axis=1)
-    
-    # inning logic determining home team
-    inning_changes = txtdata.loc[txtdata['is_inning_change'], 'text']
-    first_inning_row = inning_changes.iloc[0]
-    is_devon_home = (
-        ('Bottom' in first_inning_row and 'Devon' in first_inning_row)
-        or
-        ('Top' in first_inning_row and 'Devon' not in first_inning_row)
-    )
+    if not txtdata.empty:
+        # Team Assignments
+        txtdata['is_inning_change'] = txtdata['text'].str.contains(r'Top \d|Bottom \d',regex=True,na=False)
+        txtdata['is_pa_result'] = txtdata['text'].isin(gc_pa_results)
+        txtdata['is_out_change'] = txtdata['text'].str.contains(r'\d Out')
+        pattern = '|'.join(gc_pitch_results)
+        txtdata['is_pitch_sequence'] = txtdata['text'].str.findall(pattern).str.len() > 0
+        txtdata['is_score_change'] = txtdata['text'].str.contains(dp_team_abbrev)
+        cols = ['is_inning_change','is_pa_result','is_out_change','is_pitch_sequence','is_score_change']
+        txtdata['is_outcome_string'] = ~txtdata[cols].any(axis=1)
+        
+        # inning logic determining home team
+        inning_changes = txtdata.loc[txtdata['is_inning_change'], 'text']
+        first_inning_row = inning_changes.iloc[0]
+        is_devon_home = (
+            ('Bottom' in first_inning_row and 'Devon' in first_inning_row)
+            or
+            ('Top' in first_inning_row and 'Devon' not in first_inning_row)
+        )
 
-    dp_col, other_col = st.columns(2,gap="small")
-    with dp_col:
-        dp_team_name = st.selectbox("Input Devon's Team Name",options=devon_teams,value='Varsity')
-        dp_team_abbrev = st.text_input("Input Devon's GC Abbreviation",value='DVNP')
-        game_date = st.date_input("Input Game Date",value='today')
-    with other_col:
-        other_team_name = st.text_input("Input Opponent's Team Name")
-        other_team_abbrev = st.text_input("Input Opponent's GC Abbreviation")
-        default_venue = 'Devon Prep' if is_devon_home else other_team_name
-        venue = st.text_input("Input Venue Name",value=default_venue)
+        dp_col, other_col = st.columns(2,gap="small")
+        with dp_col:
+            dp_team_name = st.selectbox("Input Devon's Team Name",options=devon_teams,value='Varsity')
+            dp_team_abbrev = st.text_input("Input Devon's GC Abbreviation",value='DVNP')
+            game_date = st.date_input("Input Game Date",value='today')
+        with other_col:
+            other_team_name = st.text_input("Input Opponent's Team Name")
+            other_team_abbrev = st.text_input("Input Opponent's GC Abbreviation")
+            default_venue = 'Devon Prep' if is_devon_home else other_team_name
+            venue = st.text_input("Input Venue Name",value=default_venue)
 
-    #%% Test Data stuff
+        #%% Test Data stuff
 
-    txtdata
+        txtdata
 
-    pitch_sequences = txtdata[txtdata['is_pitch_sequence']]
-    pitch_sequences
+        pitch_sequences = txtdata[txtdata['is_pitch_sequence']]
+        pitch_sequences
 
-    outcome_strings_and_sequences = txtdata[txtdata['is_outcome_string']|txtdata['is_pitch_sequence']]
-    outcome_strings_and_sequences
+        outcome_strings_and_sequences = txtdata[txtdata['is_outcome_string']|txtdata['is_pitch_sequence']]
+        outcome_strings_and_sequences
 
-    #%% Processing Data
+        #%% Processing Data
 
-    # submit
-    submit = st.button("Process Data",disabled=True) #re-enable when ready
-    if submit:
-        new_game = {
-            'date': game_date,  # Use the string version of the date
-            'is_devon_home': is_devon_home,
-            'opponent_name': other_team_name,
-            'venue': venue,
-        }
-        response = db.client.table("games").insert(new_game).execute()
-        game_id = response.select()
-        parsed_pas = []
-        parsed_pitches = []
-        current_home_score = 0
-        current_away_score = 0
-        current_outs = 0
-        current_bases = "---"
+        # submit
+        submit = st.button("Process Data",disabled=True) #re-enable when ready
+        if submit:
+            new_game = {
+                'date': game_date,  # Use the string version of the date
+                'is_devon_home': is_devon_home,
+                'opponent_name': other_team_name,
+                'venue': venue,
+            }
+            response = db.client.table("games").insert(new_game).execute()
+            game_id = response.select()
+            parsed_pas = []
+            parsed_pitches = []
+            current_home_score = 0
+            current_away_score = 0
+            current_outs = 0
+            current_bases = "---"
 
-        outs_before = 0
-        outs_after = 0
-        i = 0
-        r = len(txtdata)-1
-        while r >= 0:
-            row = txtdata.iloc[i]
-            current_inning = innings_sequence[i]
-            if row['is_inning_change']:
-                i = i + 1
-                outs_before = 0
-                outs_after = 0
-                continue
-            if row['is_outcome_string']:
-                if row['text'] != "Half-inning ended by out on the base paths.":                    
-                    batter_match_text = None #ADD RESULTS STRING HERE
-                    batter_matches = long_players_and_gc_names.loc[long_players_and_gc_names['gc_match']==batter_match_text,'id']
-                    batter_match_id = batter_matches.iloc[0] if not batter_matches.empty else None
-                    if batter_match_id == None:
-                        batter_handedness = None
-                    else:
-                        batter_handedness = players.loc[players['id']==batter_match_id,'bats']
-                    pitcher_match_text = None #ADD RESULTS STRING HERE
-                    pitcher_matches = long_players_and_gc_names.loc[long_players_and_gc_names['gc_match']==pitcher_match_text,'id']
-                    pitcher_match_id = pitcher_matches.iloc[0] if not pitcher_matches.empty else None
-                    if pitcher_match_id == None:
-                        pitcher_handedness = None
-                    else:
-                        pitcher_handedness = players.loc[players['id']==pitcher_match_id,'throws']
-                    pa = {
-                        'game_id': game_id,
-                        'inning': current_inning,
-                        'batter_id': batter_match_id,
-                        'pitcher_id': pitcher_match_id,
-                        'result': row['text'],
-                    }
+            outs_before = 0
+            outs_after = 0
+            i = 0
+            r = len(txtdata)-1
+            while r >= 0:
+                row = txtdata.iloc[i]
+                current_inning = innings_sequence[i]
+                if row['is_inning_change']:
+                    i = i + 1
+                    outs_before = 0
+                    outs_after = 0
+                    continue
+                if row['is_outcome_string']:
+                    if row['text'] != "Half-inning ended by out on the base paths.":                    
+                        batter_match_text = None #ADD RESULTS STRING HERE
+                        batter_matches = long_players_and_gc_names.loc[long_players_and_gc_names['gc_match']==batter_match_text,'id']
+                        batter_match_id = batter_matches.iloc[0] if not batter_matches.empty else None
+                        if batter_match_id == None:
+                            batter_handedness = None
+                        else:
+                            batter_handedness = players.loc[players['id']==batter_match_id,'bats']
+                        pitcher_match_text = None #ADD RESULTS STRING HERE
+                        pitcher_matches = long_players_and_gc_names.loc[long_players_and_gc_names['gc_match']==pitcher_match_text,'id']
+                        pitcher_match_id = pitcher_matches.iloc[0] if not pitcher_matches.empty else None
+                        if pitcher_match_id == None:
+                            pitcher_handedness = None
+                        else:
+                            pitcher_handedness = players.loc[players['id']==pitcher_match_id,'throws']
+                        pa = {
+                            'game_id': game_id,
+                            'inning': current_inning,
+                            'batter_id': batter_match_id,
+                            'pitcher_id': pitcher_match_id,
+                            'result': row['text'],
+                        }
