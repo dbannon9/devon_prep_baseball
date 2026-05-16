@@ -102,7 +102,7 @@ devon_teams = ['Varsity','Junior Varsity','Freshman']
 dp_team_abbrev = 'DVNP'
 innings_sequence = ['Top 1st', 'Bottom 1st', 'Top 2nd', 'Bottom 2nd', 'Top 3rd', 'Bottom 3rd', 'Top 4th', 'Bottom 4th', 'Top 5th', 'Bottom 5th', 'Top 6th', 'Bottom 6th', 'Top 7th', 'Bottom 7th', 'Top 8th', 'Bottom 8th', 'Top 9th', 'Bottom 9th', 'Top 10th', 'Bottom 10th', 'Top 11th', 'Bottom 11th', 'Top 12th', 'Bottom 12th', 'Top 13th', 'Bottom 13th']
 search_cols = ['gc_name_with_number_1','gc_name_with_number_2','gc_name_with_number_3','gc_name_full_1','gc_name_full_2','gc_name_full_3','gc_name_initial_1','gc_name_initial_2','gc_name_initial_3']
-long_players_and_gc_names = players.melt(id_vars='id',value_vars=search_cols,value_name='gc_match')
+# THIS NEEDS FIXING # long_players_and_gc_names = players.melt(id_vars='id',value_vars=search_cols,value_name='gc_match')
 
 txtfile = st.file_uploader("Dump GC Text File Here", accept_multiple_files=False)
 if txtfile == '':
